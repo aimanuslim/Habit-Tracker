@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "812653061383",
+    "firebase_url": "https://habit-king.firebaseio.com",
+    "project_id": "habit-king",
+    "storage_bucket": "habit-king.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812653061383:android:c9b5137d72aab103",
+        "android_client_info": {
+          "package_name": "com.theunheard.habitking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812653061383-558kes87cfmthfokece9svmucdnqpe4o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2O4X-yDXun_S3buh1GMjwjj03ehO9mdk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

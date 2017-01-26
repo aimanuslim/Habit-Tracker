@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.theunheard.habitking.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="Enter details of the habit"
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"
+            android:id="@+id/instructionLabel"
+            android:textSize="20dip"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_below="@+id/instructionLabel"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:id="@+id/habitInputName"
+            android:inputType="text|textCapWords|textPersonName"
+            android:hint="Habit Name" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/habitInputName"
+            android:id="@+id/datetimeContainer">
+
+            <!--<TimePicker-->
+                <!--android:id="@+id/timePicker1"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/habitInputName"
+                android:ems="10"
+                android:id="@+id/dateLastPerformedInput"
+                android:layout_weight="1"
+                android:hint="Date Executed"
+                android:inputType="date"
+                android:focusable="false"
+
+                />
+
+            <EditText
+                android:focusable="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/dateLastPerformedInput"
+                android:layout_below="@+id/habitInputName"
+                android:inputType="time"
+                android:ems="10"
+                android:id="@+id/timeLastPerformedInput"
+                android:layout_weight="1"
+                android:hint="Time Executed"
+
+                />
+
+        </LinearLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/datetimeContainer"
+            android:inputType="text|textPersonName"
+            android:ems="10"
+            android:id="@+id/categoryInput"
+            android:layout_weight="1"
+            android:hint="Category" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/categoryInput"
+            android:id="@+id/reminderDetailsContainer">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:ems="10"
+                android:id="@+id/reminderDateInput"
+                android:layout_weight="1"
+                android:hint="Reminder date"
+                android:focusable="false"
+                />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="time"
+                android:ems="10"
+                android:id="@+id/reminderTimeInput"
+                android:layout_weight="1"
+                android:hint="Reminder time"
+                android:focusable="false"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/reminderDetailsContainer"
+            android:layout_weight="1"
+            android:id="@+id/personInteractedContainer">
+
+            <ScrollView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginBottom="2dp"
+                android:id="@+id/personInteractedScrollView">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+
+            <Button
+                android:text="Add Interacted Person"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/addPersonInteractedButton"
+                android:layout_weight="0.5"
+                android:layout_gravity="center_vertical"
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:text="Record!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/recordButton"
+            android:layout_below="@+id/personInteractedContainer"
+            android:layout_centerInParent="true"
+
+            />
+
+
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
