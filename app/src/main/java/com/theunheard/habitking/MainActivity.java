@@ -2,25 +2,19 @@ package com.theunheard.habitking;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TimePicker;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
-import static android.text.InputType.*;
+import static android.text.InputType.TYPE_CLASS_DATETIME;
+import static android.text.InputType.TYPE_DATETIME_VARIATION_DATE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText timeTextView;
     private EditText reminderDateTextView;
     private EditText reminderTimeTextView;
+    private Button addPersonButton;
 
     private final static String TAG = "HabitKing";
 
@@ -46,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         timeTextView = (EditText) findViewById(R.id.timeLastPerformedInput);
         reminderDateTextView = (EditText) findViewById(R.id.reminderDateInput);
         reminderTimeTextView = (EditText) findViewById(R.id.reminderTimeInput);
+        addPersonButton = (Button) findViewById(R.id.addPersonInteractedButton);
 
 
 
@@ -67,52 +63,13 @@ public class MainActivity extends AppCompatActivity {
         setupField(reminderDateTextView);
         setupField(reminderTimeTextView);
 
-
-//        dateTextView.setInputType(InputType.TYPE_NULL);
-//        dateTextView.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                setDateField();
-//            }
-//
-//
-//        });
-//
-//        dateTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (hasFocus) {
-//                    setDateField();
-//                }
-//            }
-//        });
-//
-//
-//        timeTextView.setInputType(InputType.TYPE_NULL);
-//        timeTextView.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                setTimeField();
-//            }
-//
-//
-//        });
-//
-//        timeTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (hasFocus) {
-//                    setTimeField();
-//                }
-//            }
-//        });
+        setupAddInteractedPersonButton(addPersonButton);
 
 
 
+    }
 
-
+    private void setupAddInteractedPersonButton(Button btn) {
 
     }
 
@@ -131,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 hideSoftKeyboard(et);
-                setField(et);
+                setDialog(et);
             }
         });
 
@@ -140,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 hideSoftKeyboard(et);
                 if (hasFocus) {
-                    setField(et);
+                    setDialog(et);
                 }
             }
         });
@@ -156,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void setField(EditText et) {
+    private void setDialog(EditText et) {
         Calendar now = Calendar.getInstance();
 //        Log.d(TAG, "input type:" + et.getInputType());
         if(et.getInputType() == (TYPE_CLASS_DATETIME | TYPE_DATETIME_VARIATION_DATE)) {
@@ -167,8 +124,6 @@ public class MainActivity extends AppCompatActivity {
             timePickerDialog.show();
         }
     }
-
-
 
 }
 
