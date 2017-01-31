@@ -15,6 +15,9 @@ public class Habit {
     private Integer frequencyPerformed;
     private ArrayList<String> personsInteracted;
 
+    public Habit() {
+    }
+
     public Habit(Date dateLastPerformed, String name, String ownerUid) {
         this.dateLastPerformed = dateLastPerformed;
         this.name = name;

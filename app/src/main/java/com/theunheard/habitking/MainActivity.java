@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,11 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -32,6 +34,7 @@ import static android.text.InputType.TYPE_CLASS_DATETIME;
 import static android.text.InputType.TYPE_DATETIME_VARIATION_DATE;
 
 public class MainActivity extends AppCompatActivity {
+
 
 
     private DatePickerDialog datePickerDialog;
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
+        habitNameTextView = (EditText) findViewById(R.id.habitInputName);
         dateTextView = (EditText) findViewById(R.id.dateLastPerformedInput);
         timeTextView = (EditText) findViewById(R.id.timeLastPerformedInput);
         reminderDateTextView = (EditText) findViewById(R.id.reminderDateInput);
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // firebase initialization
+
         _firebaseInstance = FirebaseDatabase.getInstance();
         _firebaseInstance.setPersistenceEnabled(true);
         _databaseRef = _firebaseInstance.getReference();
@@ -111,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean valid = areEntriesValid();
 //                if(isNetworkAvailable()) {
                 if(areEntriesValid()) {
                     saveToCloud();
@@ -140,20 +143,54 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private Date stringToDate(String dateString, String format) {
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat(format); // here set the pattern as you date in string was containing like date/month/year
+            Date date = sdf.parse(dateString);
+            return date;
+        }catch(ParseException ex){
+            // handle parsing exception if date string was different from the pattern applying into the SimpleDateFormat contructor
+            return null;
+        }
+    }
+
+    private Date prepareDatePerformed() {
+        Date convertedLastDatePerformed = stringToDate(dateTextView.getText().toString(), CustomSetListener.dateFormat);
+        Date convertedLastTimePerformed = stringToDate(timeTextView.getText().toString(), CustomSetListener.timeFormat);
+        Calendar d = Calendar.getInstance();
+        d.setTime(convertedLastDatePerformed);
+        Calendar t = Calendar.getInstance();
+        t.setTime(convertedLastTimePerformed);
+        Calendar finalCal = Calendar.getInstance();
+        finalCal.set(Calendar.DAY_OF_MONTH, d.get(Calendar.DAY_OF_MONTH));
+        finalCal.set(Calendar.MONTH, d.get(Calendar.MONTH));
+        finalCal.set(Calendar.YEAR, d.get(Calendar.YEAR));
+        finalCal.set(Calendar.HOUR, t.get(Calendar.HOUR));
+        finalCal.set(Calendar.MINUTE, t.get(Calendar.MINUTE));
+
+        return finalCal.getTime();
+
+    }
+
     private void saveToCloud() {
-        Date convertedLastDatePerformed = stringToDate(dateTextView.getText().toString());
+        // TODO: save data to firebase
+        Date dateToSave = prepareDatePerformed();
+
         String habitName = habitNameTextView.getText().toString();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if(checkLogInStatus(user)) {
-            String uid = user.getUid();
+            String uid = user.getUid().toString();
+            Habit habit = new Habit(dateToSave, habitName, uid);
+            _databaseRef.child("habits").setValue(habit);
+            Log.d(TAG, "Data saved");
+            Toast.makeText(MainActivity.this, "Data saved!", Toast.LENGTH_SHORT);
         } else {
+            Log.d(TAG, "Data not saved");
+            Toast.makeText(MainActivity.this, "No date saved", Toast.LENGTH_SHORT);
         }
 
-
-
-
-        Habit habit = new Habit()
     }
     private boolean areEntriesValid() {
         if(habitNameTextView.getText().toString().trim().length() == 0) { return false; }
@@ -161,11 +198,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void savetoCloud() {
-        // TODO: save data to firebase
-        Habit habit = new Habit()
-        _databaseRef.child("habits").child
-    }
 
     private void setupAddInteractedPersonButton(Button btn) {
         btn.setOnClickListener(new View.OnClickListener() {
