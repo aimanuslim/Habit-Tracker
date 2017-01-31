@@ -73,10 +73,13 @@ public class MainActivity extends AppCompatActivity {
 
         // firebase initialization
 
+        // TODO: skip firebase and figure out how to use local storage for now
+        if(_databaseRef == null) {
+            _firebaseInstance = FirebaseDatabase.getInstance();
+            _firebaseInstance.setPersistenceEnabled(true);
+            _databaseRef = _firebaseInstance.getReference();
+        }
 
-        _firebaseInstance = FirebaseDatabase.getInstance();
-        _firebaseInstance.setPersistenceEnabled(true);
-        _databaseRef = _firebaseInstance.getReference();
 
 
 
