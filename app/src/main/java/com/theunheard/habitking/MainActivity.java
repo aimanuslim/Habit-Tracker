@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private Button addPersonButton;
     private Button recordButton;
 
+    private DBHandler _dbHandler;
 
 
     // Firebase objects
@@ -70,16 +71,21 @@ public class MainActivity extends AppCompatActivity {
         addPersonButton = (Button) findViewById(R.id.addPersonInteractedButton);
         recordButton = (Button) findViewById(R.id.recordButton);
 
+        _dbHandler = new DBHandler(this, null, null, 1);
+
 
         // firebase initialization
 
         // TODO: skip firebase and figure out how to use local storage for now
-        if(_databaseRef == null) {
-            _firebaseInstance = FirebaseDatabase.getInstance();
-            _firebaseInstance.setPersistenceEnabled(true);
-            _databaseRef = _firebaseInstance.getReference();
-        }
+//        if(_databaseRef == null) {
+//            _firebaseInstance = FirebaseDatabase.getInstance();
+//            _firebaseInstance.setPersistenceEnabled(true);
+//            _databaseRef = _firebaseInstance.getReference();
+//        }
 
+
+//        DBHandler db = new DBHandler(this, null, null, 1);
+//        db.deleteTables();
 
 
 
@@ -123,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 if(areEntriesValid()) {
                     saveToCloud();
                 } else {
-                    Toast.makeText(MainActivity.this, "Some entries are required to be filled in!", Toast.LENGTH_SHORT);
+                    Log.d(TAG, "Entries not valid");
                 }
 //                } else {
                     // TODO: save data to local memory
@@ -143,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // No user is signed in
             Toast.makeText(MainActivity.this, "User not logged in!", Toast.LENGTH_SHORT);
+
             return false;
         }
     }
@@ -179,21 +186,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveToCloud() {
         // TODO: save data to firebase
-        Date dateToSave = prepareDatePerformed();
-
         String habitName = habitNameTextView.getText().toString();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        Habit habit = new Habit(prepareDatePerformed(), habitName, "0");
 
-        if(checkLogInStatus(user)) {
-            String uid = user.getUid().toString();
-            Habit habit = new Habit(dateToSave, habitName, uid);
-            _databaseRef.child("habits").setValue(habit);
-            Log.d(TAG, "Data saved");
-            Toast.makeText(MainActivity.this, "Data saved!", Toast.LENGTH_SHORT);
-        } else {
-            Log.d(TAG, "Data not saved");
-            Toast.makeText(MainActivity.this, "No date saved", Toast.LENGTH_SHORT);
-        }
+        _dbHandler.addHabits(habit);
+        Log.d(TAG, "Done adding");
+        Log.d(TAG, "DB " + _dbHandler.databasetostring());
+
+
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//
+//        if(checkLogInStatus(user)) {
+//            String uid = user.getUid().toString();
+//            Habit habit = new Habit(dateToSave, habitName, uid);
+//            _databaseRef.child("habits").setValue(habit);
+//            Log.d(TAG, "Data saved");
+//            Toast.makeText(MainActivity.this, "Data saved!", Toast.LENGTH_SHORT);
+//        } else {
+//            Log.d(TAG, "Data not saved");
+//            Toast.makeText(MainActivity.this, "No date saved", Toast.LENGTH_SHORT);
+//        }
 
     }
     private boolean areEntriesValid() {
