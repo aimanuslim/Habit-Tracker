@@ -14,9 +14,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,15 +38,16 @@ import static android.text.InputType.TYPE_DATETIME_VARIATION_DATE;
 public class MainActivity extends AppCompatActivity {
 
 
-
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
 
     private EditText habitNameTextView;
     private EditText dateTextView;
     private EditText timeTextView;
-    private EditText reminderDateTextView;
-    private EditText reminderTimeTextView;
+    private EditText categoryTextView;
+    private EditText repetitionFrequencyTextView;
+    private Spinner repetitionPeriodSpinner;
+
     private Button addPersonButton;
     private Button recordButton;
 
@@ -66,12 +69,13 @@ public class MainActivity extends AppCompatActivity {
         habitNameTextView = (EditText) findViewById(R.id.habitInputName);
         dateTextView = (EditText) findViewById(R.id.dateLastPerformedInput);
         timeTextView = (EditText) findViewById(R.id.timeLastPerformedInput);
-        reminderDateTextView = (EditText) findViewById(R.id.reminderDateInput);
-        reminderTimeTextView = (EditText) findViewById(R.id.reminderTimeInput);
+
+        categoryTextView = (EditText) findViewById(R.id.categoryInput);
+        repetitionFrequencyTextView = (EditText) findViewById(R.id.repetitionFrequencyInput);
         addPersonButton = (Button) findViewById(R.id.addPersonInteractedButton);
         recordButton = (Button) findViewById(R.id.recordButton);
 
-        _dbHandler = new DBHandler(this, null, null, 1);
+        _dbHandler = new DBHandler(this);
 
 
         // firebase initialization
@@ -98,17 +102,29 @@ public class MainActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
         dateTextView.setWidth(width/2);
         timeTextView.setWidth(width/2);
-        reminderDateTextView.setWidth(width/2);
-        reminderTimeTextView.setWidth(width/2);
 
+
+        setupRepetitionPeriodSpinner();
 
         setupField(dateTextView);
         setupField(timeTextView);
-        setupField(reminderDateTextView);
-        setupField(reminderTimeTextView);
 
         setupAddInteractedPersonButton(addPersonButton);
         setupRecordButton(recordButton);
+
+
+
+    }
+
+    private void setupRepetitionPeriodSpinner() {
+        repetitionPeriodSpinner = (Spinner) findViewById(R.id.repetitionPeriodSpinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.repetition_period_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        repetitionPeriodSpinner.setAdapter(adapter);
 
 
 
@@ -132,8 +148,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "Entries not valid");
                 }
 //                } else {
-                    // TODO: save data to local memory
-                    // TODO: create a background process that checks for connection
+
 
 //                }
             }
@@ -149,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // No user is signed in
             Toast.makeText(MainActivity.this, "User not logged in!", Toast.LENGTH_SHORT);
-
             return false;
         }
     }
@@ -184,10 +198,47 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    private long calculatePeriodInMinutes() {
+        int itemPos = repetitionPeriodSpinner.getSelectedItemPosition();
+        long multiplier;
+        switch(itemPos) {
+            case 0: // minute
+                multiplier = 1;
+                return multiplier;
+            case 1: // hour
+                multiplier = 1 * 60;
+                return multiplier;
+            case 2: // day
+                multiplier = 1 * 60 * 24;
+                return multiplier;
+            case 3: // week
+                multiplier = 1 * 60 * 24 * 7;
+                return multiplier;
+            case 4: // month
+                multiplier = 1 * 60 * 24 * 7 * 30;
+                return multiplier;
+            case 5: // year
+                multiplier = 1 * 60 * 24 * 7 * 30 * 12;
+                return multiplier;
+            default: return 0;
+        }
+    }
+    
     private void saveToCloud() {
         // TODO: save data to firebase
         String habitName = habitNameTextView.getText().toString();
         Habit habit = new Habit(prepareDatePerformed(), habitName, "0");
+        if(categoryTextView.getText().toString() != "") {
+            habit.setCategory(categoryTextView.getText().toString());
+        }
+
+        if(repetitionFrequencyTextView.getText().toString() != "") {
+            habit.setRepetitionPeriod(calculatePeriodInMinutes());
+        }
+
+
+
 
         _dbHandler.addHabits(habit);
         Log.d(TAG, "Done adding");

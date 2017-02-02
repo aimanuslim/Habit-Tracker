@@ -96,30 +96,36 @@
             android:layout_below="@+id/categoryInput"
             android:id="@+id/reminderDetailsContainer">
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="date"
-                android:ems="10"
-                android:id="@+id/reminderDateInput"
-                android:layout_weight="1"
-                android:hint="Reminder date"
-                android:focusable="false"
-                />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="time"
-                android:ems="10"
-                android:id="@+id/reminderTimeInput"
-                android:layout_weight="1"
-                android:hint="Reminder time"
-                android:focusable="false"
-                />
-
             <!--TODO: add reminder for every week, month, day-->
 
+            <TextView
+                android:text="Remind me every"
+                android:layout_height="fill_parent"
+                android:id="@+id/textView"
+                android:layout_weight="0.4"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+
+                android:layout_marginRight="10px"
+                android:fontFamily="monospace"
+                android:layout_width="170dp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/repetitionFrequencyInput"
+                android:layout_weight="0.3"
+                android:hint="Repetition Frequency"
+                android:layout_marginRight="10px"
+                android:textSize="10sp" />
+
+            <Spinner
+                android:layout_height="fill_parent"
+                android:id="@+id/repetitionPeriodSpinner"
+                android:layout_weight="0.3"
+                android:layout_width="120dip" />
         </LinearLayout>
 
         <LinearLayout

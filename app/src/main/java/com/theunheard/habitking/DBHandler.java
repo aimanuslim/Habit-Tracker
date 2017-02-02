@@ -29,8 +29,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
 
-    public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    public DBHandler(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -46,15 +46,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
                 ");";
 
-        String queryPersonsInteracted = "CREATE TABLE " + TABLE_PIT + "(" +
-
-                COL_PITID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL_OWNID + " TEXT," +
-                COL_PITNAME + " TEXT " +
-                ");";
+//        String queryPersonsInteracted = "CREATE TABLE " + TABLE_PIT + "(" +
+//
+//                COL_PITID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//                COL_OWNID + " TEXT," +
+//                COL_PITNAME + " TEXT " +
+//                ");";
 
         db.execSQL(queryHabits);
-        db.execSQL(queryPersonsInteracted);
+//        db.execSQL(queryPersonsInteracted);
 
 
 
@@ -77,7 +77,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(COL_FREQUENCY, 0);
         values.put(COL_DATELP, habit.getDateLastPerformed().getTime());
 
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_HABITS, null, values);
         db.close();
 
@@ -102,7 +102,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void deleteHabit(String habitname, String ownerId){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_HABITS + " WHERE " + COL_NAME + "=\"" + habitname + "\"" +
-                " AND " + COL_OWNID + "=\"" + ownerId + "\"" +
+//                " AND " + COL_OWNID + "=\"" + ownerId + "\"" +
                 ";");
         db.close();
     }
@@ -113,7 +113,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db= getReadableDatabase();
 
-        String query = "SELECT * FROM " + TABLE_HABITS + " WHERE 1";
+        String query = "SELECT * FROM " + TABLE_HABITS;
 
         Cursor c =db.rawQuery(query,null);
 

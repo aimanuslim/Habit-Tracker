@@ -13,6 +13,7 @@ public class Habit {
     private String name;
     private String category;
     private Integer frequencyPerformed;
+    private long repetitionPeriod;
     private ArrayList<String> personsInteracted;
 
     public Habit() {
@@ -22,6 +23,19 @@ public class Habit {
         this.dateLastPerformed = dateLastPerformed;
         this.name = name;
         this.ownerUid = ownerUid;
+        this.category = null;
+        this.frequencyPerformed = 0;
+        this.repetitionPeriod = 0;
+        this.personsInteracted = null;
+
+    }
+
+    public long getRepetitionPeriod() {
+        return repetitionPeriod;
+    }
+
+    public void setRepetitionPeriod(long repetitionPeriod) {
+        this.repetitionPeriod = repetitionPeriod;
     }
 
     public String getOwnerUid() {
