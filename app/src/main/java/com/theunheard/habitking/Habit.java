@@ -1,6 +1,7 @@
 package com.theunheard.habitking;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ public class Habit {
     private String name;
     private String category;
     private Integer frequencyPerformed;
-    private long repetitionPeriod;
+    private Date nextReminderTime;
     private ArrayList<String> personsInteracted;
 
     public Habit() {
@@ -25,17 +26,34 @@ public class Habit {
         this.ownerUid = ownerUid;
         this.category = null;
         this.frequencyPerformed = 0;
-        this.repetitionPeriod = 0;
         this.personsInteracted = null;
 
     }
 
-    public long getRepetitionPeriod() {
-        return repetitionPeriod;
-    }
-
-    public void setRepetitionPeriod(long repetitionPeriod) {
-        this.repetitionPeriod = repetitionPeriod;
+    public void setNextReminderTime(int periodSpinnerPosition, int deltaTime) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(dateLastPerformed.getTime());
+        switch(periodSpinnerPosition) {
+            case 0: // minute
+                cal.add(Calendar.MINUTE, deltaTime);
+                nextReminderTime = cal.getTime();
+            case 1: // hour
+                cal.add(Calendar.HOUR, deltaTime);
+                nextReminderTime = cal.getTime();
+            case 2: // day
+                cal.add(Calendar.DATE, deltaTime);
+                nextReminderTime = cal.getTime();
+            case 3: // week
+                cal.add(Calendar.WEEK_OF_YEAR, deltaTime);
+                nextReminderTime = cal.getTime();
+            case 4: // month
+                cal.add(Calendar.MONTH, deltaTime);
+                nextReminderTime = cal.getTime();
+            case 5: // year
+                cal.add(Calendar.YEAR, deltaTime);
+                nextReminderTime = cal.getTime();
+            default: return;
+        }
     }
 
     public String getOwnerUid() {

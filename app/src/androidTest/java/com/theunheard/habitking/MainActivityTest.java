@@ -28,6 +28,6 @@ public class MainActivityTest  {
 
     @Test
     public void addingHabits() {
-        onView(withId())
+
     }
 }

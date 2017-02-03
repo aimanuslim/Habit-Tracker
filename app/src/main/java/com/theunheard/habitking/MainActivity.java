@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ListViewCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -18,6 +19,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,8 +32,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static android.text.InputType.TYPE_CLASS_DATETIME;
 import static android.text.InputType.TYPE_DATETIME_VARIATION_DATE;
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText categoryTextView;
     private EditText repetitionFrequencyTextView;
     private Spinner repetitionPeriodSpinner;
+    private ListView personInteractedListView;
 
     private Button addPersonButton;
     private Button recordButton;
@@ -59,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase _firebaseInstance;
 
     private final static String TAG = "HabitKing";
+
+    // for list view
+    private List<String> person_list;
+    ArrayAdapter<String> arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +84,13 @@ public class MainActivity extends AppCompatActivity {
         repetitionFrequencyTextView = (EditText) findViewById(R.id.repetitionFrequencyInput);
         addPersonButton = (Button) findViewById(R.id.addPersonInteractedButton);
         recordButton = (Button) findViewById(R.id.recordButton);
+
+        personInteractedListView = (ListView) findViewById(R.id.personInteractedListView);
+
+
+        person_list = new ArrayList<String>();
+        arrayAdapter = new ArrayAdapter<String>(this, R.layout.namerow, person_list);
+        personInteractedListView.setAdapter(arrayAdapter);
 
         _dbHandler = new DBHandler(this);
 
@@ -111,6 +128,11 @@ public class MainActivity extends AppCompatActivity {
 
         setupAddInteractedPersonButton(addPersonButton);
         setupRecordButton(recordButton);
+
+        // TODO: make the textfield for period resize
+        // TODO: put autocomplete on all on category and names
+        // TODO: add menubar to navigate to other activity (list of habits)
+
 
 
 
@@ -199,32 +221,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private long calculatePeriodInMinutes() {
-        int itemPos = repetitionPeriodSpinner.getSelectedItemPosition();
-        long multiplier;
-        switch(itemPos) {
-            case 0: // minute
-                multiplier = 1;
-                return multiplier;
-            case 1: // hour
-                multiplier = 1 * 60;
-                return multiplier;
-            case 2: // day
-                multiplier = 1 * 60 * 24;
-                return multiplier;
-            case 3: // week
-                multiplier = 1 * 60 * 24 * 7;
-                return multiplier;
-            case 4: // month
-                multiplier = 1 * 60 * 24 * 7 * 30;
-                return multiplier;
-            case 5: // year
-                multiplier = 1 * 60 * 24 * 7 * 30 * 12;
-                return multiplier;
-            default: return 0;
-        }
-    }
-    
+
+
     private void saveToCloud() {
         // TODO: save data to firebase
         String habitName = habitNameTextView.getText().toString();
@@ -234,13 +232,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(repetitionFrequencyTextView.getText().toString() != "") {
-            habit.setRepetitionPeriod(calculatePeriodInMinutes());
+            int deltaTime = Integer.parseInt(repetitionFrequencyTextView.getText().toString());
+            habit.setNextReminderTime(repetitionPeriodSpinner.getSelectedItemPosition(), deltaTime);
         }
 
-
-
-
         _dbHandler.addHabits(habit);
+        if(personInteractedListView.getAdapter().getCount() != 0) {
+            _dbHandler.addPersonInteracted(habit);
+        }
         Log.d(TAG, "Done adding");
         Log.d(TAG, "DB " + _dbHandler.databasetostring());
 
@@ -266,6 +265,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void setupPersonInteractedListView() {
+
+    }
+
     private void setupAddInteractedPersonButton(Button btn) {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,10 +284,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String personName = input.getEditableText().toString();
-                        TextView tv = (TextView) new TextView(MainActivity.this);
-                        LinearLayout ll = (LinearLayout) findViewById(R.id.interactedPersonList);
-                        tv.setText(personName);
-                        ll.addView(tv);
+                        person_list.add(personName);
+                        arrayAdapter.notifyDataSetChanged();
                     }
                 });
 
