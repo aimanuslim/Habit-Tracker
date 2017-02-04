@@ -20,13 +20,12 @@ public class CustomSetListener implements DatePickerDialog.OnDateSetListener, Ti
     public CustomSetListener(EditText et) {
         this.editTextToModify = et;
     }
-    public static final String dateFormat = "dd-MM-yyyy";
-    public static final String timeFormat = "h:mm a";
+
 
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        DateFormat dateFormatter = new SimpleDateFormat(dateFormat, Locale.US);
+        DateFormat dateFormatter = new SimpleDateFormat(Utility.dateFormat, Locale.US);
         Calendar dateSelected = Calendar.getInstance();
         dateSelected.set(year, monthOfYear, dayOfMonth, 0, 0);
         editTextToModify.setText(dateFormatter.format(dateSelected.getTime()));
@@ -34,7 +33,7 @@ public class CustomSetListener implements DatePickerDialog.OnDateSetListener, Ti
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-        DateFormat timeFormatter = new SimpleDateFormat(timeFormat, Locale.US);
+        DateFormat timeFormatter = new SimpleDateFormat(Utility.timeFormat, Locale.US);
         Calendar timeSelected = Calendar.getInstance();
         timeSelected.set(timeSelected.get(Calendar.YEAR), timeSelected.get(Calendar.MONTH), timeSelected.get(Calendar.DATE), hourOfDay, minute);
         editTextToModify.setText(timeFormatter.format(timeSelected.getTime()));

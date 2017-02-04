@@ -5,14 +5,18 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by aimanmduslim on 2/2/17.
  */
 
 public class DBHandler extends SQLiteOpenHelper {
+    private static DBHandler sInstance;
     private final static int DATABASE_VERSION = 1;
     private final static String DATABASE_NAME = "habits.db";
     public static final String TABLE_HABITS="habits";
@@ -24,12 +28,23 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COL_DATELP = "dateLastPerformed";
     public static final String COL_CATEGORY = "category";
     public static final String COL_FREQUENCY = "frequency";
+    public static final String COL_PERIOD = "period";
+    public static final String COL_MULTIPLIER = "multiplier";
 
 
     public static final String COL_PITID = "_pitid";
     public static final String COL_PITNAME = "personInteracted";
 
+    public static synchronized DBHandler getInstance(Context context) {
 
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = new DBHandler(context.getApplicationContext());
+        }
+        return sInstance;
+    }
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -45,6 +60,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 COL_DATELP + " INTEGER, " + // date has to be stored as an integer
                 COL_CATEGORY + " TEXT, " +
                 COL_FREQUENCY + " INTEGER " +
+                COL_PERIOD + " TEXT " +
+                COL_MULTIPLIER + " INTEGER " +
+
 
                 ");";
 
@@ -89,6 +107,45 @@ public class DBHandler extends SQLiteOpenHelper {
         return names;
     }
 
+    public ArrayList<Habit> getAllHabits() {
+        ArrayList<Habit> habitList = new ArrayList<Habit>();
+
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_HABITS;
+        Cursor c = db.rawQuery(query ,null);
+        c.moveToFirst();
+        while(!c.isAfterLast()) {
+            Habit habit = new Habit();
+            if(c.getString(c.getColumnIndex(COL_NAME)) != null) {
+                habit.setName(c.getString(c.getColumnIndex(COL_NAME)));
+            }
+
+            if(c.getString(c.getColumnIndex(COL_CATEGORY)) != null) {
+                habit.setCategory(c.getString(c.getColumnIndex(COL_CATEGORY)));
+            }
+
+            try {
+                habit.setDateLastPerformed(new Date(c.getLong(c.getColumnIndex(COL_DATELP)) * 1000));
+            } catch (Exception e) {
+                Log.d("Habit King", "Date doesn't exist for this row?");
+            }
+            // TODO: finish this
+
+
+
+
+
+
+
+
+
+            c.moveToNext();
+
+        }
+        return habitList;
+
+    }
+
     public void addHabits(Habit habit) {
         ContentValues values = new ContentValues();
         values.put(COL_NAME, habit.getName());
@@ -96,7 +153,8 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(COL_CATEGORY, habit.getCategory());
         values.put(COL_FREQUENCY, 0);
         values.put(COL_DATELP, habit.getDateLastPerformed().getTime());
-
+        values.put(COL_PERIOD, habit.getReminderPerPeriodLength());
+        values.put(COL_MULTIPLIER, habit.getReminderPeriodMultiplier());
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_HABITS, null, values);
         db.close();

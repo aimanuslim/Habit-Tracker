@@ -127,10 +127,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         person_list = new ArrayList<String>();
-        arrayAdapter = new ArrayAdapter<String>(this, R.layout.namerow, person_list);
+        arrayAdapter = new ArrayAdapter<String>(this, R.layout.person_name_item, person_list);
         personInteractedListView.setAdapter(arrayAdapter);
 
-        _dbHandler = new DBHandler(this);
+        _dbHandler = DBHandler.getInstance(this);
 
 
         // firebase initialization
@@ -249,20 +249,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private Date stringToDate(String dateString, String format) {
-        try{
-            SimpleDateFormat sdf = new SimpleDateFormat(format); // here set the pattern as you date in string was containing like date/month/year
-            Date date = sdf.parse(dateString);
-            return date;
-        }catch(ParseException ex){
-            // handle parsing exception if date string was different from the pattern applying into the SimpleDateFormat contructor
-            return null;
-        }
-    }
+
 
     private Date prepareDatePerformed() {
-        Date convertedLastDatePerformed = stringToDate(dateTextView.getText().toString(), CustomSetListener.dateFormat);
-        Date convertedLastTimePerformed = stringToDate(timeTextView.getText().toString(), CustomSetListener.timeFormat);
+        Date convertedLastDatePerformed = Utility.stringToDate(dateTextView.getText().toString(), Utility.dateFormat);
+        Date convertedLastTimePerformed = Utility.stringToDate(timeTextView.getText().toString(), Utility.timeFormat);
         Calendar d = Calendar.getInstance();
         d.setTime(convertedLastDatePerformed);
         Calendar t = Calendar.getInstance();
@@ -291,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(repetitionFrequencyTextView.getText().toString() != "") {
             int deltaTime = Integer.parseInt(repetitionFrequencyTextView.getText().toString());
-            habit.setNextReminderTime(repetitionPeriodSpinner.getSelectedItemPosition(), deltaTime);
+            habit.setReminderTimeAndProperties(repetitionPeriodSpinner.getSelectedItemPosition(), deltaTime);
         }
 
         _dbHandler.addHabits(habit);
