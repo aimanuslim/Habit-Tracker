@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
 
     android:layout_width="match_parent"
@@ -11,167 +12,182 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.theunheard.habitking.MainActivity"
     android:fillViewport="true"
+    android:orientation="vertical"
+    android:isScrollContainer="true"
     >
 
-
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/habitron_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/mainContainer">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-        <TextView
-            android:text="Enter details of the habit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="18dp"
-            android:id="@+id/instructionLabel"
-            android:textSize="20dip"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:layout_below="@+id/instructionLabel"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
-            android:id="@+id/habitInputName"
-            android:inputType="text|textCapWords|textPersonName"
-            android:hint="Habit Name" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/datetimeContainer">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/mainContainer">
 
-            <!--<TimePicker-->
+            <TextView
+                android:text="Enter details of the habit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="18dp"
+                android:id="@+id/instructionLabel"
+                android:textSize="20dip"/>
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/habitInputName"
+                android:hint="Habit Name"
+
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/datetimeContainer">
+
+                <!--<TimePicker-->
                 <!--android:id="@+id/timePicker1"-->
                 <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content" />-->
 
-            <EditText
-                android:layout_width="wrap_content"
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:id="@+id/dateLastPerformedInput"
+                    android:layout_weight="1"
+                    android:hint="Date Executed"
+                    android:inputType="date"
+                    android:focusable="false"
+
+                    />
+
+                <EditText
+                    android:focusable="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:inputType="time"
+                    android:ems="10"
+                    android:id="@+id/timeLastPerformedInput"
+                    android:layout_weight="1"
+                    android:hint="Time Executed"
+
+                    />
+
+            </LinearLayout>
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:inputType="text|textPersonName"
+                android:id="@+id/categoryInput"
+                android:hint="Category"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:id="@+id/dateLastPerformedInput"
+                android:layout_below="@+id/categoryInput"
+                android:id="@+id/reminderDetailsContainer">
+
+                <!--TODO: add reminder for every week, month, day-->
+
+                <TextView
+                    android:text="Remind me every"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/textView"
+                    android:layout_weight="0.4"
+                    android:textAlignment="center"
+                    android:gravity="center_vertical"
+
+                    android:layout_marginRight="10px"
+                    android:fontFamily="monospace"
+                    android:layout_width="170dp" />
+
+                <EditText
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/repetitionFrequencyInput"
+                    android:layout_marginRight="10px"
+                    android:textSize="10sp"
+                    android:textAlignment="center" />
+
+                <Spinner
+                    android:layout_height="fill_parent"
+                    android:id="@+id/repetitionPeriodSpinner"
+                    android:layout_weight="0.3"
+                    android:layout_width="120dip" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
                 android:layout_weight="1"
-                android:hint="Date Executed"
-                android:inputType="date"
-                android:focusable="false"
-
-                />
-
-            <EditText
-                android:focusable="false"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:inputType="time"
-                android:ems="10"
-                android:id="@+id/timeLastPerformedInput"
-                android:layout_weight="1"
-                android:hint="Time Executed"
-
-                />
-
-        </LinearLayout>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:inputType="text|textPersonName"
-            android:id="@+id/categoryInput"
-            android:hint="Category"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/categoryInput"
-            android:id="@+id/reminderDetailsContainer">
-
-            <!--TODO: add reminder for every week, month, day-->
-
-            <TextView
-                android:text="Remind me every"
-                android:layout_height="fill_parent"
-                android:id="@+id/textView"
-                android:layout_weight="0.4"
-                android:textAlignment="center"
-                android:gravity="center_vertical"
-
-                android:layout_marginRight="10px"
-                android:fontFamily="monospace"
-                android:layout_width="170dp" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/repetitionFrequencyInput"
-                android:layout_weight="0.3"
-                android:hint="Repetition Frequency"
-                android:layout_marginRight="10px"
-                android:textSize="10sp"
-                android:textAlignment="center" />
-
-            <Spinner
-                android:layout_height="fill_parent"
-                android:id="@+id/repetitionPeriodSpinner"
-                android:layout_weight="0.3"
-                android:layout_width="120dip" />
-        </LinearLayout>
-
-        <LinearLayout
-
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_weight="1"
-            android:id="@+id/personInteractedContainer">
+                android:id="@+id/personInteractedContainer">
 
 
-            <ListView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:id="@+id/personInteractedListView"
+                <ListView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:id="@+id/personInteractedListView"
 
-                android:transcriptMode="alwaysScroll"/>
+                    android:transcriptMode="alwaysScroll"/>
+
+                <Button
+                    android:text="Add Interacted Person"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addPersonInteractedButton"
+                    android:layout_weight="0.5"
+                    android:visibility="visible"
+                    android:layout_gravity="center_vertical" />
+
+            </LinearLayout>
+
 
             <Button
-                android:text="Add Interacted Person"
-                android:layout_width="0dp"
+
+                android:text="Record!"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/addPersonInteractedButton"
-                android:layout_weight="0.5"
-                android:visibility="visible"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_horizontal"
+
+                android:id="@+id/recordButton"
+
+                />
+
+
+
+
+
 
         </LinearLayout>
 
 
-        <Button
-
-            android:text="Record!"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-
-            android:id="@+id/recordButton"
-
-            />
+    </ScrollView>
 
 
 
-
-
-
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

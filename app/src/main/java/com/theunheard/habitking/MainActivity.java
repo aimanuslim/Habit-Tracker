@@ -5,24 +5,26 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ListViewCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
 
-    private EditText habitNameTextView;
+    private AutoCompleteTextView habitNameTextView;
     private EditText dateTextView;
     private EditText timeTextView;
-    private EditText categoryTextView;
+    private AutoCompleteTextView categoryTextView;
     private EditText repetitionFrequencyTextView;
     private Spinner repetitionPeriodSpinner;
     private ListView personInteractedListView;
@@ -71,16 +73,52 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> arrayAdapter;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_toolbar, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_feedback:
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+            case R.id.action_viewhabits:
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                Intent myIntent = new Intent(getApplicationContext(), HabitListActivity.class);
+                startActivityForResult(myIntent, 0);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.habitron_toolbar);
+        setSupportActionBar(myToolbar);
 
 
-        habitNameTextView = (EditText) findViewById(R.id.habitInputName);
+
+
+
+        habitNameTextView = (AutoCompleteTextView) findViewById(R.id.habitInputName);
         dateTextView = (EditText) findViewById(R.id.dateLastPerformedInput);
         timeTextView = (EditText) findViewById(R.id.timeLastPerformedInput);
 
-        categoryTextView = (EditText) findViewById(R.id.categoryInput);
+        categoryTextView = (AutoCompleteTextView) findViewById(R.id.categoryInput);
         repetitionFrequencyTextView = (EditText) findViewById(R.id.repetitionFrequencyInput);
         addPersonButton = (Button) findViewById(R.id.addPersonInteractedButton);
         recordButton = (Button) findViewById(R.id.recordButton);
@@ -120,12 +158,13 @@ public class MainActivity extends AppCompatActivity {
         dateTextView.setWidth(width/2);
         timeTextView.setWidth(width/2);
 
-
+        setupHabitNameAutoComplete();
         setupRepetitionPeriodSpinner();
 
         setupField(dateTextView);
         setupField(timeTextView);
 
+        setupRepetitionFrequencyField();
         setupAddInteractedPersonButton(addPersonButton);
         setupRecordButton(recordButton);
 
@@ -137,6 +176,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private void setupHabitNameAutoComplete() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                (this,android.R.layout.simple_list_item_1,_dbHandler.getNames(_dbHandler.COL_NAME));
+        habitNameTextView.setAdapter(adapter);
+    }
+
+    private void setupCategoryAutoComplete() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                (this,android.R.layout.simple_list_item_1,_dbHandler.getNames(_dbHandler.COL_CATEGORY));
+        categoryTextView.setAdapter(adapter);
+    }
+
+
 
     private void setupRepetitionPeriodSpinner() {
         repetitionPeriodSpinner = (Spinner) findViewById(R.id.repetitionPeriodSpinner);
@@ -151,6 +204,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private void setupRepetitionFrequencyField() {
+
+    }
+
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -224,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void saveToCloud() {
-        // TODO: save data to firebase
+
         String habitName = habitNameTextView.getText().toString();
         Habit habit = new Habit(prepareDatePerformed(), habitName, "0");
         if(categoryTextView.getText().toString() != "") {

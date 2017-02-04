@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 /**
  * Created by aimanmduslim on 2/2/17.
  */
@@ -67,6 +69,24 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS"+TABLE_HABITS);
         db.execSQL("DROP TABLE IF EXISTS"+TABLE_PIT);
         onCreate(db);
+    }
+
+    public ArrayList<String> getNames(String colName) {
+        ArrayList<String> names = new ArrayList<String>();
+        SQLiteDatabase db= getReadableDatabase();
+        String query = "SELECT " + colName + " FROM " + TABLE_HABITS;
+        Cursor c = db.rawQuery(query ,null);
+        c.moveToFirst();
+        while(!c.isAfterLast()) {
+            if(c.getString(c.getColumnIndex(colName))!=null) {
+                String name = c.getString(c.getColumnIndex(colName));
+                names.add(name);
+            }
+            c.moveToNext();
+
+        }
+        db.close();
+        return names;
     }
 
     public void addHabits(Habit habit) {
