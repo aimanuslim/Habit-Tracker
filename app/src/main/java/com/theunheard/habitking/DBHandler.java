@@ -17,6 +17,7 @@ import java.util.Date;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static DBHandler sInstance;
+    private static Context myContext;
     private final static int DATABASE_VERSION = 1;
     private final static String DATABASE_NAME = "habits.db";
     public static final String TABLE_HABITS="habits";
@@ -35,19 +36,20 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COL_PITID = "_pitid";
     public static final String COL_PITNAME = "personInteracted";
 
-    public static synchronized DBHandler getInstance(Context context) {
-
-        // Use the application context, which will ensure that you
-        // don't accidentally leak an Activity's context.
-        // See this article for more information: http://bit.ly/6LRzfx
-        if (sInstance == null) {
-            sInstance = new DBHandler(context.getApplicationContext());
-        }
-        return sInstance;
-    }
+//    public static synchronized DBHandler getInstance(Context context) {
+//
+//        // Use the application context, which will ensure that you
+//        // don't accidentally leak an Activity's context.
+//        // See this article for more information: http://bit.ly/6LRzfx
+//        if (sInstance == null) {
+//            sInstance = new DBHandler(context.getApplicationContext());
+//        }
+//        return sInstance;
+//    }
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        myContext = context;
     }
 
     @Override
@@ -80,6 +82,40 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
 
+    }
+
+    public void refreshDB () {
+        deleteTables();
+        createTable();
+
+    }
+
+
+    public void createTable() {
+        SQLiteDatabase db = getWritableDatabase();
+        String queryHabits = "CREATE TABLE " + TABLE_HABITS+ "(" +
+
+                COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_OWNID + " INTEGER, " +
+                COL_NAME + " TEXT, " +
+                COL_DATELP + " INTEGER, " + // date has to be stored as an integer
+                COL_CATEGORY + " TEXT, " +
+                COL_FREQUENCY + " INTEGER " +
+                COL_PERIOD + " TEXT " +
+                COL_MULTIPLIER + " INTEGER " +
+
+
+                ");";
+
+//        String queryPersonsInteracted = "CREATE TABLE " + TABLE_PIT + "(" +
+//
+//                COL_PITID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//                COL_OWNID + " TEXT," +
+//                COL_PITNAME + " TEXT " +
+//                ");";
+
+        db.execSQL(queryHabits);
+//        db.execSQL(queryPersonsInteracted);
     }
 
     @Override
@@ -125,7 +161,10 @@ public class DBHandler extends SQLiteOpenHelper {
             }
 
             try {
-                habit.setDateLastPerformed(new Date(c.getLong(c.getColumnIndex(COL_DATELP)) * 1000));
+                habit.setDateLastPerformed(new Date(c.getLong(c.getColumnIndex(COL_DATELP))));
+                habit.setReminderPeriodProperties(c.getString(c.getColumnIndex(COL_PERIOD)), c.getInt(c.getColumnIndex(COL_MULTIPLIER)));
+                habit.setFrequencyPerformed(c.getInt(c.getColumnIndex(COL_FREQUENCY)));
+
             } catch (Exception e) {
                 Log.d("Habit King", "Date doesn't exist for this row?");
             }
@@ -155,7 +194,9 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(COL_DATELP, habit.getDateLastPerformed().getTime());
         values.put(COL_PERIOD, habit.getReminderPerPeriodLength());
         values.put(COL_MULTIPLIER, habit.getReminderPeriodMultiplier());
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
+//        db.execSQL("ALTER TABLE " + TABLE_HABITS + " ADD COLUMN " + COL_MULTIPLIER + " INTEGER" );
+//        db.execSQL("ALTER TABLE " + TABLE_HABITS + " ADD COLUMN " + COL_PERIOD + " INTEGER" );
         db.insert(TABLE_HABITS, null, values);
         db.close();
 

@@ -35,7 +35,7 @@ public class HabitListActivity extends AppCompatActivity {
         });
 
         habitListView = (ListView) findViewById(R.id.habitListView);
-        _dbHandler = DBHandler.getInstance(this);
+        _dbHandler = new DBHandler(this);
 
        setupHabitListView();
 

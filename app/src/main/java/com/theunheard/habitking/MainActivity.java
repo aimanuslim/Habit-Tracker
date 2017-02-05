@@ -130,7 +130,14 @@ public class MainActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.person_name_item, person_list);
         personInteractedListView.setAdapter(arrayAdapter);
 
-        _dbHandler = DBHandler.getInstance(this);
+
+        _dbHandler = new DBHandler(this);
+        _dbHandler.refreshDB();
+//        _dbHandler.onCreate();
+
+//        _dbHandler.deleteTables();
+//        _dbHandler.createTable();
+
 
 
         // firebase initialization
@@ -144,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 //        DBHandler db = new DBHandler(this, null, null, 1);
-//        db.deleteTables();
+
 
 
 
