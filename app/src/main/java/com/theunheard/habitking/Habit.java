@@ -10,14 +10,23 @@ import java.util.Date;
 
 public class Habit {
     private String ownerUid;
+    private String id;
     private Date dateLastPerformed;
     private String name;
     private String category;
     private Integer frequencyPerformed; // TODO: frequency of action tracked independently since its recorded into the database, rememember to implement this functionality
     private Date nextReminderTime; // date when the user will be reminded of the habit, will be calculated using the reminder properties
-    private String reminderPerPeriodLength; // ex: weeks, months
+    private Integer reminderPerPeriodLengthMode; // ex: weeks, months
     private Integer reminderPeriodMultiplier;
     private ArrayList<String> personsInteracted;
+
+    public final static int PERIOD_MINUTE = 0;
+    public final static int PERIOD_HOUR = 1;
+    public final static int PERIOD_DAY = 2;
+    public final static int PERIOD_WEEK = 3;
+    public final static int PERIOD_MONTH = 4;
+    public final static int PERIOD_YEAR = 5;
+
 
     public Habit() {
     }
@@ -32,56 +41,79 @@ public class Habit {
 
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public void setReminderTimeAndProperties(int periodSpinnerPosition, int deltaTime) {
         // TODO: test next reminder time functionality
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(dateLastPerformed.getTime());
         switch(periodSpinnerPosition) {
-            case 0: // minute
+            case PERIOD_MINUTE: // minute
                 cal.add(Calendar.MINUTE, deltaTime);
                 nextReminderTime = cal.getTime();
-                setReminderPeriodProperties("minute" + (deltaTime > 1 ? "s" : ""), deltaTime);
+                setReminderPeriodProperties(periodSpinnerPosition, deltaTime);
                 break;
-            case 1: // hour
+            case PERIOD_HOUR: // hour
                 cal.add(Calendar.HOUR, deltaTime);
                 nextReminderTime = cal.getTime();
-                setReminderPeriodProperties("hour" + (deltaTime > 1 ? "s" : ""), deltaTime);
+                setReminderPeriodProperties(periodSpinnerPosition , deltaTime);
                 break;
-            case 2: // day
+            case PERIOD_DAY: // day
                 cal.add(Calendar.DATE, deltaTime);
                 nextReminderTime = cal.getTime();
-                setReminderPeriodProperties("day" + (deltaTime > 1 ? "s" : ""), deltaTime);
+                setReminderPeriodProperties(periodSpinnerPosition, deltaTime);
                 break;
-            case 3: // week
+            case PERIOD_WEEK: // week
                 cal.add(Calendar.WEEK_OF_YEAR, deltaTime);
                 nextReminderTime = cal.getTime();
-                setReminderPeriodProperties("week" + (deltaTime > 1 ? "s" : ""), deltaTime);
+                setReminderPeriodProperties(periodSpinnerPosition, deltaTime);
                 break;
-            case 4: // month
+            case PERIOD_MONTH: // month
                 cal.add(Calendar.MONTH, deltaTime);
                 nextReminderTime = cal.getTime();
-                setReminderPeriodProperties("month" + (deltaTime > 1 ? "s" : ""), deltaTime);
+                setReminderPeriodProperties(periodSpinnerPosition, deltaTime);
                 break;
-            case 5: // year
+            case PERIOD_YEAR: // year
                 cal.add(Calendar.YEAR, deltaTime);
                 nextReminderTime = cal.getTime();
-                setReminderPeriodProperties("year" + (deltaTime > 1 ? "s" : ""), deltaTime);
+                setReminderPeriodProperties(periodSpinnerPosition, deltaTime);
                 break;
             default: return;
         }
+    }
+
+    public String getPeriodString(int mode) {
+        switch(mode){
+            case PERIOD_MINUTE: return "minute" + (reminderPeriodMultiplier > 1 ? "s" : "");
+            case PERIOD_HOUR: return "hour" + (reminderPeriodMultiplier > 1 ? "s" : "");
+            case PERIOD_DAY: return "day" + (reminderPeriodMultiplier > 1 ? "s" : "");
+            case PERIOD_WEEK: return "week" + (reminderPeriodMultiplier > 1 ? "s" : "");
+            case PERIOD_MONTH: return "month" + (reminderPeriodMultiplier > 1 ? "s" : "");
+            case PERIOD_YEAR: return "year" + (reminderPeriodMultiplier > 1 ? "s" : "");
+        }
+        return "";
     }
 
     public Integer getReminderPeriodMultiplier() {
         return reminderPeriodMultiplier;
     }
 
-    public String getReminderPerPeriodLength() {
-        return reminderPerPeriodLength;
+    public Integer getReminderPerPeriodLengthMode() {
+        return reminderPerPeriodLengthMode;
+    }
+    public String getReminderPerPeriodLengthModeAsString() {
+        return getPeriodString(getReminderPerPeriodLengthMode());
     }
 
-    public void setReminderPeriodProperties(String length, Integer mult) {
+    public void setReminderPeriodProperties(int pos, Integer mult) {
         this.reminderPeriodMultiplier = mult;
-        this.reminderPerPeriodLength = length;
+        this.reminderPerPeriodLengthMode = pos;
     }
 
     public String getOwnerUid() {

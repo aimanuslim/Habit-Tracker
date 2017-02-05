@@ -32,8 +32,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -132,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         _dbHandler = new DBHandler(this);
-        _dbHandler.refreshDB();
+//        _dbHandler.refreshDB();
 //        _dbHandler.onCreate();
 
 //        _dbHandler.deleteTables();
@@ -292,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
             habit.setReminderTimeAndProperties(repetitionPeriodSpinner.getSelectedItemPosition(), deltaTime);
         }
 
-        _dbHandler.addHabits(habit);
+        _dbHandler.addHabit(habit);
         if(personInteractedListView.getAdapter().getCount() != 0) {
             _dbHandler.addPersonInteracted(habit);
         }

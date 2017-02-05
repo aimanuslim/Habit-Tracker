@@ -44,7 +44,7 @@ public class HabitListAdapter extends ArrayAdapter<Habit> {
             nameLabel.setText(habit.getName());
             categoryLabel.setText(habit.getCategory());
             lastPerformedLabel.setText(habit.getDateTimeLastPerformedAsString());
-            reminderPeriodLabel.setText(habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLength());
+            reminderPeriodLabel.setText(habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
         }
 
         return v;

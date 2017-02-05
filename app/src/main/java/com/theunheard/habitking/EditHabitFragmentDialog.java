@@ -16,7 +16,7 @@ import android.widget.EditText;
  */
 public class EditHabitFragmentDialog extends DialogFragment {
 
-
+    private View dialogView;
 
     public EditHabitFragmentDialog() {
         // Required empty public constructor
@@ -32,12 +32,18 @@ public class EditHabitFragmentDialog extends DialogFragment {
     }
 
 
+    @Nullable
+    @Override
+    public View getView() {
+        return dialogView;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_habit_fragment_dialog, container, false);
+        dialogView = inflater.inflate(R.layout.fragment_edit_habit_fragment_dialog, container, false);
+        return dialogView;
     }
 
 

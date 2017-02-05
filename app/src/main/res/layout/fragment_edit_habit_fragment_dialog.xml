@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="200dip"
     android:orientation="vertical"
-    tools:context="com.theunheard.habitking.EditHabitFragmentDialog">
+    tools:context="com.theunheard.habitking.EditHabitFragmentDialog"
+    android:layout_width="300dip">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -15,44 +15,41 @@
         >
 
         <TextView
-            android:text="TextView"
+            android:text="Habit Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView3"
             android:layout_weight="1" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="197dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Name"
             android:ems="10"
-            android:id="@+id/editText"
-            android:layout_weight="1" />
+            android:id="@+id/habitName_DialogInput" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         >
 
         <TextView
-            android:text="TextView"
+            android:text="Category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView4"
             android:layout_weight="1" />
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="198dp"
             android:layout_height="wrap_content"
+
             android:inputType="textPersonName"
-            android:text="Name"
             android:ems="10"
-            android:id="@+id/editText2"
-            android:layout_weight="1" />
+            android:id="@+id/category_DialogInput" />
     </LinearLayout>
 
     <LinearLayout
@@ -68,17 +65,16 @@
             android:layout_weight="1" />
 
         <EditText
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="time"
             android:ems="10"
-            android:id="@+id/editText4" />
+            android:id="@+id/multiplier_DialogInput"
+            android:inputType="number"
+            android:layout_width="40dp" />
 
         <Spinner
-            android:layout_width="match_parent"
+            android:layout_width="121dp"
             android:layout_height="match_parent"
-            android:id="@+id/spinner"
-            android:layout_weight="1" />
+            android:id="@+id/reminderPeriod_DialogSpinner" />
 
     </LinearLayout>
 
@@ -89,24 +85,24 @@
         >
 
         <Button
-            android:text="Button"
+            android:text="Update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button4"
+            android:id="@+id/updateButton"
             android:layout_weight="1" />
 
         <Button
-            android:text="Button"
+            android:text="Delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button3"
+            android:id="@+id/deleteButton"
             android:layout_weight="1" />
 
         <Button
-            android:text="Button"
+            android:text="Cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button2"
+            android:id="@+id/cancelButton"
             android:layout_weight="1" />
     </LinearLayout>
 
