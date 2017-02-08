@@ -17,6 +17,11 @@ public class Habit {
     private Integer frequencyPerformed; // TODO: frequency of action tracked independently since its recorded into the database, rememember to implement this functionality
     private Date nextReminderTime; // date when the user will be reminded of the habit, will be calculated using the reminder properties
     private Integer reminderPerPeriodLengthMode; // ex: weeks, months
+
+    public void setReminderPeriodMultiplier(Integer reminderPeriodMultiplier) {
+        this.reminderPeriodMultiplier = reminderPeriodMultiplier;
+    }
+
     private Integer reminderPeriodMultiplier;
     private ArrayList<String> personsInteracted;
 

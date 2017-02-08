@@ -1,15 +1,22 @@
 package com.theunheard.habitking;
 
+import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.DatePicker;
 
 import com.google.firebase.database.ThrowOnExtraProperties;
 
+import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.*;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
@@ -27,7 +34,11 @@ public class MainActivityTest  {
     }
 
     @Test
-    public void addingHabits() {
+    public void addHabitsNormal() {
+        onView(withId(R.id.habitInputName)).perform(typeText("habit1"));
+        onView(withId(R.id.categoryInput)).perform(typeText("category1"));
+        onView(withId(R.id.dateLastPerformedInput)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate())
 
     }
 }

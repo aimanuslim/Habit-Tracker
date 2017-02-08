@@ -18,15 +18,17 @@
 
         <TextView
             android:text="TextView"
-            android:layout_width="wrap_content"
+            android:layout_width="20dip"
             android:layout_height="wrap_content"
             android:id="@+id/habitCategoryLabel"
-            android:layout_weight="1" />
+            android:layout_weight="0.3" />
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="203dp"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            >
 
             <TextView
                 android:text="TextView"

@@ -185,9 +185,12 @@ public class DBHandler extends SQLiteOpenHelper {
             c.moveToNext();
 
         }
+        db.close();
         return habitList;
 
     }
+
+
 
     public void addHabit(Habit habit) {
         ContentValues values = new ContentValues();
@@ -205,6 +208,27 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
 
 //        addPersonInteracted(habit);
+    }
+
+    public void modifyHabit (Habit habit) {
+        ContentValues cv = new ContentValues();
+        cv.put(COL_NAME, habit.getName());
+        cv.put(COL_CATEGORY, habit.getCategory());
+        cv.put(COL_FREQUENCY, habit.getFrequencyPerformed());
+        cv.put(COL_DATELP, habit.getDateLastPerformed().getTime());
+        cv.put(COL_PERIOD, habit.getReminderPerPeriodLengthMode());
+        cv.put(COL_MULTIPLIER, habit.getReminderPeriodMultiplier());
+
+
+
+        String ID = habit.getId();
+        SQLiteDatabase db = getWritableDatabase();
+        db.update(TABLE_HABITS, cv, COL_ID+"="+ID, null);
+        db.close();
+
+
+
+
     }
 
     public boolean deleteHabit(Integer id) {

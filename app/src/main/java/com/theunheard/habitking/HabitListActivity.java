@@ -65,17 +65,17 @@ public class HabitListActivity extends AppCompatActivity {
                 dialog.setTitle("Edit Habit");
 //                View dialogView = view.inflate(getApplicationContext(), R.layout.fragment_edit_habit_fragment_dialog, null);
 
-                EditText name = (EditText) dialog.findViewById(R.id.habitName_DialogInput);
-                EditText category = (EditText) dialog.findViewById(R.id.category_DialogInput);
-                EditText mult = (EditText) dialog.findViewById(R.id.multiplier_DialogInput);
-                Spinner periodSpinner = (Spinner) dialog.findViewById(R.id.reminderPeriod_DialogSpinner);
+                final EditText name = (EditText) dialog.findViewById(R.id.habitName_DialogInput);
+                final EditText category = (EditText) dialog.findViewById(R.id.category_DialogInput);
+                final EditText mult = (EditText) dialog.findViewById(R.id.multiplier_DialogInput);
+                final Spinner periodSpinner = (Spinner) dialog.findViewById(R.id.reminderPeriod_DialogSpinner);
                 Button updateButton = (Button) dialog.findViewById(R.id.updateButton);
                 Button deleteButton = (Button) dialog.findViewById(R.id.deleteButton);
                 Button cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
 
 
 
-                Habit habit = (Habit) habitListView.getItemAtPosition(pos);
+                final Habit habit = (Habit) habitListView.getItemAtPosition(pos);
 
                 name.setText(habit.getName());
                 category.setText(habit.getCategory());
@@ -89,7 +89,26 @@ public class HabitListActivity extends AppCompatActivity {
                 periodSpinner.setSelection(habit.getReminderPerPeriodLengthMode());
 
 
-                // TODO: implement onclick for the rest of the buttons
+
+                updateButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        habit.setName(name.getText().toString());
+                        habit.setCategory(category.getText().toString());
+                        habit.setReminderPeriodProperties(periodSpinner.getSelectedItemPosition(), Integer.parseInt(mult.getText().toString()));
+                        habitListAdapter.notifyDataSetChanged();
+                        _dbHandler.modifyHabit(habit);
+                        dialog.dismiss();
+                    }
+                });
+
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
                 deleteButton.setTag(pos);
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -97,6 +116,7 @@ public class HabitListActivity extends AppCompatActivity {
                         int position = (int) view.getTag();
                         habitList.remove(position);
                         habitListAdapter.notifyDataSetChanged();
+                        _dbHandler.deleteHabit(Integer.parseInt(habit.getId()));
                         dialog.dismiss();
                     }
                 });
