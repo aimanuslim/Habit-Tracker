@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DBHandler _dbHandler;
 
+    private String[] periodArray;
 
     // Firebase objects
     private DatabaseReference _databaseRef;
@@ -69,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
     // for list view
     private List<String> person_list;
     ArrayAdapter<String> arrayAdapter;
+
+    public DBHandler getDB () {
+        return _dbHandler;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
 
-
+        this.periodArray = new String[] {"Minute (s)", "Hour (s)", "Day (s)", "Week (s)", "Month (s)", "Year (s)"};
 
 
         habitNameTextView = (AutoCompleteTextView) findViewById(R.id.habitInputName);
@@ -198,9 +203,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupRepetitionPeriodSpinner() {
         repetitionPeriodSpinner = (Spinner) findViewById(R.id.repetitionPeriodSpinner);
+
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.repetition_period_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, periodArray);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
@@ -229,8 +235,9 @@ public class MainActivity extends AppCompatActivity {
 //                if(isNetworkAvailable()) {
                 if(areEntriesValid()) {
                     saveToCloud();
+                    Toast.makeText(MainActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d(TAG, "Entries not valid");
+                    Toast.makeText(MainActivity.this, R.string.missing_info, Toast.LENGTH_SHORT).show();
                 }
 //                } else {
 
@@ -281,11 +288,9 @@ public class MainActivity extends AppCompatActivity {
 
         String habitName = habitNameTextView.getText().toString();
         Habit habit = new Habit(prepareDatePerformed(), habitName, "0");
-        if(categoryTextView.getText().toString() != "") {
-            habit.setCategory(categoryTextView.getText().toString());
-        }
+        habit.setCategory(categoryTextView.getText().toString());
 
-        if(repetitionFrequencyTextView.getText().toString() != "") {
+        if(!repetitionFrequencyTextView.getText().toString().trim().equals("")) {
             int deltaTime = Integer.parseInt(repetitionFrequencyTextView.getText().toString());
             habit.setReminderTimeAndProperties(repetitionPeriodSpinner.getSelectedItemPosition(), deltaTime);
         }
@@ -296,6 +301,8 @@ public class MainActivity extends AppCompatActivity {
         }
         Log.d(TAG, "Done adding");
         Log.d(TAG, "DB " + _dbHandler.databasetostring());
+
+
 
 
 //        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -313,14 +320,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private boolean areEntriesValid() {
-        if(habitNameTextView.getText().toString().trim().length() == 0) { return false; }
-        if(dateTextView.getText().toString().trim().length() == 0 && timeTextView.getText().toString().trim().length() == 0) { return false; }
+        if(habitNameTextView.getText().toString().trim().equals("")) { return false; }
+        if(dateTextView.getText().toString().trim().equals("") || timeTextView.getText().toString().trim().equals("")) { return false; }
         return true;
     }
 
 
     private void setupPersonInteractedListView() {
 
+    }
+
+    public void deleteDatabase() {
+        _dbHandler.deleteAllHabits();
     }
 
     private void setupAddInteractedPersonButton(Button btn) {

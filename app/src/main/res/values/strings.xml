@@ -16,6 +16,8 @@
     </string>
     <string name="sign_in_success">Sign in successful</string>
     <string name="sign_up_success">Thanks for creating an account</string>
+    <string name="missing_info">"Some information are missing!"</string>
+    <string name="save_success">"Data saved!"</string>
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>

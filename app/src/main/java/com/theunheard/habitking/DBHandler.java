@@ -253,12 +253,19 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteHabit(String habitname, String ownerId){
+    public void deleteHabit(String habitname){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_HABITS + " WHERE " + COL_NAME + "=\"" + habitname + "\"" +
 //                " AND " + COL_OWNID + "=\"" + ownerId + "\"" +
                 ";");
         db.close();
+
+    }
+
+    public void deleteAllHabits() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_HABITS + " WHERE 1;");
+        close();
     }
 
     public String databasetostring(){
