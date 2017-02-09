@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button addPersonButton;
     private Button recordButton;
+    private Button nowButton;
 
     private DBHandler _dbHandler;
 
@@ -125,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         repetitionFrequencyTextView = (EditText) findViewById(R.id.repetitionFrequencyInput);
         addPersonButton = (Button) findViewById(R.id.addPersonInteractedButton);
         recordButton = (Button) findViewById(R.id.recordButton);
+        nowButton = (Button) findViewById(R.id.nowButton);
 
         personInteractedListView = (ListView) findViewById(R.id.personInteractedListView);
 
@@ -176,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupRepetitionFrequencyField();
         setupAddInteractedPersonButton(addPersonButton);
+        setupNowButton();
         setupRecordButton(recordButton);
 
         // TODO: make the textfield for period resize
@@ -325,6 +329,16 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void setupNowButton () {
+        nowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dateTextView.setText(Utility.dateToString(new Date(), Utility.dateFormat));
+                timeTextView.setText(Utility.dateToString(new Date(), Utility.timeFormat));
+
+            }
+        });
+    }
 
     private void setupPersonInteractedListView() {
 

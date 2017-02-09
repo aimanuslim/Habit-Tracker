@@ -31,7 +31,7 @@ public class Utility {
     }
 
     public static String dateToString(Date date, String format) {
-        DateFormat formatter = new SimpleDateFormat(format, Locale.US);
+        DateFormat formatter = new SimpleDateFormat(format);
         return formatter.format(date.getTime());
     }
 

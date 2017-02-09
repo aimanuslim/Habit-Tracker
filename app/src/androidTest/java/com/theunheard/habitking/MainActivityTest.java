@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.security.SecureRandom;
+import java.util.Date;
 
 import static android.support.test.espresso.Espresso.*;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -160,11 +161,21 @@ public class MainActivityTest  {
         addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), "", spinnerOptions[randomInt(spinnerOptions.length)]);
         onView(withText(R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
+    @Test
+    public void nowButtonCheck() {
+        onView(withId(R.id.nowButton)).perform(click());
+        onView(withId(R.id.dateLastPerformedInput)).check(matches(withText(Utility.dateToString(new Date(), Utility.dateFormat))));
+        onView(withId(R.id.timeLastPerformedInput)).check(matches(withText(Utility.dateToString(new Date(), Utility.timeFormat))));
+
+    }
 
 
     public void deleteData() {
         DBHandler dbHandler = main.getActivity().getDB();
         dbHandler.deleteAllHabits();
     }
+
+    // TODO: tests the habit list
+    // TODO: transition between activities
 
 }

@@ -11,7 +11,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.theunheard.habitking.MainActivity"
-    android:fillViewport="true"
+
     android:orientation="vertical"
     android:isScrollContainer="true"
     >
@@ -27,7 +27,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
 
 
         <LinearLayout
@@ -68,13 +70,13 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
+                    android:ems="8"
                     android:id="@+id/dateLastPerformedInput"
                     android:layout_weight="1"
                     android:hint="Date Executed"
                     android:inputType="date"
                     android:focusable="false"
-
+                    android:textSize="15dp"
                     />
 
                 <EditText
@@ -83,11 +85,22 @@
                     android:layout_height="wrap_content"
 
                     android:inputType="time"
-                    android:ems="10"
+                    android:ems="8"
                     android:id="@+id/timeLastPerformedInput"
                     android:layout_weight="1"
                     android:hint="Time Executed"
+                    android:layout_marginRight="5dp"
+                    android:textSize="15dp"
 
+                    />
+
+                <Button
+                    android:text="Just did it!"
+                    android:ems="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nowButton"
+                    android:textSize="10sp"
                     />
 
             </LinearLayout>
