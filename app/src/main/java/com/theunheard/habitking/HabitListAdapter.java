@@ -1,7 +1,6 @@
 package com.theunheard.habitking;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,12 +41,15 @@ public class HabitListAdapter extends ArrayAdapter<Habit> {
             TextView categoryLabel = (TextView) v.findViewById(R.id.habitCategoryLabel);
             TextView periodSinceLastPerformedLabel = (TextView) v.findViewById(R.id.habitLastPerformedDate);
             TextView reminderPeriodLabel = (TextView) v.findViewById(R.id.habitReminderPeriod);
+            TextView frequencyPerformedLabel = (TextView) v.findViewById(R.id.frequencyPerformedLabel);
+
 
             nameLabel.setText(habit.getName());
             categoryLabel.setText(habit.getCategory());
-            periodSinceLastPerformedLabel.setText("Time since last performed: " + Utility.outputApproximateTimePeriodDifferenceAsString(habit.getDateLastPerformed(), new Date()));
+            periodSinceLastPerformedLabel.setText("Last performed: " + Utility.outputApproximateTimePeriodDifferenceAsString(habit.getDateLastPerformed(), new Date()));
+            frequencyPerformedLabel.setText(habit.getFrequencyPerformed().toString() + " time" + (habit.getFrequencyPerformed() > 1 ? "s" : ""));
 
-            reminderPeriodLabel.setText("Reminder frequency: " +habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
+            reminderPeriodLabel.setText(habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
         }
 
         return v;

@@ -119,8 +119,6 @@
                 android:layout_below="@+id/categoryInput"
                 android:id="@+id/reminderDetailsContainer">
 
-                <!--TODO: add reminder for every week, month, day-->
-
                 <TextView
                     android:text="Remind me every"
                     android:layout_height="fill_parent"

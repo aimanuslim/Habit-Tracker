@@ -19,13 +19,13 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -182,10 +182,6 @@ public class MainActivity extends AppCompatActivity {
         setupNowButton();
         setupRecordButton(recordButton);
 
-        // TODO: make the textfield for period resize
-        // TODO: put autocomplete on all on category and names
-        // TODO: add menubar to navigate to other activity (list of habits)
-
 
 
 
@@ -195,6 +191,14 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this,android.R.layout.simple_list_item_1,_dbHandler.getNames(_dbHandler.COL_NAME));
         habitNameTextView.setAdapter(adapter);
+        habitNameTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selection = (String)parent.getItemAtPosition(position);
+                Habit habit = _dbHandler.getHabitByName(selection);
+                categoryTextView.setText(habit.getCategory());
+            }
+        });
     }
 
     private void setupCategoryAutoComplete() {
@@ -294,15 +298,24 @@ public class MainActivity extends AppCompatActivity {
         Habit habit = new Habit(prepareDatePerformed(), habitName, "0");
         habit.setCategory(categoryTextView.getText().toString());
 
+
         if(!repetitionFrequencyTextView.getText().toString().trim().equals("")) {
             int deltaTime = Integer.parseInt(repetitionFrequencyTextView.getText().toString());
             habit.setReminderTimeAndProperties(repetitionPeriodSpinner.getSelectedItemPosition(), deltaTime);
         }
 
-        _dbHandler.addHabit(habit);
+        // if this habit is already in database, increase the number of times it has been performed.
+        if(_dbHandler.habitExist(habitName, habit.getCategory())) {
+            _dbHandler.increaseHabitFreq(habitName, habit.getCategory());
+        } else {
+            _dbHandler.addHabit(habit);
+        }
+
+        // TODO: interacted person feature
         if(personInteractedListView.getAdapter().getCount() != 0) {
             _dbHandler.addPersonInteracted(habit);
         }
+
         Log.d(TAG, "Done adding");
         Log.d(TAG, "DB " + _dbHandler.databasetostring());
 

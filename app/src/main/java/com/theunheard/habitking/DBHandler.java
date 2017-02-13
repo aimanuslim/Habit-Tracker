@@ -172,7 +172,6 @@ public class DBHandler extends SQLiteOpenHelper {
             } catch (Exception e) {
                 Log.d("Habit King", "Date doesn't exist for this row?");
             }
-            // TODO: finish this
             habitList.add(habit);
 
 
@@ -191,9 +190,82 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
+    public void increaseHabitFreq(String habitName, String category) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.execSQL("UPDATE " + TABLE_HABITS + " SET " + COL_FREQUENCY + " = " + COL_FREQUENCY + " + 1 WHERE " + COL_NAME + " = " + habitName +
+        " AND " + COL_CATEGORY + " = " + category + ";");
+        db.close();
+
+    }
+
+    public Habit getHabitByName(String name ) {
+        SQLiteDatabase db = getReadableDatabase();
+        Habit habit = new Habit();
+        String query = "SELECT * FROM " + TABLE_HABITS;
+        Cursor c = db.rawQuery(query ,null);
+        c.moveToFirst();
+        while(!c.isAfterLast()) {
+
+
+            if(c.getString(c.getColumnIndex(COL_NAME)) == name) {
+                habit.setName(c.getString(c.getColumnIndex(COL_NAME)));
+                habit.setId(c.getString(c.getColumnIndex(COL_ID)));
+                if(c.getString(c.getColumnIndex(COL_CATEGORY)) != null) {
+                    habit.setCategory(c.getString(c.getColumnIndex(COL_CATEGORY)));
+                }
+
+                try {
+                    habit.setDateLastPerformed(new Date(c.getLong(c.getColumnIndex(COL_DATELP))));
+                    habit.setReminderPeriodProperties(c.getInt(c.getColumnIndex(COL_PERIOD)), c.getInt(c.getColumnIndex(COL_MULTIPLIER)));
+                    habit.setFrequencyPerformed(c.getInt(c.getColumnIndex(COL_FREQUENCY)));
+
+                } catch (Exception e) {
+                    Log.d("Habit King", "Date doesn't exist for this row?");
+                }
+
+                db.close();
+                return habit;
+            }
+
+            c.moveToNext();
+
+        }
+
+        db.close();
+        return null;
+
+
+
+    }
+
+    public boolean habitExist(String habitName, String categoryName) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_HABITS;
+        Cursor c = db.rawQuery(query ,null);
+        c.moveToFirst();
+        while(!c.isAfterLast()) {
+
+
+            if(c.getString(c.getColumnIndex(COL_NAME)).trim().equals(habitName) && c.getString(c.getColumnIndex(COL_CATEGORY)).trim().equals(categoryName)) {
+                db.close();
+                return true;
+            }
+
+            c.moveToNext();
+
+        }
+
+        db.close();
+        return false;
+
+    }
+
 
     public void addHabit(Habit habit) {
         ContentValues values = new ContentValues();
+        SQLiteDatabase db = getWritableDatabase();
+
         values.put(COL_NAME, habit.getName());
         values.put(COL_OWNID, habit.getOwnerUid());
         values.put(COL_CATEGORY, habit.getCategory());
@@ -201,7 +273,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(COL_DATELP, habit.getDateLastPerformed().getTime());
         values.put(COL_PERIOD, habit.getReminderPerPeriodLengthMode());
         values.put(COL_MULTIPLIER, habit.getReminderPeriodMultiplier());
-        SQLiteDatabase db = getWritableDatabase();
+
 //        db.execSQL("ALTER TABLE " + TABLE_HABITS + " ADD COLUMN " + COL_MULTIPLIER + " INTEGER" );
 //        db.execSQL("ALTER TABLE " + TABLE_HABITS + " ADD COLUMN " + COL_PERIOD + " INTEGER" );
         db.insert(TABLE_HABITS, null, values);
