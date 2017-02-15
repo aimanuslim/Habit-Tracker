@@ -193,8 +193,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public void increaseHabitFreq(String habitName, String category) {
         SQLiteDatabase db = getWritableDatabase();
 
-        db.execSQL("UPDATE " + TABLE_HABITS + " SET " + COL_FREQUENCY + " = " + COL_FREQUENCY + " + 1 WHERE " + COL_NAME + " = " + habitName +
-        " AND " + COL_CATEGORY + " = " + category + ";");
+        db.execSQL("UPDATE " + TABLE_HABITS + " SET " + COL_FREQUENCY + " = " + COL_FREQUENCY + " + 1 WHERE " + COL_NAME + " = '" + habitName +
+        "' AND " + COL_CATEGORY + " = '" + category + "';");
         db.close();
 
     }
@@ -269,7 +269,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(COL_NAME, habit.getName());
         values.put(COL_OWNID, habit.getOwnerUid());
         values.put(COL_CATEGORY, habit.getCategory());
-        values.put(COL_FREQUENCY, 0);
+        values.put(COL_FREQUENCY, 1);
         values.put(COL_DATELP, habit.getDateLastPerformed().getTime());
         values.put(COL_PERIOD, habit.getReminderPerPeriodLengthMode());
         values.put(COL_MULTIPLIER, habit.getReminderPeriodMultiplier());

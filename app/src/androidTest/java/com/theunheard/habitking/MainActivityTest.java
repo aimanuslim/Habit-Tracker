@@ -1,6 +1,7 @@
 package com.theunheard.habitking;
 
 import android.os.SystemClock;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.rule.ActivityTestRule;
@@ -17,6 +18,7 @@ import java.util.Date;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -28,6 +30,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static java.lang.Math.abs;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -69,6 +72,7 @@ public class MainActivityTest  {
             addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
             clearAllInputs();
         }
+        deleteData();
     }
 
     public void clearAllInputs() {
@@ -122,7 +126,7 @@ public class MainActivityTest  {
         onView(withId(R.id.recordButton)).perform(click());
 
 //        onView(withText(R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed())
-        deleteData();
+//        deleteData();
 
     }
 
@@ -130,6 +134,7 @@ public class MainActivityTest  {
     public void addHabitWithoutName () {
         addHabits("", randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         onView(withText(R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        deleteData();
     }
 
 
@@ -137,24 +142,28 @@ public class MainActivityTest  {
     public void addHabitWithoutCategory () {
         addHabits(randomString(), "", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         onView(withText(R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        deleteData();
     }
 
     @Test
     public void addHabitWithoutDate () {
         addHabits(randomString(), randomString(), 0, randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         onView(withText(R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        deleteData();
     }
 
     @Test
     public void addHabitWithoutTime () {
         addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), 0, randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         onView(withText(R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        deleteData();
     }
 
     @Test
     public void addHabitWithoutRepetitionFreq () {
         addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), "", spinnerOptions[randomInt(spinnerOptions.length)]);
         onView(withText(R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        deleteData();
     }
     @Test
     public void nowButtonCheck() {
@@ -165,12 +174,22 @@ public class MainActivityTest  {
     }
 
 
-    // TODO: add it twice, and then transfer to view and check if the frequency is one or has changed
+
     @Test
     public void increaseFrequencyCheck()
     {
+        addHabits("Test", "Test_category", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        clearAllInputs();
+        addHabits("Test", "Test_category", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        onView(withText("View My Habits")).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.habitListView)).atPosition(0).onChildView(withId(R.id.frequencyPerformedLabel)).check(matches(withText("2 times")));
+        deleteData();
+
 
     }
+
+
 
     public void deleteData() {
         DBHandler dbHandler = main.getActivity().getDB();

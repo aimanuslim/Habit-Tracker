@@ -1,7 +1,11 @@
 package com.theunheard.habitking;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +13,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -290,6 +295,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void setupReminderNotification(Habit habit) {
+        Calendar reminderTime = habit.getNextReminderTime();
+        Intent intent = new Intent(this, ReminderReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 001, intent, 0);
+        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+        am.set(AlarmManager.RTC_WAKEUP, reminderTime.getTimeInMillis(), pendingIntent);
+
+    }
+
 
 
     private void saveToCloud() {
@@ -302,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
         if(!repetitionFrequencyTextView.getText().toString().trim().equals("")) {
             int deltaTime = Integer.parseInt(repetitionFrequencyTextView.getText().toString());
             habit.setReminderTimeAndProperties(repetitionPeriodSpinner.getSelectedItemPosition(), deltaTime);
+
         }
 
         // if this habit is already in database, increase the number of times it has been performed.

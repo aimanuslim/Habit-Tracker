@@ -1,5 +1,7 @@
 package com.theunheard.habitking;
 
+import android.content.Intent;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,8 +16,8 @@ public class Habit {
     private Date dateLastPerformed;
     private String name;
     private String category;
-    private Integer frequencyPerformed; // TODO: frequency of action tracked independently since its recorded into the database, rememember to implement this functionality
-    private Date nextReminderTime; // date when the user will be reminded of the habit, will be calculated using the reminder properties
+    private Integer frequencyPerformed;
+    private Calendar nextReminderTime; // date when the user will be reminded of the habit, will be calculated using the reminder properties
     private Integer reminderPerPeriodLengthMode; // ex: weeks, months
 
     public void setReminderPeriodMultiplier(Integer reminderPeriodMultiplier) {
@@ -36,12 +38,17 @@ public class Habit {
     public Habit() {
     }
 
+    public Calendar getNextReminderTime() {
+        return nextReminderTime;
+    }
+
     public Habit(Date dateLastPerformed, String name, String ownerUid) {
         this.dateLastPerformed = dateLastPerformed;
         this.name = name;
         this.ownerUid = ownerUid;
         this.category = null;
         this.frequencyPerformed = 0;
+
         this.personsInteracted = null;
 
     }
@@ -54,6 +61,7 @@ public class Habit {
         this.id = id;
     }
 
+
     public void setReminderTimeAndProperties(int periodSpinnerPosition, int deltaTime) {
         // TODO: test next reminder time functionality
         Calendar cal = Calendar.getInstance();
@@ -61,32 +69,33 @@ public class Habit {
         switch(periodSpinnerPosition) {
             case PERIOD_MINUTE: // minute
                 cal.add(Calendar.MINUTE, deltaTime);
-                nextReminderTime = cal.getTime();
+                nextReminderTime = cal;
                 setReminderPeriodProperties(periodSpinnerPosition, deltaTime);
+
                 break;
             case PERIOD_HOUR: // hour
                 cal.add(Calendar.HOUR, deltaTime);
-                nextReminderTime = cal.getTime();
+                nextReminderTime = cal;
                 setReminderPeriodProperties(periodSpinnerPosition , deltaTime);
                 break;
             case PERIOD_DAY: // day
                 cal.add(Calendar.DATE, deltaTime);
-                nextReminderTime = cal.getTime();
+                nextReminderTime = cal;
                 setReminderPeriodProperties(periodSpinnerPosition, deltaTime);
                 break;
             case PERIOD_WEEK: // week
                 cal.add(Calendar.WEEK_OF_YEAR, deltaTime);
-                nextReminderTime = cal.getTime();
+                nextReminderTime = cal;
                 setReminderPeriodProperties(periodSpinnerPosition, deltaTime);
                 break;
             case PERIOD_MONTH: // month
                 cal.add(Calendar.MONTH, deltaTime);
-                nextReminderTime = cal.getTime();
+                nextReminderTime = cal;
                 setReminderPeriodProperties(periodSpinnerPosition, deltaTime);
                 break;
             case PERIOD_YEAR: // year
                 cal.add(Calendar.YEAR, deltaTime);
-                nextReminderTime = cal.getTime();
+                nextReminderTime = cal;
                 setReminderPeriodProperties(periodSpinnerPosition, deltaTime);
                 break;
             default: return;
