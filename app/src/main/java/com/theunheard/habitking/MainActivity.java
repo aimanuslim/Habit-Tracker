@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
         // firebase initialization
 
-        // TODO: skip firebase and figure out how to use local storage for now
+        // TODO: implement fire base for analytics
 //        if(_databaseRef == null) {
 //            _firebaseInstance = FirebaseDatabase.getInstance();
 //            _firebaseInstance.setPersistenceEnabled(true);
@@ -326,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
             _dbHandler.addHabit(habit);
         }
 
-        // TODO: interacted person feature
+        // laterTODO: interacted person feature
         if(personInteractedListView.getAdapter().getCount() != 0) {
             _dbHandler.addPersonInteracted(habit);
         }

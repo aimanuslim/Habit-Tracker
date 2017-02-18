@@ -10,6 +10,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/colorPurpleLight"
     tools:context="com.theunheard.habitking.MainActivity"
 
     android:orientation="vertical"
@@ -20,7 +21,7 @@
         android:id="@+id/habitron_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorPurpleMedium"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
@@ -99,9 +100,13 @@
                     android:ems="5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/nowButton"
+                    android:textColor="#FFFFFFFF"
+                    android:fontFamily="monospace"
+
                     android:textSize="10sp"
-                    />
+                    android:background="@drawable/custom_button"
+                    android:id="@+id/nowButton"
+                   />
 
             </LinearLayout>
 

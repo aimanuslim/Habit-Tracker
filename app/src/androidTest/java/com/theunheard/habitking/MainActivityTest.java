@@ -1,14 +1,22 @@
 package com.theunheard.habitking;
 
 import android.os.SystemClock;
+import android.os.health.UidHealthStats;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.Until;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiSelector;
+
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,11 +50,24 @@ import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest  {
+
+    private UiDevice mDevice;
     @Rule
     public final ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class);
 
+
+
     @Test
     public void shouldBeAbleToLaunchMainScreen() {
+
+    }
+
+    @Test
+    public void testNotification() {
+        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        mDevice.openNotification();
+        mDevice.wait(Until.hasObject(By.pkg("com.android.systemui")), 10000);
+
 
     }
 
