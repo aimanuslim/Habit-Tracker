@@ -3,8 +3,6 @@ package com.theunheard.habitking;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -13,7 +11,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -75,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG = "HabitKing";
 
     // for list view
-    private List<String> person_list;
+    private ArrayList<String>  person_list;
     ArrayAdapter<String> arrayAdapter;
 
     public DBHandler getDB () {
@@ -101,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_viewhabits:
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
-                Intent myIntent = new Intent(getApplicationContext(), HabitListActivity.class);
+                Intent myIntent = new Intent(getApplicationContext(), DataListActivity.class);
                 startActivityForResult(myIntent, 0);
                 return true;
 
@@ -328,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
 
         // laterTODO: interacted person feature
         if(personInteractedListView.getAdapter().getCount() != 0) {
-            _dbHandler.addPersonInteracted(habit);
+            _dbHandler.addPersonInteracted(person_list, habit.getId());
         }
 
         Log.d(TAG, "Done adding");
@@ -385,6 +382,7 @@ public class MainActivity extends AppCompatActivity {
                 alert.setMessage("Enter the name of the person you performed this activity with");
 
                 final EditText input = new EditText(MainActivity.this);
+                input.setId(R.id.person_name_edit);
                 alert.setView(input);
 
                 alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {

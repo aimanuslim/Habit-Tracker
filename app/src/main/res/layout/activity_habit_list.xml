@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/colorPurpleLight"
-    tools:context="com.theunheard.habitking.HabitListActivity">
+    tools:context="com.theunheard.habitking.DataListActivity">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
@@ -19,9 +19,16 @@
         android:minHeight="?attr/actionBarSize"
         android:id="@+id/habitron_habit_list_toolbar" />
 
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dataModeSpinner"
+        android:layout_below="@+id/habitron_habit_list_toolbar"
+        />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/habitron_habit_list_toolbar"
-        android:id="@+id/habitListView" />
+        android:layout_below="@+id/dataModeSpinner"
+        android:id="@+id/dataListView" />
 </RelativeLayout>

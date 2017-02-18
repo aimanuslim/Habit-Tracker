@@ -20,6 +20,7 @@ public class Habit {
     private Calendar nextReminderTime; // date when the user will be reminded of the habit, will be calculated using the reminder properties
     private Integer reminderPerPeriodLengthMode; // ex: weeks, months
 
+
     public void setReminderPeriodMultiplier(Integer reminderPeriodMultiplier) {
         this.reminderPeriodMultiplier = reminderPeriodMultiplier;
     }
@@ -59,6 +60,11 @@ public class Habit {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getHash() {
+        String habitString = name + category;
+        return Integer.toString(habitString.hashCode());
     }
 
 

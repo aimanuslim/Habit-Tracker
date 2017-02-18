@@ -91,6 +91,7 @@ public class MainActivityTest  {
 
         for(int i = 0; i < 5; i++) {
             addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+            clickRecordButton();
             clearAllInputs();
         }
         deleteData();
@@ -143,25 +144,51 @@ public class MainActivityTest  {
 
         onView(withId(R.id.repetitionPeriodSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(repetitionPeriod))).perform(click());
-        SystemClock.sleep(2000);
-        onView(withId(R.id.recordButton)).perform(click());
+
 
 //        onView(withText(R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed())
 //        deleteData();
 
     }
 
+    public void clickRecordButton() {
+        SystemClock.sleep(2000);
+        onView(withId(R.id.recordButton)).perform(click());
+    }
+
     @Test
     public void addHabitWithoutName () {
         addHabits("", randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        clickRecordButton();
         onView(withText(R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
     }
 
+    @Test
+    public void addPersonInteracted() {
+        addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        onView(withId(R.id.addPersonInteractedButton)).perform(click());
+        String personName = randomString();
+        onView(withId(R.id.person_name_edit)).perform(typeText(personName));
+        onView(withText("Add")).perform(click());
+        onData(anything())
+                .inAdapterView(withId(R.id.personInteractedListView))
+                .atPosition(0)
+//                .onChildView(withId(R.layout.person_name_item))
+                .check(matches(withText(personName)));
+
+
+    }
+
+
+    // TODO: test data views
+    // TODO: check spinner, change data
+    // TODO: check data, betul tak
 
     @Test
     public void addHabitWithoutCategory () {
         addHabits(randomString(), "", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        clickRecordButton();
         onView(withText(R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
     }
@@ -169,6 +196,7 @@ public class MainActivityTest  {
     @Test
     public void addHabitWithoutDate () {
         addHabits(randomString(), randomString(), 0, randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        clickRecordButton();
         onView(withText(R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
     }
@@ -176,6 +204,7 @@ public class MainActivityTest  {
     @Test
     public void addHabitWithoutTime () {
         addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), 0, randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        clickRecordButton();
         onView(withText(R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
     }
@@ -183,6 +212,7 @@ public class MainActivityTest  {
     @Test
     public void addHabitWithoutRepetitionFreq () {
         addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), "", spinnerOptions[randomInt(spinnerOptions.length)]);
+        clickRecordButton();
         onView(withText(R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
     }
@@ -204,7 +234,7 @@ public class MainActivityTest  {
         addHabits("Test", "Test_category", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
         onView(withText("View My Habits")).perform(click());
-        onData(anything()).inAdapterView(withId(R.id.habitListView)).atPosition(0).onChildView(withId(R.id.frequencyPerformedLabel)).check(matches(withText("2 times")));
+        onData(anything()).inAdapterView(withId(R.id.dataListView)).atPosition(0).onChildView(withId(R.id.frequencyPerformedLabel)).check(matches(withText("2 times")));
         deleteData();
 
 

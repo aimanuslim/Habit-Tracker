@@ -46,14 +46,20 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="18dp"
+
                 android:id="@+id/instructionLabel"
                 android:textSize="20dip"/>
 
             <AutoCompleteTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
                 android:id="@+id/habitInputName"
                 android:hint="Habit Name"
+                android:background="@color/colorPurpleSuperLight"
+
 
                 />
 
@@ -70,7 +76,7 @@
 
                 <EditText
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:ems="8"
                     android:id="@+id/dateLastPerformedInput"
                     android:layout_weight="1"
@@ -78,12 +84,13 @@
                     android:inputType="date"
                     android:focusable="false"
                     android:textSize="15dp"
-                    />
+                    android:background="@color/colorPurpleSuperLight"
+                    android:textAlignment="center" />
 
                 <EditText
                     android:focusable="false"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
 
                     android:inputType="time"
                     android:ems="8"
@@ -91,9 +98,11 @@
                     android:layout_weight="1"
                     android:hint="Time Executed"
                     android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
                     android:textSize="15dp"
+                    android:background="@color/colorPurpleSuperLight"
 
-                    />
+                    android:textAlignment="center" />
 
                 <Button
                     android:text="Just did it!"
@@ -115,6 +124,10 @@
                 android:inputType="text|textPersonName"
                 android:id="@+id/categoryInput"
                 android:hint="Category"
+                android:background="@color/colorPurpleSuperLight"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+
                 android:layout_height="wrap_content" />
 
             <LinearLayout
@@ -178,7 +191,15 @@
                     android:id="@+id/addPersonInteractedButton"
                     android:layout_weight="0.5"
                     android:visibility="visible"
-                    android:layout_gravity="center_vertical" />
+                    android:layout_gravity="center_vertical"
+                    android:ems="5"
+                    android:textColor="#FFFFFFFF"
+                    android:fontFamily="monospace"
+
+                    android:textSize="10sp"
+                    android:background="@drawable/custom_button"
+
+                    />
 
             </LinearLayout>
 
@@ -189,7 +210,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:ems="5"
+                android:textColor="#FFFFFFFF"
+                android:fontFamily="monospace"
 
+                android:textSize="10sp"
+                android:background="@drawable/custom_button"
                 android:id="@+id/recordButton"
 
                 />

@@ -24,6 +24,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String COL_ID = "_id";
     public static final String COL_OWNID = "_ownerid";
+//    public static final String COL_HASH = "hash";
     public static final String COL_NAME = "habitname";
     public static final String COL_DATELP = "dateLastPerformed";
     public static final String COL_CATEGORY = "category";
@@ -34,6 +35,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String COL_PITID = "_pitid";
     public static final String COL_PITNAME = "personInteracted";
+    public static final String COL_HABITID= "habit";
 
 //    public static synchronized DBHandler getInstance(Context context) {
 //
@@ -67,15 +69,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
                 ");";
 
-//        String queryPersonsInteracted = "CREATE TABLE " + TABLE_PIT + "(" +
-//
-//                COL_PITID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//                COL_OWNID + " TEXT," +
-//                COL_PITNAME + " TEXT " +
-//                ");";
+        String queryPersonsInteracted = "CREATE TABLE " + TABLE_PIT + "(" +
+
+                COL_PITID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_HABITID + " INTEGER," +
+                COL_PITNAME + " TEXT " +
+                ");";
 
         db.execSQL(queryHabits);
-//        db.execSQL(queryPersonsInteracted);
+        db.execSQL(queryPersonsInteracted);
 
 
 
@@ -106,15 +108,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
                 ");";
 
-//        String queryPersonsInteracted = "CREATE TABLE " + TABLE_PIT + "(" +
-//
-//                COL_PITID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//                COL_OWNID + " TEXT," +
-//                COL_PITNAME + " TEXT " +
-//                ");";
+        String queryPersonsInteracted = "CREATE TABLE " + TABLE_PIT + "(" +
+
+                COL_PITID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_HABITID + " INTEGER," +
+                COL_PITNAME + " TEXT " +
+                ");";
 
         db.execSQL(queryHabits);
-//        db.execSQL(queryPersonsInteracted);
+        db.execSQL(queryPersonsInteracted);
     }
 
     @Override
@@ -239,6 +241,33 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+
+
+    public ArrayList<Person> getAllPerson() {
+        ArrayList<Person> personsList = new ArrayList<Person>();
+
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_PIT;
+        Cursor c = db.rawQuery(query ,null);
+        Cursor habitCursor;
+        c.moveToFirst();
+        while(!c.isAfterLast()) {
+            Person person = new Person();
+
+
+            person.setName(c.getString(c.getColumnIndex(COL_PITNAME)));
+            habitCursor = db.rawQuery("SELECT * FROM " + TABLE_HABITS + " WHERE " + COL_ID + " = " + c.getString(c.getColumnIndex(COL_HABITID)), null);
+            person.setHabitName(habitCursor.getString(habitCursor.getColumnIndex(COL_NAME)));
+            person.setLastDateInteractedWith(new Date(habitCursor.getLong(habitCursor.getColumnIndex(COL_DATELP))));
+
+            personsList.add(person);
+            c.moveToNext();
+
+        }
+        db.close();
+        return personsList;
+    }
+
     public boolean habitExist(String habitName, String categoryName) {
         SQLiteDatabase db = getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_HABITS;
@@ -274,12 +303,28 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(COL_PERIOD, habit.getReminderPerPeriodLengthMode());
         values.put(COL_MULTIPLIER, habit.getReminderPeriodMultiplier());
 
-//        db.execSQL("ALTER TABLE " + TABLE_HABITS + " ADD COLUMN " + COL_MULTIPLIER + " INTEGER" );
+//        db.execSQL("ALTER TABLE " + TABLE_HABITS + " ADD COLUMN " + COL_HASH + " TEXT" );
 //        db.execSQL("ALTER TABLE " + TABLE_HABITS + " ADD COLUMN " + COL_PERIOD + " INTEGER" );
         db.insert(TABLE_HABITS, null, values);
         db.close();
 
 //        addPersonInteracted(habit);
+    }
+
+    public void addPersonInteracted(ArrayList<String> personList, String habitId) {
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        for(String pn: personList ) {
+            ContentValues values = new ContentValues();
+            values.put(COL_PITNAME, pn);
+            values.put(COL_HABITID, habitId);
+            db.insert(TABLE_PIT, null, values);
+        }
+
+        db.close();
+
+
     }
 
     public void modifyHabit (Habit habit) {
@@ -310,20 +355,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
 
-    public void addPersonInteracted(Habit habit) {
-        String habitID = habit.getOwnerUid();
-        SQLiteDatabase db = getWritableDatabase();
 
-        for (String personName :habit.getPersonsInteracted()
-             ) {
-            ContentValues values = new ContentValues();
-            values.put(COL_PITNAME, personName);
-            values.put(COL_OWNID, habitID);
-            db.insert(TABLE_PIT, null, values);
-        }
-
-        db.close();
-    }
 
     public void deleteHabit(String habitname){
         SQLiteDatabase db = getWritableDatabase();

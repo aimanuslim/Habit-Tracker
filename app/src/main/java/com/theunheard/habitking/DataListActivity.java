@@ -1,11 +1,9 @@
 package com.theunheard.habitking;
 
 import android.app.Dialog;
-import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,11 +17,22 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 
-public class HabitListActivity extends AppCompatActivity {
+public class DataListActivity extends AppCompatActivity {
 
 
-    private ListView habitListView;
+    private ListView dataListView;
+    private Spinner dataModeSpinner;
     private DBHandler _dbHandler;
+    private HabitListAdapter habitListAdapter;
+    private ArrayList<Habit> habitList;
+
+    private ArrayList<Person> personNameList;
+    private PersonListAdapter personListAdapter;
+
+
+
+
+    private final static String[] dataModeArray = new String[] {"Habit List", "Person List", "Location List"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,28 +48,71 @@ public class HabitListActivity extends AppCompatActivity {
             }
         });
 
-        habitListView = (ListView) findViewById(R.id.habitListView);
+        dataListView = (ListView) findViewById(R.id.dataListView);
+        dataModeSpinner = (Spinner) findViewById(R.id.dataModeSpinner);
         _dbHandler = new DBHandler(this);
 
-       setupHabitListView();
+
+        setupAdapters();
+       setupHabitAdapter();
+
+        setupDataSelector();
 
 
 
     }
 
-    private void setupHabitListView() {
+    private void setupAdapters() {
+        habitList = _dbHandler.getAllHabits();
+        habitListAdapter = new HabitListAdapter(this, R.layout.habit_item, habitList);
+        personNameList = _dbHandler.getAllPerson();
+        personListAdapter = new PersonListAdapter(this, R.layout.person_item, personNameList);
 
 
-        final ArrayList<Habit> habitList = _dbHandler.getAllHabits();
-        final HabitListAdapter habitListAdapter = new HabitListAdapter(this, R.layout.habit_item, habitList);
-        habitListView.setAdapter(habitListAdapter);
-        habitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+    }
+
+    private void setupDataSelector() {
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, dataModeArray);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        dataModeSpinner.setAdapter(adapter);
+
+        dataModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                switch (position) {
+                    case 0: setupHabitAdapter();
+                    case 1: setupPersonInteractedAdapter();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+    }
+
+    private void setupPersonInteractedAdapter() {
+        dataListView.setAdapter(personListAdapter);
+
+    }
+
+
+    private void setupHabitAdapter() {
+        dataListView.setAdapter(habitListAdapter);
+        dataListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
 //                android.app.FragmentManager fm = getFragmentManager();
 //                EditHabitFragmentDialog myDialog = new EditHabitFragmentDialog().newInstance("Edit habit");
 
-                final Dialog dialog = new Dialog(HabitListActivity.this);
+                final Dialog dialog = new Dialog(DataListActivity.this);
                 dialog.setContentView(R.layout.fragment_edit_habit_fragment_dialog);
                 dialog.setTitle("Edit Habit");
 //                View dialogView = view.inflate(getApplicationContext(), R.layout.fragment_edit_habit_fragment_dialog, null);
@@ -75,12 +127,12 @@ public class HabitListActivity extends AppCompatActivity {
 
 
 
-                final Habit habit = (Habit) habitListView.getItemAtPosition(pos);
+                final Habit habit = (Habit) dataListView.getItemAtPosition(pos);
 
                 name.setText(habit.getName());
                 category.setText(habit.getCategory());
                 mult.setText(habit.getReminderPeriodMultiplier().toString());
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(HabitListActivity.this,
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(DataListActivity.this,
                         R.array.repetition_period_array, android.R.layout.simple_spinner_item);
                 // Specify the layout to use when the list of choices appears
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
