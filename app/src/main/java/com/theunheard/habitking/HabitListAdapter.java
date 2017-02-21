@@ -23,6 +23,9 @@ public class HabitListAdapter extends ArrayAdapter<Habit> {
         super(context, resource, habits);
     }
 
+
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

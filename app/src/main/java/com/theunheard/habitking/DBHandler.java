@@ -246,7 +246,12 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<Person> getAllPerson() {
         ArrayList<Person> personsList = new ArrayList<Person>();
 
+
+
+
         SQLiteDatabase db = getReadableDatabase();
+
+
         String query = "SELECT * FROM " + TABLE_PIT;
         Cursor c = db.rawQuery(query ,null);
         Cursor habitCursor;
@@ -254,11 +259,19 @@ public class DBHandler extends SQLiteOpenHelper {
         while(!c.isAfterLast()) {
             Person person = new Person();
 
-
+            person.setId(c.getString(c.getColumnIndex(COL_ID)));
             person.setName(c.getString(c.getColumnIndex(COL_PITNAME)));
-            habitCursor = db.rawQuery("SELECT * FROM " + TABLE_HABITS + " WHERE " + COL_ID + " = " + c.getString(c.getColumnIndex(COL_HABITID)), null);
-            person.setHabitName(habitCursor.getString(habitCursor.getColumnIndex(COL_NAME)));
-            person.setLastDateInteractedWith(new Date(habitCursor.getLong(habitCursor.getColumnIndex(COL_DATELP))));
+            habitCursor = db.rawQuery("SELECT * FROM " + TABLE_HABITS + " WHERE " + COL_ID + " = " + c.getLong(c.getColumnIndex(COL_HABITID)), null);
+            habitCursor.moveToFirst();
+            try {
+                person.setHabitName(habitCursor.getString(habitCursor.getColumnIndex(COL_NAME)));
+                person.setLastDateInteractedWith(new Date(habitCursor.getLong(habitCursor.getColumnIndex(COL_DATELP))));
+            } catch (Exception e) {
+                person.setHabitName("None");
+                person.setLastDateInteractedWith(new Date());
+            }
+
+
 
             personsList.add(person);
             c.moveToNext();
@@ -305,7 +318,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
 //        db.execSQL("ALTER TABLE " + TABLE_HABITS + " ADD COLUMN " + COL_HASH + " TEXT" );
 //        db.execSQL("ALTER TABLE " + TABLE_HABITS + " ADD COLUMN " + COL_PERIOD + " INTEGER" );
-        db.insert(TABLE_HABITS, null, values);
+        // TODO: setting the habit's id here may not be the correct way of doing things, but have to figure out how.
+        habit.setId(Long.toString(db.insert(TABLE_HABITS, null, values)));
         db.close();
 
 //        addPersonInteracted(habit);
@@ -318,7 +332,7 @@ public class DBHandler extends SQLiteOpenHelper {
         for(String pn: personList ) {
             ContentValues values = new ContentValues();
             values.put(COL_PITNAME, pn);
-            values.put(COL_HABITID, habitId);
+            values.put(COL_HABITID, Long.parseLong(habitId));
             db.insert(TABLE_PIT, null, values);
         }
 
@@ -348,9 +362,52 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+    public Integer getIdByHabitName(String habitName) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_HABITS;
+        Cursor c = db.rawQuery(query ,null);
+        c.moveToFirst();
+        while(!c.isAfterLast()) {
+
+
+            if(c.getString(c.getColumnIndex(COL_NAME)) == habitName) {
+                return c.getInt(c.getColumnIndex(COL_ID));
+            }
+
+            c.moveToNext();
+
+        }
+        db.close();
+        return null;
+    }
+
+    public void modifyPerson(Person person) {
+        ContentValues cv = new ContentValues();
+        cv.put(COL_PITNAME, person.getName());
+        cv.put(COL_HABITID, getIdByHabitName(person.getHabitName()));
+
+        String ID = person.getId();
+        SQLiteDatabase db = getWritableDatabase();
+        db.update(TABLE_PIT, cv, COL_PITID+"="+ID, null);
+        db.close();
+
+    }
+
+
+
     public boolean deleteHabit(Integer id) {
         SQLiteDatabase db = getWritableDatabase();
-        return db.delete(TABLE_HABITS, COL_ID + " = " + id.toString(), null) > 0;
+        boolean res = db.delete(TABLE_HABITS, COL_ID + " = " + id.toString(), null) > 0;
+        db.close();
+        return res;
+    }
+
+    public boolean deletePerson(Integer id) {
+        SQLiteDatabase db = getWritableDatabase();
+        boolean res = db.delete(TABLE_PIT, COL_PITID + " = " + id.toString(), null) > 0;
+        db.close();
+        return res;
     }
 
 

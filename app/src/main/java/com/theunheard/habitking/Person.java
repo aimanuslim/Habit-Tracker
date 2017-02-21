@@ -11,8 +11,17 @@ public class Person {
     private String name;
     private String habitName;
     private Date lastDateInteractedWith;
+    private String id;
 
     public Person() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Person(String habitName, Date lastDateInteractedWith, String name) {

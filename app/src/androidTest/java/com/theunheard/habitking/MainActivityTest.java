@@ -164,21 +164,34 @@ public class MainActivityTest  {
         deleteData();
     }
 
+    public void switchToDataListView() {
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        onView(withText("View My Habits")).perform(click());
+    }
+
     @Test
-    public void addPersonInteracted() {
+    public void addHabitsWithPersonInteracted() {
         addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        addPersonInteracted();
+        addPersonInteracted();
+        clickRecordButton();
+        switchToDataListView();
+    }
+
+    public void addPersonInteracted() {
         onView(withId(R.id.addPersonInteractedButton)).perform(click());
         String personName = randomString();
         onView(withId(R.id.person_name_edit)).perform(typeText(personName));
         onView(withText("Add")).perform(click());
-        onData(anything())
-                .inAdapterView(withId(R.id.personInteractedListView))
-                .atPosition(0)
-//                .onChildView(withId(R.layout.person_name_item))
-                .check(matches(withText(personName)));
-
 
     }
+
+    // TODO: checking for added interacted person
+//    onData(anything())
+//            .inAdapterView(withId(R.id.personInteractedListView))
+//            .atPosition(0)
+////                .onChildView(withId(R.layout.person_name_item))
+//    .check(matches(withText(personName)));
 
 
     // TODO: test data views

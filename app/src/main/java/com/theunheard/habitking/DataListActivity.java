@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,7 +27,7 @@ public class DataListActivity extends AppCompatActivity {
     private HabitListAdapter habitListAdapter;
     private ArrayList<Habit> habitList;
 
-    private ArrayList<Person> personNameList;
+    private ArrayList<Person> personList;
     private PersonListAdapter personListAdapter;
 
 
@@ -65,8 +66,8 @@ public class DataListActivity extends AppCompatActivity {
     private void setupAdapters() {
         habitList = _dbHandler.getAllHabits();
         habitListAdapter = new HabitListAdapter(this, R.layout.habit_item, habitList);
-        personNameList = _dbHandler.getAllPerson();
-        personListAdapter = new PersonListAdapter(this, R.layout.person_item, personNameList);
+        personList = _dbHandler.getAllPerson();
+        personListAdapter = new PersonListAdapter(this, R.layout.person_item, personList);
 
 
 
@@ -84,9 +85,15 @@ public class DataListActivity extends AppCompatActivity {
         dataModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                Log.d("position", "Position: " + Integer.toString(position));
                 switch (position) {
-                    case 0: setupHabitAdapter();
-                    case 1: setupPersonInteractedAdapter();
+                    case 0:
+                        setupHabitAdapter();
+                        break;
+                    case 1:
+                        setupPersonInteractedAdapter();
+                        break;
+                    default: setupHabitAdapter();
                 }
             }
 
@@ -99,12 +106,74 @@ public class DataListActivity extends AppCompatActivity {
     }
 
     private void setupPersonInteractedAdapter() {
+//        dataListView.setAdapter(null);
+
         dataListView.setAdapter(personListAdapter);
+        dataListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                final Dialog dialog = new Dialog(DataListActivity.this);
+                dialog.setContentView(R.layout.fragment_edit_person_info_fragment_dialog);
+
+
+                final EditText personName = (EditText) dialog.findViewById(R.id.editPerson_associatedHabitEditText);
+                final EditText associatedHabit = (EditText) dialog.findViewById(R.id.editPerson_associatedHabitEditText);
+
+                Button updateButton = (Button) dialog.findViewById(R.id.personItemUpdateButton);
+                Button deleteButton = (Button) dialog.findViewById(R.id.personItemDeletedButton);
+                Button cancelButton = (Button) dialog.findViewById(R.id.personItemCancelButton);
+
+                final Person person = (Person) dataListView.getItemAtPosition(pos);
+
+                personName.setText(person.getName());
+                associatedHabit.setText(person.getHabitName());
+
+
+
+                updateButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        person.setName(personName.getText().toString());
+                        person.setHabitName(associatedHabit.getText().toString());
+                        personListAdapter.notifyDataSetChanged();
+                        _dbHandler.modifyPerson(person);
+                        dialog.dismiss();
+                    }
+                });
+
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                deleteButton.setTag(pos);
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int position = (int) view.getTag();
+                        personList.remove(position);
+                        personListAdapter.notifyDataSetChanged();
+                        _dbHandler.deletePerson(Integer.parseInt(person.getId()));
+                        dialog.dismiss();
+                    }
+                });
+
+
+//                myDialog.show(fm, "Edit Habit");
+
+                dialog.show();
+
+            }
+        });
+
 
     }
 
 
     private void setupHabitAdapter() {
+//        dataListView.setAdapter(null);
         dataListView.setAdapter(habitListAdapter);
         dataListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -180,6 +249,8 @@ public class DataListActivity extends AppCompatActivity {
 
             }
         });
+
+        habitListAdapter.notifyDataSetChanged();
     }
 
     @Override
