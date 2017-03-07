@@ -94,7 +94,7 @@ public class MainActivityTest  {
             clickRecordButton();
             clearAllInputs();
         }
-        deleteData();
+//        deleteData();
     }
 
     public void clearAllInputs() {
@@ -175,7 +175,8 @@ public class MainActivityTest  {
         addPersonInteracted();
         addPersonInteracted();
         clickRecordButton();
-        switchToDataListView();
+
+//        switchToDataListView();
     }
 
     public void addPersonInteracted() {

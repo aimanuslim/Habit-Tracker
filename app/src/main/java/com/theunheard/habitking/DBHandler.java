@@ -62,8 +62,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 COL_NAME + " TEXT, " +
                 COL_DATELP + " INTEGER, " + // date has to be stored as an integer
                 COL_CATEGORY + " TEXT, " +
-                COL_FREQUENCY + " INTEGER " +
-                COL_PERIOD + " INTEGER " +
+                COL_FREQUENCY + " INTEGER, " +
+                COL_PERIOD + " INTEGER, " +
                 COL_MULTIPLIER + " INTEGER " +
 
 
@@ -259,7 +259,7 @@ public class DBHandler extends SQLiteOpenHelper {
         while(!c.isAfterLast()) {
             Person person = new Person();
 
-            person.setId(c.getString(c.getColumnIndex(COL_ID)));
+            person.setId(c.getString(c.getColumnIndex(COL_PITID)));
             person.setName(c.getString(c.getColumnIndex(COL_PITNAME)));
             habitCursor = db.rawQuery("SELECT * FROM " + TABLE_HABITS + " WHERE " + COL_ID + " = " + c.getLong(c.getColumnIndex(COL_HABITID)), null);
             habitCursor.moveToFirst();

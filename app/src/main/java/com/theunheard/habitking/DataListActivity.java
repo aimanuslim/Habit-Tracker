@@ -33,7 +33,7 @@ public class DataListActivity extends AppCompatActivity {
 
 
 
-    private final static String[] dataModeArray = new String[] {"Habit List", "Person List", "Location List"};
+    private final static String[] dataModeArray = new String[] {"Habit List", "Person List"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +115,9 @@ public class DataListActivity extends AppCompatActivity {
                 final Dialog dialog = new Dialog(DataListActivity.this);
                 dialog.setContentView(R.layout.fragment_edit_person_info_fragment_dialog);
 
-
-                final EditText personName = (EditText) dialog.findViewById(R.id.editPerson_associatedHabitEditText);
+                // TODO: this should probably be autocompletetextview
+                final EditText personName = (EditText) dialog.findViewById(R.id.personEdit_personNameEditText);
+                // TODO: this should be a spinner
                 final EditText associatedHabit = (EditText) dialog.findViewById(R.id.editPerson_associatedHabitEditText);
 
                 Button updateButton = (Button) dialog.findViewById(R.id.personItemUpdateButton);
