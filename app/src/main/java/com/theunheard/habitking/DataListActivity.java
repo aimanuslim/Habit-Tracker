@@ -29,6 +29,7 @@ public class DataListActivity extends AppCompatActivity {
 
     private ArrayList<Person> personList;
     private PersonListAdapter personListAdapter;
+    private Runnable updateListAndAdapters;
 
 
 
@@ -53,6 +54,22 @@ public class DataListActivity extends AppCompatActivity {
         dataModeSpinner = (Spinner) findViewById(R.id.dataModeSpinner);
         _dbHandler = new DBHandler(this);
 
+
+        updateListAndAdapters = new Runnable() {
+            public void run() {
+                //reload content
+                personList.clear();
+                personList = _dbHandler.getAllPerson();
+                personListAdapter.notifyDataSetChanged();
+
+                habitList.clear();
+                habitList = _dbHandler.getAllHabits();
+                habitListAdapter.notifyDataSetChanged();
+
+                dataListView.invalidateViews();
+                dataListView.refreshDrawableState();
+            }
+        };
 
         setupAdapters();
        setupHabitAdapter();
@@ -120,7 +137,7 @@ public class DataListActivity extends AppCompatActivity {
                 // TODO: this should be a spinner
                 final EditText associatedHabit = (EditText) dialog.findViewById(R.id.editPerson_associatedHabitEditText);
 
-                Button updateButton = (Button) dialog.findViewById(R.id.personItemUpdateButton);
+                final Button updateButton = (Button) dialog.findViewById(R.id.personItemUpdateButton);
                 Button deleteButton = (Button) dialog.findViewById(R.id.personItemDeletedButton);
                 Button cancelButton = (Button) dialog.findViewById(R.id.personItemCancelButton);
 
@@ -136,8 +153,8 @@ public class DataListActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         person.setName(personName.getText().toString());
                         person.setHabitName(associatedHabit.getText().toString());
-                        personListAdapter.notifyDataSetChanged();
                         _dbHandler.modifyPerson(person);
+                        runOnUiThread(updateListAndAdapters);
                         dialog.dismiss();
                     }
                 });
@@ -156,7 +173,7 @@ public class DataListActivity extends AppCompatActivity {
                         int position = (int) view.getTag();
                         personList.remove(position);
                         personListAdapter.notifyDataSetChanged();
-                        _dbHandler.deletePerson(Integer.parseInt(person.getId()));
+                        _dbHandler.deletePersonByID(Integer.parseInt(person.getId()));
                         dialog.dismiss();
                     }
                 });
@@ -237,8 +254,9 @@ public class DataListActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         int position = (int) view.getTag();
                         habitList.remove(position);
-                        habitListAdapter.notifyDataSetChanged();
-                        _dbHandler.deleteHabit(Integer.parseInt(habit.getId()));
+                        _dbHandler.deleteHabitByID(Integer.parseInt(habit.getId()));
+                        _dbHandler.deletePersonByHabitID(Integer.parseInt(habit.getId()));
+                        runOnUiThread(updateListAndAdapters);
                         dialog.dismiss();
                     }
                 });

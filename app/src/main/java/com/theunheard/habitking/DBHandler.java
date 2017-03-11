@@ -396,25 +396,28 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
 
-    public boolean deleteHabit(Integer id) {
+    public boolean deleteHabitByID(Integer id) {
         SQLiteDatabase db = getWritableDatabase();
         boolean res = db.delete(TABLE_HABITS, COL_ID + " = " + id.toString(), null) > 0;
         db.close();
         return res;
     }
 
-    public boolean deletePerson(Integer id) {
+    public boolean deletePersonByHabitID(Integer habitID) {
+        SQLiteDatabase db = getWritableDatabase();
+        boolean res = db.delete(TABLE_PIT, COL_HABITID + " = " + habitID.toString(), null) > 0;
+        db.close();
+        return res;
+    }
+
+    public boolean deletePersonByID(Integer id) {
         SQLiteDatabase db = getWritableDatabase();
         boolean res = db.delete(TABLE_PIT, COL_PITID + " = " + id.toString(), null) > 0;
         db.close();
         return res;
     }
 
-
-
-
-
-    public void deleteHabit(String habitname){
+    public void deleteHabitByName(String habitname){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_HABITS + " WHERE " + COL_NAME + "=\"" + habitname + "\"" +
 //                " AND " + COL_OWNID + "=\"" + ownerId + "\"" +
@@ -428,6 +431,13 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_HABITS + " WHERE 1;");
         close();
     }
+
+    public void deleteAllPersons() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_PIT + " WHERE 1;");
+        close();
+    }
+
 
     public String databasetostring(){
 

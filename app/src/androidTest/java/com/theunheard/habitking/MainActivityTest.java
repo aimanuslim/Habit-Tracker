@@ -1,22 +1,28 @@
 package com.theunheard.habitking;
 
 import android.os.SystemClock;
-import android.os.health.UidHealthStats;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.contrib.PickerActions;
+import android.support.test.espresso.intent.Checks;
+import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.Until;
+import android.util.Log;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiSelector;
 
-import org.junit.Before;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,8 +35,11 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Checks.checkNotNull;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -90,7 +99,7 @@ public class MainActivityTest  {
     public void addMultipleHabits () {
 
         for(int i = 0; i < 5; i++) {
-            addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+            enterHabitDetails(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
             clickRecordButton();
             clearAllInputs();
         }
@@ -107,7 +116,7 @@ public class MainActivityTest  {
     }
 
 
-    public void addHabits(
+    public String enterHabitDetails(
             String habitName,
             String category,
             int year,
@@ -145,20 +154,26 @@ public class MainActivityTest  {
         onView(withId(R.id.repetitionPeriodSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(repetitionPeriod))).perform(click());
 
+        return habitName;
+
 
 //        onView(withText(R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed())
 //        deleteData();
 
     }
 
+    public void waitInSeconds (int seconds) {
+        SystemClock.sleep(seconds * 1000);
+    }
+
     public void clickRecordButton() {
-        SystemClock.sleep(2000);
+        waitInSeconds(2);
         onView(withId(R.id.recordButton)).perform(click());
     }
 
     @Test
     public void addHabitWithoutName () {
-        addHabits("", randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        enterHabitDetails("", randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         clickRecordButton();
         onView(withText(R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
@@ -169,30 +184,118 @@ public class MainActivityTest  {
         onView(withText("View My Habits")).perform(click());
     }
 
+
+
     @Test
     public void addHabitsWithPersonInteracted() {
-        addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
-        addPersonInteracted();
-        addPersonInteracted();
+        String habitname = randomString();
+        enterHabitDetails(habitname, randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        String personName1 = enterPersonInteracted();
+        String personName2 = enterPersonInteracted();
         clickRecordButton();
 
-//        switchToDataListView();
+
+
+        switchToDataListView();
+        switchDataListToPersonList();
+        checkIfPersonItemExist(habitname, personName1, personName2);
     }
 
-    public void addPersonInteracted() {
+    public void checkIfPersonItemExist (String habitName, String... persons) {
+        for (String personName: persons) {
+//            onView(allOf(withText(personName), withText(habitName), withParent(withId(R.id.dataListView))));
+            onData(withYourPersonName(Matchers.containsString(personName)))
+                    .inAdapterView(withId(R.id.dataListView))
+                    .check(matches(isDisplayed()));
+            Log.d("Check person", "Succeed " + personName);
+
+        }
+
+    }
+
+    // custom matcher to find the habit name text in listview
+    public static Matcher<Object> withYourHabitName(final Matcher<String> habitName) {
+        checkNotNull(habitName);
+        return new BoundedMatcher<Object, Habit>(Habit.class) {
+            @Override
+            public boolean matchesSafely(Habit habit) {
+                return habitName.matches(habit.getName());
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with text: " + habitName.toString());
+                habitName.describeTo(description);
+            }
+        };
+    }
+
+    // custom matcher to find the person in the text in listview
+    public static Matcher<Object> withYourPersonName(final Matcher<String> personName) {
+        checkNotNull(personName);
+        return new BoundedMatcher<Object, Person>(Person.class) {
+            @Override
+            public boolean matchesSafely(Person person) {
+                return personName.matches(person.getName());
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with text: " + personName.toString());
+                personName.describeTo(description);
+            }
+        };
+    }
+
+    // from https://google.github.io/android-testing-support-library/docs/espresso/advanced/index.html#asserting-that-a-data-item-is-not-in-an-adapter
+    private static Matcher<View> withAdaptedData(final Matcher<Object> dataMatcher) {
+        return new TypeSafeMatcher<View>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with class name: ");
+                dataMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                if (!(view instanceof AdapterView)) {
+                    return false;
+                }
+                @SuppressWarnings("rawtypes")
+                Adapter adapter = ((AdapterView) view).getAdapter();
+                for (int i = 0; i < adapter.getCount(); i++) {
+                    if (dataMatcher.matches(adapter.getItem(i))) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
+    }
+
+    public void switchDataListToPersonList () {
+        onView(withId(R.id.dataModeSpinner)).perform(click());
+        onView(withText("Person List")).perform(click());
+
+
+    }
+
+    public void switchDataListToHabitList () {
+        onView(withId(R.id.dataModeSpinner)).perform(click());
+        onView(withText("Habit List")).perform(click());
+    }
+
+    public String enterPersonInteracted() {
         onView(withId(R.id.addPersonInteractedButton)).perform(click());
         String personName = randomString();
-        onView(withId(R.id.person_name_edit)).perform(typeText(personName));
+        onView(withId(R.id.person_name_edit)).perform(typeText(personName), closeSoftKeyboard());
+        waitInSeconds(1);
         onView(withText("Add")).perform(click());
-
+        return personName;
     }
 
-    // TODO: checking for added interacted person
-//    onData(anything())
-//            .inAdapterView(withId(R.id.personInteractedListView))
-//            .atPosition(0)
-////                .onChildView(withId(R.layout.person_name_item))
-//    .check(matches(withText(personName)));
+
 
 
     // TODO: test data views
@@ -201,7 +304,7 @@ public class MainActivityTest  {
 
     @Test
     public void addHabitWithoutCategory () {
-        addHabits(randomString(), "", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        enterHabitDetails(randomString(), "", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         clickRecordButton();
         onView(withText(R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
@@ -209,7 +312,7 @@ public class MainActivityTest  {
 
     @Test
     public void addHabitWithoutDate () {
-        addHabits(randomString(), randomString(), 0, randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        enterHabitDetails(randomString(), randomString(), 0, randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         clickRecordButton();
         onView(withText(R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
@@ -217,7 +320,7 @@ public class MainActivityTest  {
 
     @Test
     public void addHabitWithoutTime () {
-        addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), 0, randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        enterHabitDetails(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), 0, randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         clickRecordButton();
         onView(withText(R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
@@ -225,7 +328,7 @@ public class MainActivityTest  {
 
     @Test
     public void addHabitWithoutRepetitionFreq () {
-        addHabits(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), "", spinnerOptions[randomInt(spinnerOptions.length)]);
+        enterHabitDetails(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), "", spinnerOptions[randomInt(spinnerOptions.length)]);
         clickRecordButton();
         onView(withText(R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
@@ -243,9 +346,9 @@ public class MainActivityTest  {
     @Test
     public void increaseFrequencyCheck()
     {
-        addHabits("Test", "Test_category", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        enterHabitDetails("Test", "Test_category", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         clearAllInputs();
-        addHabits("Test", "Test_category", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        enterHabitDetails("Test", "Test_category", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
         onView(withText("View My Habits")).perform(click());
         onData(anything()).inAdapterView(withId(R.id.dataListView)).atPosition(0).onChildView(withId(R.id.frequencyPerformedLabel)).check(matches(withText("2 times")));
@@ -259,9 +362,36 @@ public class MainActivityTest  {
     public void deleteData() {
         DBHandler dbHandler = main.getActivity().getDB();
         dbHandler.deleteAllHabits();
+        dbHandler.deleteAllPersons();
     }
 
     // TODO: tests the habit list
     // TODO: transition between activities
+    // TODO: test add habit and person interacted then remove habit.
+
+    @Test
+    public void deleteHabitAndMakeSurePersonInteractedGotDeleted() {
+        String habitName = enterHabitDetails(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
+        String personName = enterPersonInteracted();
+        clickRecordButton();
+        switchToDataListView();
+        deleteHabitFromList(habitName);
+        switchDataListToPersonList();
+        // negative testing.
+        onView(withId(R.id.dataListView)).check(matches(not(withAdaptedData(withYourPersonName(Matchers.containsString(personName))))));
+
+    }
+
+
+
+
+
+
+    public void deleteHabitFromList(String habitName) {
+        onData(withYourHabitName(Matchers.containsString(habitName)))
+                .inAdapterView(withId(R.id.dataListView))
+                .perform(click());
+        onView(withText("Delete")).perform(click());
+    }
 
 }

@@ -51,6 +51,7 @@ public class Habit {
         this.frequencyPerformed = 0;
 
         this.personsInteracted = null;
+        this.nextReminderTime = null;
 
     }
 

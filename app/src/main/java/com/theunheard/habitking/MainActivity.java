@@ -296,11 +296,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupReminderNotification(Habit habit) {
         Calendar reminderTime = habit.getNextReminderTime();
-        Intent intent = new Intent(this, ReminderReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 001, intent, 0);
-        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP, reminderTime.getTimeInMillis(), pendingIntent);
-
+        if(reminderTime != null) {
+            Log.d("Next Reminder Time:", Utility.dateToString(reminderTime.getTime(), Utility.timeFormat));
+            Intent intent = new Intent(this, ReminderReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 001, intent, 0);
+            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+            am.set(AlarmManager.RTC_WAKEUP, reminderTime.getTimeInMillis(), pendingIntent);
+        }
     }
 
 
@@ -329,6 +331,8 @@ public class MainActivity extends AppCompatActivity {
         if(personInteractedListView.getAdapter().getCount() != 0) {
             _dbHandler.addPersonInteracted(person_list, habit.getId());
         }
+
+        setupReminderNotification(habit);
 
         Log.d(TAG, "Done adding");
         Log.d(TAG, "DB " + _dbHandler.databasetostring());
