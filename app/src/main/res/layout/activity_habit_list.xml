@@ -19,16 +19,37 @@
         android:minHeight="?attr/actionBarSize"
         android:id="@+id/habitron_habit_list_toolbar" />
 
-    <Spinner
+    <LinearLayout
+        android:id="@+id/dataListSpinnerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dataModeSpinner"
         android:layout_below="@+id/habitron_habit_list_toolbar"
-        />
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/dataModeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/habitron_habit_list_toolbar"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/clearDataListButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button"
+            android:ems="5"
+            android:fontFamily="monospace"
+
+            android:text="Clear Data"
+            android:textColor="#FFFFFFFF"
+            android:textSize="10sp" />
+
+    </LinearLayout>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/dataModeSpinner"
+        android:layout_below="@+id/dataListSpinnerContainer"
         android:id="@+id/dataListView" />
 </RelativeLayout>

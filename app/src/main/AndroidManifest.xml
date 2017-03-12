@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:windowSoftInputMode="adjustResize|stateVisible|stateAlwaysHidden">
-        <activity android:name=".MainActivity">
+        <activity android:name=".InsertDataActivity">
 
             <!-- <intent-filter> -->
 

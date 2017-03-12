@@ -58,11 +58,11 @@ import static org.hamcrest.Matchers.not;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest  {
+public class InsertDataActivityTest  {
 
     private UiDevice mDevice;
     @Rule
-    public final ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<InsertDataActivity> main = new ActivityTestRule<>(InsertDataActivity.class);
 
 
 
@@ -367,7 +367,6 @@ public class MainActivityTest  {
 
     // TODO: tests the habit list
     // TODO: transition between activities
-    // TODO: test add habit and person interacted then remove habit.
 
     @Test
     public void deleteHabitAndMakeSurePersonInteractedGotDeleted() {

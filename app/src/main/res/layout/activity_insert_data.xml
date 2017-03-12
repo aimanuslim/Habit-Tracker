@@ -11,7 +11,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/colorPurpleLight"
-    tools:context="com.theunheard.habitking.MainActivity"
+    tools:context="com.theunheard.habitking.InsertDataActivity"
 
     android:orientation="vertical"
     android:isScrollContainer="true"
@@ -40,28 +40,29 @@
             android:id="@+id/mainContainer">
 
             <TextView
-                android:text="Enter details of the habit"
+                android:id="@+id/instructionLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="18dp"
 
-                android:id="@+id/instructionLabel"
-                android:textSize="20dip"/>
+                android:text="Enter details of the habit"
+                android:textSize="15dip" />
 
             <AutoCompleteTextView
+                android:id="@+id/habitInputName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:padding="5dp"
-                android:id="@+id/habitInputName"
-                android:hint="Habit Name"
                 android:background="@color/colorPurpleSuperLight"
+                android:hint="Habit Name"
+                android:padding="5dp"
 
 
-                />
+                android:textAlignment="center"
+                android:textSize="15sp" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -120,15 +121,17 @@
             </LinearLayout>
 
             <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:inputType="text|textPersonName"
                 android:id="@+id/categoryInput"
-                android:hint="Category"
-                android:background="@color/colorPurpleSuperLight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:padding="5dp"
+                android:background="@color/colorPurpleSuperLight"
+                android:hint="Category"
+                android:inputType="text|textPersonName"
 
-                android:layout_height="wrap_content" />
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="15sp" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -145,7 +148,7 @@
                     android:textAlignment="center"
                     android:gravity="center_vertical"
 
-                    android:layout_marginRight="10px"
+                    android:layout_marginRight="0px"
                     android:fontFamily="monospace"
                     android:layout_width="170dp" />
 

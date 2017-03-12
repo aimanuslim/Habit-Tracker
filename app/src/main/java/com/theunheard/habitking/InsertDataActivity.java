@@ -39,12 +39,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import static android.text.InputType.TYPE_CLASS_DATETIME;
 import static android.text.InputType.TYPE_DATETIME_VARIATION_DATE;
 
-public class MainActivity extends AppCompatActivity {
+public class InsertDataActivity extends AppCompatActivity {
 
 
     private DatePickerDialog datePickerDialog;
@@ -115,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Stetho.initializeWithDefaults(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_insert_data);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.habitron_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -218,9 +217,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, periodArray);
+                R.layout.hk_spinner_unclicked_textview, periodArray);
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.hk_spinner_item);
         // Apply the adapter to the spinner
         repetitionPeriodSpinner.setAdapter(adapter);
 
@@ -247,9 +246,9 @@ public class MainActivity extends AppCompatActivity {
 //                if(isNetworkAvailable()) {
                 if(areEntriesValid()) {
                     saveToCloud();
-                    Toast.makeText(MainActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InsertDataActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MainActivity.this, R.string.missing_info, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InsertDataActivity.this, R.string.missing_info, Toast.LENGTH_SHORT).show();
                 }
 //                } else {
 
@@ -267,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else {
             // No user is signed in
-            Toast.makeText(MainActivity.this, "User not logged in!", Toast.LENGTH_SHORT);
+            Toast.makeText(InsertDataActivity.this, "User not logged in!", Toast.LENGTH_SHORT);
             return false;
         }
     }
@@ -347,10 +346,10 @@ public class MainActivity extends AppCompatActivity {
 //            Habit habit = new Habit(dateToSave, habitName, uid);
 //            _databaseRef.child("habits").setValue(habit);
 //            Log.d(TAG, "Data saved");
-//            Toast.makeText(MainActivity.this, "Data saved!", Toast.LENGTH_SHORT);
+//            Toast.makeText(InsertDataActivity.this, "Data saved!", Toast.LENGTH_SHORT);
 //        } else {
 //            Log.d(TAG, "Data not saved");
-//            Toast.makeText(MainActivity.this, "No date saved", Toast.LENGTH_SHORT);
+//            Toast.makeText(InsertDataActivity.this, "No date saved", Toast.LENGTH_SHORT);
 //        }
 
     }
@@ -383,11 +382,11 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(InsertDataActivity.this);
                 alert.setTitle("Add person");
                 alert.setMessage("Enter the name of the person you performed this activity with");
 
-                final EditText input = new EditText(MainActivity.this);
+                final EditText input = new EditText(InsertDataActivity.this);
                 input.setId(R.id.person_name_edit);
                 alert.setView(input);
 
@@ -417,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
     private void hideSoftKeyboard(EditText et){
         View view = this.getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(MainActivity.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager)getSystemService(InsertDataActivity.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
@@ -458,10 +457,10 @@ public class MainActivity extends AppCompatActivity {
         Calendar now = Calendar.getInstance();
 //        Log.d(TAG, "input type:" + et.getInputType());
         if(et.getInputType() == (TYPE_CLASS_DATETIME | TYPE_DATETIME_VARIATION_DATE)) {
-            datePickerDialog = new DatePickerDialog(MainActivity.this, new CustomSetListener(et), now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+            datePickerDialog = new DatePickerDialog(InsertDataActivity.this, new CustomSetListener(et), now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
             datePickerDialog.show();
         } else {
-            timePickerDialog = new TimePickerDialog(MainActivity.this, new CustomSetListener(et), now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), false);
+            timePickerDialog = new TimePickerDialog(InsertDataActivity.this, new CustomSetListener(et), now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), false);
             timePickerDialog.show();
         }
     }
