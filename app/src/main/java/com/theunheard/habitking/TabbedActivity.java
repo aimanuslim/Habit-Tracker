@@ -39,8 +39,8 @@ public class TabbedActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.addTab(tabLayout.newTab().setText("Insert Habit"));
-        tabLayout.addTab(tabLayout.newTab().setText("Data List"));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.insert_data_tab_text));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.data_list_tab_text));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.container);

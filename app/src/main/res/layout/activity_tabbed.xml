@@ -27,6 +27,7 @@
             app:popupTheme="@style/PopupOverlay"
             app:subtitleTextColor="@color/colorPurpleHigh"
             app:titleTextColor="@color/colorPurpleHigh"
+            android:layout_margin="5dip"
             >
 
         </android.support.v7.widget.Toolbar>

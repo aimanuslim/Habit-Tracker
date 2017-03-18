@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -14,7 +15,7 @@ import java.util.List;
  * Created by ian21 on 2/4/2017.
  */
 
-public class HabitListAdapter extends ArrayAdapter<Habit> {
+public class HabitListAdapter extends ArrayAdapter<Habit> implements Filterable{
     public HabitListAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }

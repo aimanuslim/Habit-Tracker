@@ -4,7 +4,6 @@ import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.contrib.PickerActions;
-import android.support.test.espresso.intent.Checks;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -37,7 +36,6 @@ import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Checks.checkNotNull;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
@@ -361,7 +359,7 @@ public class InsertDataActivityTest  {
 
     public void deleteData() {
         DBHandler dbHandler = main.getActivity().getDB();
-        dbHandler.deleteAllHabits();
+        dbHandler.deleteAllHabitsAndPerson();
         dbHandler.deleteAllPersons();
     }
 

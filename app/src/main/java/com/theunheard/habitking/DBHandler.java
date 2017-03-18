@@ -426,9 +426,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public void deleteAllHabits() {
+    public void deleteAllHabitsAndPerson() {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_HABITS + " WHERE 1;");
+        db.execSQL("DELETE FROM " + TABLE_PIT + " WHERE 1;");
         close();
     }
 

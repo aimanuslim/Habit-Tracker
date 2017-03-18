@@ -372,7 +372,7 @@ public class InsertDataActivity extends AppCompatActivity {
 
 
     public void deleteDatabase() {
-        _dbHandler.deleteAllHabits();
+        _dbHandler.deleteAllHabitsAndPerson();
     }
 
     private void setupAddInteractedPersonButton(Button btn) {

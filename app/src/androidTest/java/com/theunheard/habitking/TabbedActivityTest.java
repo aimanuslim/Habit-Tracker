@@ -12,6 +12,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.Until;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
@@ -178,8 +179,8 @@ public class TabbedActivityTest {
     }
 
     public void switchToDataListView() {
-        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
-        onView(withText("View My Habits")).perform(click());
+//        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        onView(withText(R.string.data_list_tab_text)).perform(click());
     }
 
 
@@ -202,13 +203,36 @@ public class TabbedActivityTest {
     public void checkIfPersonItemExist (String habitName, String... persons) {
         for (String personName: persons) {
 //            onView(allOf(withText(personName), withText(habitName), withParent(withId(R.id.dataListView))));
-            onData(withYourPersonName(Matchers.containsString(personName)))
-                    .inAdapterView(withId(R.id.dataListView))
-                    .check(matches(isDisplayed()));
+//            onView(allOf(withId(R.id.dataListView), isDescendantOfA(firstChildOf(withId(R.id.container))), withText(personName))).check(matches(isDisplayed()));
+            onData(withYourPersonName(Matchers.containsString(personName)));
+//
+////                            inAdapterView(withId(R.id.dataListView))
+//                    .check(matches(isDisplayed()));
             Log.d("Check person", "Succeed " + personName);
 
         }
 
+    }
+
+    // custom matcher for pager
+    public static Matcher<View> firstChildOf(final Matcher<View> parentMatcher) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with first child view of type parentMatcher");
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+
+                if (!(view.getParent() instanceof ViewGroup)) {
+                    return parentMatcher.matches(view.getParent());
+                }
+                ViewGroup group = (ViewGroup) view.getParent();
+                return parentMatcher.matches(view.getParent()) && group.getChildAt(0).equals(view);
+
+            }
+        };
     }
 
     // custom matcher to find the habit name text in listview
@@ -359,7 +383,7 @@ public class TabbedActivityTest {
 
     public void deleteData() {
         DBHandler dbHandler = main.getActivity().getDB();
-        dbHandler.deleteAllHabits();
+        dbHandler.deleteAllHabitsAndPerson();
         dbHandler.deleteAllPersons();
     }
 

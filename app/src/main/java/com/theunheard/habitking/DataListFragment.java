@@ -1,16 +1,11 @@
 package com.theunheard.habitking;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -35,6 +30,7 @@ public class DataListFragment extends Fragment {
     private ArrayList<Person> personList;
     private PersonListAdapter personListAdapter;
     private Runnable updateListAndAdapters;
+    private Button clearDataButton;
 
 
 
@@ -70,16 +66,20 @@ public class DataListFragment extends Fragment {
         updateListAndAdapters = new Runnable() {
             public void run() {
                 //reload content
+//                dataListView.invalidateViews();
+//                dataListView.refreshDrawableState();
+
+//                http://stackoverflow.com/questions/14503006/android-listview-not-refreshing-after-notifydatasetchanged
+                // problem with reference to adapter for the listview.
                 personList.clear();
-                personList = _dbHandler.getAllPerson();
+                personList.addAll(_dbHandler.getAllPerson());
                 personListAdapter.notifyDataSetChanged();
 
                 habitList.clear();
-                habitList = _dbHandler.getAllHabits();
+                habitList.addAll(_dbHandler.getAllHabits());
                 habitListAdapter.notifyDataSetChanged();
 
-                dataListView.invalidateViews();
-                dataListView.refreshDrawableState();
+
             }
         };
 
@@ -87,8 +87,27 @@ public class DataListFragment extends Fragment {
         setupHabitAdapter();
 
         setupDataSelector();
+
+        setupClearDataButton();
     }
 
+
+    private void setupClearDataButton() {
+        clearDataButton = (Button) getActivity().findViewById(R.id.clearDataListButton);
+        clearDataButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch(dataModeSpinner.getSelectedItemPosition()) {
+                    case 0: _dbHandler.deleteAllHabitsAndPerson();
+                            break;
+                    case 1: _dbHandler.deleteAllPersons();
+                            break;
+                }
+                getActivity().runOnUiThread(updateListAndAdapters);
+            }
+
+        });
+    }
 
     private void setupAdapters() {
         habitList = _dbHandler.getAllHabits();
