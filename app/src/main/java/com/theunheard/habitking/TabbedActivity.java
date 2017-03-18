@@ -1,5 +1,6 @@
 package com.theunheard.habitking;
 
+import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 public class TabbedActivity extends AppCompatActivity {
@@ -55,6 +57,7 @@ public class TabbedActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+//TODO: remove keyboard when changing tabs
             }
 
             @Override

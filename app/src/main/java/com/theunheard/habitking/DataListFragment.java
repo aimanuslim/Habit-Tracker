@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class DataListFragment extends Fragment {
@@ -30,7 +32,9 @@ public class DataListFragment extends Fragment {
     private ArrayList<Person> personList;
     private PersonListAdapter personListAdapter;
     private Runnable updateListAndAdapters;
+    private Runnable notifyDataSetChangedFromMainThread;
     private Button clearDataButton;
+    private SearchView searchView;
 
 
 
@@ -61,6 +65,8 @@ public class DataListFragment extends Fragment {
         dataListView = (ListView) getView().findViewById(R.id.dataListView);
         dataModeSpinner = (Spinner) getView().findViewById(R.id.dataModeSpinner);
         _dbHandler = new DBHandler(this.getActivity());
+        searchView = (SearchView) getView().findViewById(R.id.dataListSearchView);
+
 
 
         updateListAndAdapters = new Runnable() {
@@ -83,13 +89,82 @@ public class DataListFragment extends Fragment {
             }
         };
 
+        notifyDataSetChangedFromMainThread = new  Runnable() {
+            public void run() {
+                personListAdapter.notifyDataSetChanged();
+                habitListAdapter.notifyDataSetChanged();
+            }
+        };
+
+
+
         setupAdapters();
         setupHabitAdapter();
 
         setupDataSelector();
 
         setupClearDataButton();
+        setupSearchView();
     }
+
+    public void setupSearchView () {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String searchText) {
+                filterData(searchText);
+                return true;
+            }
+
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                getActivity().runOnUiThread(updateListAndAdapters);
+                return true;
+            }
+        });
+    }
+
+    public void filterData(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        if(dataListView.getAdapter() == habitListAdapter) {
+            habitList.clear();
+            if (charText.length() == 0) {
+                habitList.addAll(_dbHandler.getAllHabits());
+            } else {
+                for (Habit habit: _dbHandler.getAllHabits()) {
+                    if (habit.getName().toLowerCase(Locale.getDefault())
+                            .contains(charText) ||
+                            habit.getCategory().toLowerCase(Locale.getDefault()).contains(charText)
+                            ) {
+                        habitList.add(habit);
+                    }
+                }
+            }
+        } else if(dataListView.getAdapter() == personListAdapter) {
+            personList.clear();
+            if (charText.length() == 0) {
+                personList.addAll(_dbHandler.getAllPerson());
+            } else {
+                for (Person person: _dbHandler.getAllPerson()) {
+                    if (person.getName().toLowerCase(Locale.getDefault())
+                            .contains(charText) ||
+                            person.getHabitName().toLowerCase(Locale.getDefault()).contains(charText)
+                            ) {
+                        personList.add(person);
+                    }
+                }
+            }
+        }
+        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+    }
+
 
 
     private void setupClearDataButton() {
