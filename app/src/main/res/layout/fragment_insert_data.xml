@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     tools:context="com.theunheard.habitking.InsertDataFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <ScrollView
         android:layout_width="match_parent"

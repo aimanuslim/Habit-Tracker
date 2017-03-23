@@ -132,9 +132,7 @@ public class DataListActivity extends AppCompatActivity {
                 final Dialog dialog = new Dialog(DataListActivity.this);
                 dialog.setContentView(R.layout.fragment_edit_person_info_fragment_dialog);
 
-                // TODO: this should probably be autocompletetextview
                 final EditText personName = (EditText) dialog.findViewById(R.id.personEdit_personNameEditText);
-                // TODO: this should be a spinner
                 final EditText associatedHabit = (EditText) dialog.findViewById(R.id.editPerson_associatedHabitEditText);
 
                 final Button updateButton = (Button) dialog.findViewById(R.id.personItemUpdateButton);

@@ -35,13 +35,21 @@ public class DataListFragment extends Fragment {
     private Runnable notifyDataSetChangedFromMainThread;
     private Button clearDataButton;
     private SearchView searchView;
+    private Spinner sortModeSpinner;
+
+
+    private ArrayAdapter<String> habitSortAdapter;
+    private ArrayAdapter<String> personSortAdapter;
 
 
 
 
-    private final static String[] dataModeArray = new String[] {"Habit List", "Person List"};
-
-
+//    private final static String[] dataModeArray = new String[] {"Habit List", "Person List"};
+    private static String[] dataModeArray;
+//    private static String[] habitSortModeArray = new String[] {"Last Performed", "Name"};
+    private static String[] habitSortModeArray;
+//    private static String[] personSortModeArray = new String[] {"Person Name", "Last Performed With"};
+    private static String[] personSortModeArray;
 
     public DataListFragment() {
         // Required empty public constructor
@@ -66,6 +74,10 @@ public class DataListFragment extends Fragment {
         dataModeSpinner = (Spinner) getView().findViewById(R.id.dataModeSpinner);
         _dbHandler = new DBHandler(this.getActivity());
         searchView = (SearchView) getView().findViewById(R.id.dataListSearchView);
+        sortModeSpinner = (Spinner) getView().findViewById(R.id.sortModeSpinner);
+        dataModeArray = getResources().getStringArray(R.array.data_mode_array);
+        personSortModeArray = getResources().getStringArray(R.array.person_sort_mode_array);
+        habitSortModeArray = getResources().getStringArray(R.array.habit_sort_mode_array);
 
 
 
@@ -101,13 +113,17 @@ public class DataListFragment extends Fragment {
         setupAdapters();
         setupHabitAdapter();
 
-        setupDataSelector();
+        setupDataModeSpinner();
 
         setupClearDataButton();
         setupSearchView();
     }
 
     public void setupSearchView () {
+
+        // TODO: need to work on making it expand fully
+        searchView.setMaxWidth( Integer.MAX_VALUE );
+        searchView.setMinimumWidth(getView().findViewById(R.id.dataListSpinnerContainer).getWidth());
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -122,15 +138,37 @@ public class DataListFragment extends Fragment {
 
         });
 
+        searchView.setMaxWidth(getView().findViewById(R.id.dataListSpinnerContainer).getWidth());
+
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
                 getActivity().runOnUiThread(updateListAndAdapters);
+                searchView.onActionViewCollapsed();
+                dataModeSpinner.setVisibility(View.VISIBLE);
                 return true;
+            }
+        });
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataModeSpinner.setVisibility(View.GONE);
+//                view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, width));
+            }
+        });
+
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataModeSpinner.setVisibility(View.GONE);
+//                searchView.onActionViewExpanded();
+
             }
         });
     }
 
+    // http://stackoverflow.com/questions/26919099/implement-search-in-listview-inside-fragment
     public void filterData(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
         if(dataListView.getAdapter() == habitListAdapter) {
@@ -194,7 +232,56 @@ public class DataListFragment extends Fragment {
 
     }
 
-    private void setupDataSelector() {
+    private void switchSortModeSpinner() {
+        if(sortModeSpinner.getAdapter() == habitSortAdapter) {
+            sortModeSpinner.setAdapter(personSortAdapter);
+        } else {
+            sortModeSpinner.setAdapter(habitSortAdapter);
+        }
+    }
+
+
+    private void setupSortModeSpinner() {
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        habitSortAdapter = new ArrayAdapter<String>(this.getActivity(),
+                R.layout.hk_spinner_unclicked_textview, habitSortModeArray);
+        personSortAdapter = new ArrayAdapter<String>(this.getActivity(),
+                R.layout.hk_spinner_unclicked_textview, personSortModeArray);
+        // Specify the layout to use when the list of choices appears
+        habitSortAdapter.setDropDownViewResource(R.layout.hk_spinner_item);
+        personSortAdapter.setDropDownViewResource(R.layout.hk_spinner_item);
+        // Apply the adapter to the spinner
+        sortModeSpinner.setAdapter(habitSortAdapter);
+
+        sortModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                if(sortModeSpinner.getAdapter() == habitSortAdapter) {
+                    switch (getResources().getStringArray(R.array.habit_sort_mode_array)[position]) {
+                        case getResources().getString(R.string.last_performed_habit_sort_mode_text)):
+
+                    }
+                }
+                switch (getResources().getStringArray(R.array.person_sort_mode_array)[0]) {
+                    case :
+                        Collections.sort()
+                        break;
+                    case 1:
+                        setupPersonInteractedAdapter();
+                        break;
+                    default: setupHabitAdapter();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+    }
+
+    private void setupDataModeSpinner() {
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),
                 R.layout.hk_spinner_unclicked_textview, dataModeArray);
@@ -210,9 +297,11 @@ public class DataListFragment extends Fragment {
                 switch (position) {
                     case 0:
                         setupHabitAdapter();
+                        switchSortModeSpinner();
                         break;
                     case 1:
                         setupPersonInteractedAdapter();
+                        switchSortModeSpinner();
                         break;
                     default: setupHabitAdapter();
                 }

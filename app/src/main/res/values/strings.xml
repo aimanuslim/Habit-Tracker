@@ -38,4 +38,12 @@
 
     <string name="data_list_tab_text">Data List</string>
     <string name="insert_data_tab_text">Insert Habit</string>
+
+    <string name="last_performed_habit_sort_mode_text">Last Performed</string>
+    <string name="name_habit_sort_mode_text">Habit Name</string>
+    <string name="last_performed_person_sort_mode_text">Last Performed With</string>
+    <string name="name_person_sort_mode_text">Person Name</string>
+    <string name="habit_data_mode_text">Habit List</string>
+    <string name="person_data_mode_text">Person List</string>
+
 </resources>

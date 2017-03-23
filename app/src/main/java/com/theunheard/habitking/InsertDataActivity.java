@@ -151,7 +151,6 @@ public class InsertDataActivity extends AppCompatActivity {
 
         // firebase initialization
 
-        // TODO: implement fire base for analytics
 //        if(_databaseRef == null) {
 //            _firebaseInstance = FirebaseDatabase.getInstance();
 //            _firebaseInstance.setPersistenceEnabled(true);

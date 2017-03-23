@@ -324,7 +324,7 @@ public class TabbedActivityTest {
     // TODO: check spinner, change data
     // TODO: check data, betul tak
     // TODO: search filter testing
-    
+
 
     @Test
     public void addHabitWithoutCategory () {

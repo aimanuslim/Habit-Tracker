@@ -296,9 +296,7 @@ public class InsertDataActivityTest  {
 
 
 
-    // TODO: test data views
-    // TODO: check spinner, change data
-    // TODO: check data, betul tak
+
 
     @Test
     public void addHabitWithoutCategory () {
@@ -363,8 +361,7 @@ public class InsertDataActivityTest  {
         dbHandler.deleteAllPersons();
     }
 
-    // TODO: tests the habit list
-    // TODO: transition between activities
+
 
     @Test
     public void deleteHabitAndMakeSurePersonInteractedGotDeleted() {

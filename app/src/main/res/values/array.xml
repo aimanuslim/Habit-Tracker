@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="habit_sort_mode_array">
+
+        <item>@string/last_performed_habit_sort_mode_text</item>
+
+        <item>@string/name_habit_sort_mode_text</item>
+
+    </string-array>
+
+    <string-array name="person_sort_mode_array">
+
+        <item>@string/last_performed_person_sort_mode_text</item>
+
+        <item>@string/name_person_sort_mode_text</item>
+    </string-array>
+
+    <string-array name="data_mode_array">
+
+        <item>@string/habit_data_mode_text</item>
+
+        <item>@string/person_data_mode_text</item>
+
+    </string-array>
+
+
+</resources>

@@ -1,13 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.theunheard.habitking.DataListFragment"
-    android:orientation="vertical"
 
     >
 
-    <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
         android:id="@+id/dataListSpinnerContainer"
@@ -23,30 +21,37 @@
             android:layout_below="@+id/habitron_habit_list_toolbar"
             android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/clearDataListButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_button"
-            android:ems="5"
-            android:fontFamily="monospace"
+        <Spinner
+            android:id="@+id/sortModeSpinner"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content" />
 
-            android:text="Clear Data"
-            android:textColor="#FFFFFFFF"
-            android:textSize="10sp" />
+        <SearchView
+            android:id="@+id/dataListSearchView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            />
 
     </LinearLayout>
-
-    <SearchView
-        android:id="@+id/dataListSearchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <ListView
         android:id="@+id/dataListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/dataListSpinnerContainer"
-        android:layout_margin="5dip"
-        />
-</LinearLayout>
+        android:layout_margin="5dip" />
+
+    <Button
+        android:id="@+id/clearDataListButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/custom_button"
+        android:ems="5"
+
+        android:fontFamily="monospace"
+        android:text="Clear Data"
+        android:textColor="#FFFFFFFF"
+        android:textSize="10sp" />
+</RelativeLayout>
