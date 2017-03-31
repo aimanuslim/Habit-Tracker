@@ -17,6 +17,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 
@@ -117,6 +119,7 @@ public class DataListFragment extends Fragment {
 
         setupClearDataButton();
         setupSearchView();
+        setupSortModeSpinner();
     }
 
     public void setupSearchView () {
@@ -256,21 +259,31 @@ public class DataListFragment extends Fragment {
         sortModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+
                 if(sortModeSpinner.getAdapter() == habitSortAdapter) {
                     switch (getResources().getStringArray(R.array.habit_sort_mode_array)[position]) {
-                        case getResources().getString(R.string.last_performed_habit_sort_mode_text)):
-
+                        case "Last Performed":
+                            Collections.sort(habitList, new  HabitLastPerformedComparator());
+                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                            break;
+                        case "Habit Name":
+                            Collections.sort(habitList, new HabitNameComparator());
+                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                            break;
+                    }
+                } else if (sortModeSpinner.getAdapter() == personListAdapter) {
+                    switch (getResources().getStringArray(R.array.person_sort_mode_array)[position]) {
+                        case "Last Performed With":
+                            Collections.sort(personList, new PersonLastPerformedComparator());
+                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                            break;
+                        case "Person Name":
+                            Collections.sort(personList, new PersonNameComparator());
+                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                            break;
                     }
                 }
-                switch (getResources().getStringArray(R.array.person_sort_mode_array)[0]) {
-                    case :
-                        Collections.sort()
-                        break;
-                    case 1:
-                        setupPersonInteractedAdapter();
-                        break;
-                    default: setupHabitAdapter();
-                }
+
             }
 
             @Override
@@ -280,6 +293,56 @@ public class DataListFragment extends Fragment {
         });
 
     }
+
+    public static class PersonNameComparator implements  Comparator<Person> {
+        @Override
+        public int compare(Person person1, Person person2) {
+            if(person1.getName().compareTo(person2.getName()) > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    }
+
+    public static class PersonLastPerformedComparator implements  Comparator <Person> {
+
+        @Override
+        public int compare(Person person1, Person person2) {
+            if(person1.getLastDateInteractedWith().compareTo(person2.getLastDateInteractedWith()) > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    }
+
+
+    public static class HabitNameComparator implements Comparator<Habit> {
+        @Override
+        public int compare(Habit habit1, Habit habit2) {
+            if(habit1.getName().compareTo(habit2.getName()) > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    }
+
+
+
+    public static class HabitLastPerformedComparator implements  Comparator<Habit> {
+        @Override
+        public int compare(Habit habit1, Habit habit2) {
+            if(habit1.getDateLastPerformed().compareTo(habit2.getDateLastPerformed()) > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    }
+
+
 
     private void setupDataModeSpinner() {
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -295,13 +358,14 @@ public class DataListFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 Log.d("position", "Position: " + Integer.toString(position));
                 switch (position) {
+                    // TODO: fix ordering of sorting modes.
                     case 0:
                         setupHabitAdapter();
-                        switchSortModeSpinner();
+                        sortModeSpinner.setAdapter(habitSortAdapter);
                         break;
                     case 1:
                         setupPersonInteractedAdapter();
-                        switchSortModeSpinner();
+                        sortModeSpinner.setAdapter(personSortAdapter);
                         break;
                     default: setupHabitAdapter();
                 }

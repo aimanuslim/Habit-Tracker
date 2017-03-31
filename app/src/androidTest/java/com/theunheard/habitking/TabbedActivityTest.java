@@ -326,6 +326,7 @@ public class TabbedActivityTest {
     // TODO: search filter testing
 
 
+
     @Test
     public void addHabitWithoutCategory () {
         enterHabitDetails(randomString(), "", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);

@@ -266,7 +266,7 @@ public class InsertDataFragment extends Fragment {
     private void setupReminderNotification(Habit habit) {
         Calendar reminderTime = habit.getNextReminderTime();
         if(reminderTime != null) {
-            Log.d("Next Reminder Time:", Utility.dateToString(reminderTime.getTime(), Utility.timeFormat));
+            Log.d("Next Reminder Time:", Utility.dateToString(reminderTime.getTime(), Utility.dateFormat + " " + Utility.timeFormat));
             Intent intent = new Intent(this.getActivity(), ReminderReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), 001, intent, 0);
             AlarmManager am = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
