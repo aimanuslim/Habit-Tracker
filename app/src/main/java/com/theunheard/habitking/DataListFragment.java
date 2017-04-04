@@ -37,11 +37,13 @@ public class DataListFragment extends Fragment {
     private Runnable notifyDataSetChangedFromMainThread;
     private Button clearDataButton;
     private SearchView searchView;
-    private Spinner sortModeSpinner;
+    private Button sortButton;
+    private ListView sortTypeListView;
 
 
     private ArrayAdapter<String> habitSortAdapter;
     private ArrayAdapter<String> personSortAdapter;
+    private ArrayList<String> sortModeList;
 
 
 
@@ -76,12 +78,10 @@ public class DataListFragment extends Fragment {
         dataModeSpinner = (Spinner) getView().findViewById(R.id.dataModeSpinner);
         _dbHandler = new DBHandler(this.getActivity());
         searchView = (SearchView) getView().findViewById(R.id.dataListSearchView);
-        sortModeSpinner = (Spinner) getView().findViewById(R.id.sortModeSpinner);
         dataModeArray = getResources().getStringArray(R.array.data_mode_array);
         personSortModeArray = getResources().getStringArray(R.array.person_sort_mode_array);
         habitSortModeArray = getResources().getStringArray(R.array.habit_sort_mode_array);
-
-
+        sortButton = (Button) getView().findViewById(R.id.sortButton);
 
         updateListAndAdapters = new Runnable() {
             public void run() {
@@ -119,7 +119,59 @@ public class DataListFragment extends Fragment {
 
         setupClearDataButton();
         setupSearchView();
-        setupSortModeSpinner();
+        setupSortButton();
+
+
+    }
+
+    public void setupSortModeListView (final Dialog dialog) {
+        sortTypeListView = (ListView) dialog.findViewById(R.id.sortModeListView);
+
+        if(dataListView.getAdapter() == habitListAdapter) {
+            sortTypeListView.setAdapter(habitSortAdapter);
+        } else {
+            sortTypeListView.setAdapter(personSortAdapter);
+        }
+
+
+
+        sortTypeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                String sortModeTextSelected = (String) sortTypeListView.getItemAtPosition(position);
+                if(sortTypeListView.getAdapter() == habitSortAdapter) {
+                    if(sortModeTextSelected.equals(getResources().getString(R.string.name_habit_sort_ascending_mode_text))) {
+                        Collections.sort(habitList, new HabitNameComparator());
+                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                    } else if(sortModeTextSelected.equals(getResources().getString(R.string.name_habit_sort_descending_mode_text))) {
+                        Collections.sort(habitList, Collections.<Habit>reverseOrder(new HabitNameComparator()));
+                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                    } else if(sortModeTextSelected.equals(getResources().getString(R.string.last_performed_habit_sort_ascending_mode_text))) {
+                        Collections.sort(habitList, new  HabitLastPerformedComparator());
+                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                    } else if (sortModeTextSelected.equals(getResources().getString(R.string.last_performed_habit_sort_descending_mode_text))) {
+                        Collections.sort(habitList, Collections.<Habit>reverseOrder(new  HabitLastPerformedComparator()));
+                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                    }
+                } else {
+                    if(sortModeTextSelected.equals(getResources().getString(R.string.last_performed_person_sort_ascending_mode_text))){
+                        Collections.sort(personList, new  PersonLastPerformedComparator());
+                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                    } else if (sortModeTextSelected.equals(getResources().getString(R.string.last_performed_person_sort_descending_mode_text))){
+                        Collections.sort(personList, Collections.<Person>reverseOrder(new  PersonLastPerformedComparator()));
+                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                    } else if (sortModeTextSelected.equals(getResources().getString(R.string.name_person_sort_ascending_mode_text))) {
+                        Collections.sort(personList, new PersonNameComparator());
+                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                    } else if (sortModeTextSelected.equals(getResources().getString(R.string.name_person_sort_descending_mode_text))) {
+                        Collections.sort(personList, Collections.<Person>reverseOrder(new PersonNameComparator()));
+                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                    }
+                }
+                dialog.dismiss();
+
+            }
+        });
     }
 
     public void setupSearchView () {
@@ -235,62 +287,35 @@ public class DataListFragment extends Fragment {
 
     }
 
-    private void switchSortModeSpinner() {
-        if(sortModeSpinner.getAdapter() == habitSortAdapter) {
-            sortModeSpinner.setAdapter(personSortAdapter);
-        } else {
-            sortModeSpinner.setAdapter(habitSortAdapter);
-        }
-    }
-
-
-    private void setupSortModeSpinner() {
+    private void setupSortButton() {
+        sortModeList = new ArrayList<String>();
         // Create an ArrayAdapter using the string array and a default spinner layout
         habitSortAdapter = new ArrayAdapter<String>(this.getActivity(),
-                R.layout.hk_spinner_unclicked_textview, habitSortModeArray);
+                R.layout.sort_mode_item, habitSortModeArray);
         personSortAdapter = new ArrayAdapter<String>(this.getActivity(),
-                R.layout.hk_spinner_unclicked_textview, personSortModeArray);
-        // Specify the layout to use when the list of choices appears
-        habitSortAdapter.setDropDownViewResource(R.layout.hk_spinner_item);
-        personSortAdapter.setDropDownViewResource(R.layout.hk_spinner_item);
-        // Apply the adapter to the spinner
-        sortModeSpinner.setAdapter(habitSortAdapter);
+                R.layout.sort_mode_item, personSortModeArray);
 
-        sortModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            public void onClick(View view) {
 
-                if(sortModeSpinner.getAdapter() == habitSortAdapter) {
-                    switch (getResources().getStringArray(R.array.habit_sort_mode_array)[position]) {
-                        case "Last Performed":
-                            Collections.sort(habitList, new  HabitLastPerformedComparator());
-                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
-                            break;
-                        case "Habit Name":
-                            Collections.sort(habitList, new HabitNameComparator());
-                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
-                            break;
-                    }
-                } else if (sortModeSpinner.getAdapter() == personListAdapter) {
-                    switch (getResources().getStringArray(R.array.person_sort_mode_array)[position]) {
-                        case "Last Performed With":
-                            Collections.sort(personList, new PersonLastPerformedComparator());
-                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
-                            break;
-                        case "Person Name":
-                            Collections.sort(personList, new PersonNameComparator());
-                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
-                            break;
-                    }
-                }
 
-            }
+                final Dialog dialog = new Dialog(DataListFragment.this.getActivity());
+                dialog.setContentView(R.layout.fragment_sort_mode_list);
+                dialog.setTitle("Select Sorting Mode");
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                setupSortModeListView(dialog);
+
+                dialog.show();
+
+
 
             }
         });
+
+
+
+
 
     }
 
@@ -310,9 +335,9 @@ public class DataListFragment extends Fragment {
         @Override
         public int compare(Person person1, Person person2) {
             if(person1.getLastDateInteractedWith().compareTo(person2.getLastDateInteractedWith()) > 0) {
-                return 1;
-            } else {
                 return -1;
+            } else {
+                return 1;
             }
         }
     }
@@ -335,9 +360,9 @@ public class DataListFragment extends Fragment {
         @Override
         public int compare(Habit habit1, Habit habit2) {
             if(habit1.getDateLastPerformed().compareTo(habit2.getDateLastPerformed()) > 0) {
-                return 1;
-            } else {
                 return -1;
+            } else {
+                return 1;
             }
         }
     }
@@ -361,11 +386,11 @@ public class DataListFragment extends Fragment {
                     // TODO: fix ordering of sorting modes.
                     case 0:
                         setupHabitAdapter();
-                        sortModeSpinner.setAdapter(habitSortAdapter);
+//                        sortTypeListView.setAdapter(habitSortAdapter);
                         break;
                     case 1:
                         setupPersonInteractedAdapter();
-                        sortModeSpinner.setAdapter(personSortAdapter);
+//                        sortTypeListView.setAdapter(personSortAdapter);
                         break;
                     default: setupHabitAdapter();
                 }
@@ -402,8 +427,6 @@ public class DataListFragment extends Fragment {
 
                 personName.setText(person.getName());
                 associatedHabit.setText(person.getHabitName());
-
-
 
                 updateButton.setOnClickListener(new View.OnClickListener() {
                     @Override
