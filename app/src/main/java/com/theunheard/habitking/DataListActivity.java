@@ -133,7 +133,7 @@ public class DataListActivity extends AppCompatActivity {
                 dialog.setContentView(R.layout.fragment_edit_person_info_fragment_dialog);
 
                 final EditText personName = (EditText) dialog.findViewById(R.id.personEdit_personNameEditText);
-                final EditText associatedHabit = (EditText) dialog.findViewById(R.id.editPerson_associatedHabitEditText);
+                final EditText associatedHabit = (EditText) dialog.findViewById(R.id.editPerson_associatedHabitSpinner);
 
                 final Button updateButton = (Button) dialog.findViewById(R.id.personItemUpdateButton);
                 Button deleteButton = (Button) dialog.findViewById(R.id.personItemDeletedButton);

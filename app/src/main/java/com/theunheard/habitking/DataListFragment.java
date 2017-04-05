@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -201,6 +202,7 @@ public class DataListFragment extends Fragment {
                 getActivity().runOnUiThread(updateListAndAdapters);
                 searchView.onActionViewCollapsed();
                 dataModeSpinner.setVisibility(View.VISIBLE);
+                sortButton.setVisibility(View.VISIBLE);
                 return true;
             }
         });
@@ -209,6 +211,7 @@ public class DataListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 dataModeSpinner.setVisibility(View.GONE);
+                sortButton.setVisibility(View.GONE);
 //                view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, width));
             }
         });
@@ -217,6 +220,8 @@ public class DataListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 dataModeSpinner.setVisibility(View.GONE);
+                sortButton.setVisibility(View.GONE);
+//                searchView.setMinimumWidth(getView().findViewById(R.id.dataListSpinnerContainer).getWidth());
 //                searchView.onActionViewExpanded();
 
             }
@@ -413,26 +418,31 @@ public class DataListFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 final Dialog dialog = new Dialog(DataListFragment.this.getActivity());
                 dialog.setContentView(R.layout.fragment_edit_person_info_fragment_dialog);
+                dialog.setTitle("Edit Person");
 
                 // TODO: this should probably be autocompletetextview
-                final EditText personName = (EditText) dialog.findViewById(R.id.personEdit_personNameEditText);
+                final AutoCompleteTextView personName = (AutoCompleteTextView) dialog.findViewById(R.id.personEdit_personNameEditText);
                 // TODO: this should be a spinner
-                final EditText associatedHabit = (EditText) dialog.findViewById(R.id.editPerson_associatedHabitEditText);
+                final Spinner associatedHabitSpinner = (Spinner) dialog.findViewById(R.id.editPerson_associatedHabitSpinner);
+                final Person person = (Person) dataListView.getItemAtPosition(pos);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                        (getActivity(),android.R.layout.simple_list_item_1,_dbHandler.getAllHabitNames());
+                associatedHabitSpinner.setAdapter(adapter);
+                associatedHabitSpinner.setSelection(adapter.getPosition(person.getHabitName()));
 
                 final Button updateButton = (Button) dialog.findViewById(R.id.personItemUpdateButton);
                 Button deleteButton = (Button) dialog.findViewById(R.id.personItemDeletedButton);
                 Button cancelButton = (Button) dialog.findViewById(R.id.personItemCancelButton);
 
-                final Person person = (Person) dataListView.getItemAtPosition(pos);
-
                 personName.setText(person.getName());
-                associatedHabit.setText(person.getHabitName());
+//                associatedHabitSpinner.setText(person.getHabitName());
 
                 updateButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         person.setName(personName.getText().toString());
-                        person.setHabitName(associatedHabit.getText().toString());
+                        person.setHabitName(associatedHabitSpinner.getSelectedItem().toString());
                         _dbHandler.modifyPerson(person);
                         getActivity().runOnUiThread(updateListAndAdapters);
                         dialog.dismiss();

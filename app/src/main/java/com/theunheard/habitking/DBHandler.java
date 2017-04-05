@@ -191,6 +191,23 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+    public ArrayList<String> getAllHabitNames() {
+        ArrayList<String> habitNameList = new ArrayList<String>();
+
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_HABITS;
+        Cursor c = db.rawQuery(query ,null);
+        c.moveToFirst();
+        while(!c.isAfterLast()) {
+            habitNameList.add(c.getString(c.getColumnIndex(COL_NAME)));
+
+            c.moveToNext();
+
+        }
+        db.close();
+        return habitNameList;
+
+    }
 
     public void increaseHabitFreq(String habitName, String category) {
         SQLiteDatabase db = getWritableDatabase();
@@ -242,6 +259,26 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
+    public ArrayList<String> getAllPersonNames() {
+        ArrayList<String> personNameList = new ArrayList<String>();
+
+
+
+
+        SQLiteDatabase db = getReadableDatabase();
+
+
+        String query = "SELECT * FROM " + TABLE_PIT;
+        Cursor c = db.rawQuery(query ,null);
+        Cursor habitCursor;
+        c.moveToFirst();
+        while(!c.isAfterLast()) {
+            personNameList.add(c.getString(c.getColumnIndex(COL_PITNAME)));
+            c.moveToNext();
+        }
+        db.close();
+        return personNameList;
+    }
 
     public ArrayList<Person> getAllPerson() {
         ArrayList<Person> personsList = new ArrayList<Person>();

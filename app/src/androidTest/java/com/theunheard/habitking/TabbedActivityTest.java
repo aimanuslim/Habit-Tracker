@@ -1,5 +1,6 @@
 package com.theunheard.habitking;
 
+import android.os.Build;
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
@@ -134,13 +135,21 @@ public class TabbedActivityTest {
         if(year != 0) {
             onView(withId(R.id.dateLastPerformedInput)).perform(click());
             onView(withClassName(equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(year, month, day));
-            onView(withText("OK")).perform(click());
+            if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                onView(withText("OK")).perform(click());
+            } else {
+                onView(withText("Done")).perform(click());
+            }
         }
 
         if(hour != 0) {
             onView(withId(R.id.timeLastPerformedInput)).perform(click());
             onView(withClassName(equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(hour, minutes));
-            onView(withText("OK")).perform(click());
+            if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                onView(withText("OK")).perform(click());
+            } else {
+                onView(withText("Done")).perform(click());
+            }
         }
 
 
@@ -184,6 +193,11 @@ public class TabbedActivityTest {
     }
 
 
+    public void switchToInsertHabitView() {
+//        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        onView(withText(R.string.insert_data_tab_text)).perform(click());
+    }
+
 
     @Test
     public void addHabitsWithPersonInteracted() {
@@ -198,6 +212,14 @@ public class TabbedActivityTest {
         switchToDataListView();
         switchDataListToPersonList();
         checkIfPersonItemExist(habitname, personName1, personName2);
+        switchToInsertHabitView();
+        clearAllInputs();
+    }
+
+    @Test
+    public void addMultipleHabitWithPerson()  {
+        for( int i = 0; i < 5; i++ )
+            addHabitsWithPersonInteracted();
     }
 
     public void checkIfPersonItemExist (String habitName, String... persons) {

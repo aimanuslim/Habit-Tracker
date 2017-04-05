@@ -353,8 +353,19 @@ public class InsertDataFragment extends Fragment {
                 alert.setTitle("Add person");
                 alert.setMessage("Enter the name of the person you performed this activity with");
 
-                final EditText input = new EditText(InsertDataFragment.this.getActivity());
+//                final EditText input = new EditText(InsertDataFragment.this.getActivity());
+                final AutoCompleteTextView input = new AutoCompleteTextView(InsertDataFragment.this.getActivity());
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                        (getActivity(),android.R.layout.simple_list_item_1,_dbHandler.getAllPersonNames());
+                input.setAdapter(adapter);
+                input.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        input.showDropDown();
+                    }
+                });
                 input.setId(R.id.person_name_edit);
+
                 alert.setView(input);
 
                 alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {

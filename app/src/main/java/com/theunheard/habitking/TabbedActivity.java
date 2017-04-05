@@ -58,18 +58,34 @@ public class TabbedActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
                 //TODO: remove keyboard when changing tabs
+                View focus = getCurrentFocus();
+                if (focus != null) {
+                    hiddenKeyboard(focus);
+                }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                View focus = getCurrentFocus();
+                if (focus != null) {
+                    hiddenKeyboard(focus);
+                }
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                View focus = getCurrentFocus();
+                if (focus != null) {
+                    hiddenKeyboard(focus);
+                }
             }
         });
+    }
+
+
+    private void hiddenKeyboard(View v) {
+        InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     @Override
