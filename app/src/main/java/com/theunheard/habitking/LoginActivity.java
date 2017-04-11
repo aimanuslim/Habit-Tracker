@@ -264,8 +264,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if(task.isSuccessful()){
-                                                    Intent intent = new Intent(getApplicationContext(), InsertDataActivity.class);
-                                                    startActivity(intent);
+//                                                    Intent intent = new Intent(getApplicationContext(), InsertDataActivity.class);
+//                                                    startActivity(intent);
                                                 } else {
                                                     showProgress(false);
                                                     Toast.makeText(LoginActivity.this, getString(R.string.error_incorrect_password), Toast.LENGTH_LONG).show();
@@ -281,8 +281,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         } else {
                             showProgress(false);
                             Toast.makeText(LoginActivity.this, "Creating account", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(getApplicationContext(), InsertDataActivity.class);
-                            startActivity(intent);
                         }
                     }
                 });

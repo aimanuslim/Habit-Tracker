@@ -23,7 +23,7 @@ import java.util.Comparator;
 import java.util.Locale;
 
 
-public class DataListFragment extends Fragment {
+public class DataListFragment extends Fragment implements FragmentInterface {
 
 
     private ListView dataListView;
@@ -58,6 +58,13 @@ public class DataListFragment extends Fragment {
 
     public DataListFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void fragmentBecameVisible() {
+        if(_dbHandler != null) {
+            getActivity().runOnUiThread(updateListAndAdapters);
+        }
     }
 
     @Override
@@ -358,7 +365,6 @@ public class DataListFragment extends Fragment {
             }
         }
     }
-
 
 
     public static class HabitLastPerformedComparator implements  Comparator<Habit> {

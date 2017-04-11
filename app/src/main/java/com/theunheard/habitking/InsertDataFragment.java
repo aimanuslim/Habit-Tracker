@@ -3,13 +3,19 @@ package com.theunheard.habitking;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -39,7 +45,7 @@ import static android.text.InputType.TYPE_CLASS_DATETIME;
 import static android.text.InputType.TYPE_DATETIME_VARIATION_DATE;
 
 
-public class InsertDataFragment extends Fragment {
+public class InsertDataFragment extends Fragment implements FragmentInterface {
 
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
@@ -55,6 +61,7 @@ public class InsertDataFragment extends Fragment {
     private Button addPersonButton;
     private Button recordButton;
     private Button nowButton;
+    private Button testButton;
 
     private DBHandler _dbHandler;
 
@@ -75,7 +82,10 @@ public class InsertDataFragment extends Fragment {
     }
 
 
+    @Override
+    public void fragmentBecameVisible() {
 
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -113,6 +123,13 @@ public class InsertDataFragment extends Fragment {
         person_list = new ArrayList<String>();
         arrayAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.person_name_item, person_list);
         personInteractedListView.setAdapter(arrayAdapter);
+//        testButton = (Button) getView().findViewById(R.id.testButton);
+//        testButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                notifyTest();
+//            }
+//        });
 
 
         _dbHandler = new DBHandler(this.getActivity());
@@ -267,14 +284,18 @@ public class InsertDataFragment extends Fragment {
         Calendar reminderTime = habit.getNextReminderTime();
         if(reminderTime != null) {
             Log.d("Next Reminder Time:", Utility.dateToString(reminderTime.getTime(), Utility.dateFormat + " " + Utility.timeFormat));
-            Intent intent = new Intent(this.getActivity(), ReminderReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), 001, intent, 0);
-            AlarmManager am = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-            am.set(AlarmManager.RTC_WAKEUP, reminderTime.getTimeInMillis(), pendingIntent);
+            setAlarm(reminderTime.getTimeInMillis());
+
         }
     }
 
 
+    public void setAlarm(Long time) {
+        Intent alertIntent = new Intent(getActivity(), NotificationPublisher.class);
+        AlarmManager alarmManager = (AlarmManager)
+                getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(getActivity(), 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+    }
 
     private void saveToCloud() {
 
@@ -394,7 +415,7 @@ public class InsertDataFragment extends Fragment {
     private void hideSoftKeyboard(EditText et){
         View view = this.getActivity().getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(InsertDataActivity.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
