@@ -5,6 +5,7 @@ import android.content.Intent;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by ian21 on 1/23/2017.
@@ -107,6 +108,20 @@ public class Habit {
                 break;
             default: return;
         }
+    }
+
+    public Long getRepeatingPeriodInMillis()  {
+        Integer mode = getReminderPerPeriodLengthMode();
+        Integer mult = getReminderPeriodMultiplier();
+        switch(mode){
+            case PERIOD_MINUTE: return TimeUnit.MINUTES.toMillis(mult);
+            case PERIOD_HOUR: return TimeUnit.HOURS.toMillis(mult);
+            case PERIOD_DAY: return TimeUnit.DAYS.toMillis(mult);
+            case PERIOD_WEEK: return TimeUnit.DAYS.toMillis(7 * mult);
+            case PERIOD_MONTH: return TimeUnit.DAYS.toMillis(30 * mult);
+            case PERIOD_YEAR: return TimeUnit.DAYS.toMillis(365  * mult);
+        }
+        return null;
     }
 
     public String getPeriodString(int mode) {

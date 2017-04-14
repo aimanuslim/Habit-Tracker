@@ -63,10 +63,10 @@ public class TabbedActivity extends AppCompatActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-//                FragmentInterface fragment = (FragmentInterface) adapter.instantiateItem(viewPager, tab.getPosition());
-//                if(fragment != null) {
-//                    fragment.fragmentBecameVisible();
-//                }
+                FragmentInterface fragment = (FragmentInterface) adapter.instantiateItem(viewPager, tab.getPosition());
+                if(fragment != null) {
+                    fragment.fragmentBecameVisible();
+                }
 
                 View focus = getCurrentFocus();
                 if (focus != null) {

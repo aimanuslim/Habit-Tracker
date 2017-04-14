@@ -227,7 +227,7 @@ public class DBHandler extends SQLiteOpenHelper {
         while(!c.isAfterLast()) {
 
 
-            if(c.getString(c.getColumnIndex(COL_NAME)) == name) {
+            if(c.getString(c.getColumnIndex(COL_NAME)).equals(name)) {
                 habit.setName(c.getString(c.getColumnIndex(COL_NAME)));
                 habit.setId(c.getString(c.getColumnIndex(COL_ID)));
                 if(c.getString(c.getColumnIndex(COL_CATEGORY)) != null) {

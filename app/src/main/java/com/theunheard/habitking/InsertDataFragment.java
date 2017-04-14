@@ -62,6 +62,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
     private Button recordButton;
     private Button nowButton;
     private Button testButton;
+    private Runnable updateAutoCompleteComponents;
 
     private DBHandler _dbHandler;
 
@@ -77,6 +78,11 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
     private ArrayList<String>  person_list;
     ArrayAdapter<String> arrayAdapter;
 
+    private ArrayList<String>  habit_name_list;
+    private ArrayAdapter<String> habitAutoCompleteAdapter;
+    private ArrayList<String>  category_name_list;
+    private ArrayAdapter<String> categoryAutoCompleteAdapter;
+
     public InsertDataFragment() {
         // Required empty public constructor
     }
@@ -84,7 +90,9 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
 
     @Override
     public void fragmentBecameVisible() {
-
+        if(_dbHandler != null) {
+            getActivity().runOnUiThread(updateAutoCompleteComponents);
+        }
     }
 
     @Override
@@ -123,6 +131,67 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         person_list = new ArrayList<String>();
         arrayAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.person_name_item, person_list);
         personInteractedListView.setAdapter(arrayAdapter);
+
+        updateAutoCompleteComponents = new Runnable() {
+            public void run() {
+                if(habit_name_list != null) {
+                    // problem is here: http://stackoverflow.com/questions/32210404/autocompletetextview-doesnt-update-arrayadapter-items
+                    // once the list is attached to adapter, the change made to the list may not reflect in the adapter because of the mOriginalValues that stick
+                    // so, what I have decided to do is to find the difference between the two list (one from the original before deletion in the datalistview, the other one coming from the database), and remove the different elements one by one from the adapter.
+                    ArrayList<String> dbList = _dbHandler.getNames(_dbHandler.COL_NAME);
+
+                    if(dbList.size() < habit_name_list.size()){
+                        ArrayList<String> diffList = new ArrayList<>(habit_name_list);
+                        diffList.removeAll(dbList);
+                        for (String removedHabitName: diffList
+                                ) {
+                            habitAutoCompleteAdapter.remove(removedHabitName);
+                        }
+                        habit_name_list = new ArrayList<>(dbList);
+                    } else {
+                        ArrayList<String> diffList = new ArrayList<>(dbList);
+                        diffList.removeAll(habit_name_list);
+                        for (String insertedHabitName: diffList
+                                ) {
+                            habitAutoCompleteAdapter.add(insertedHabitName);
+                        }
+                        habit_name_list = new ArrayList<>(dbList);
+                    }
+
+                }
+                if(category_name_list != null) {
+                    ArrayList<String> dbList = _dbHandler.getNames(_dbHandler.COL_CATEGORY);
+
+                    if(dbList.size() < category_name_list.size()){
+                        ArrayList<String> diffList = new ArrayList<>(category_name_list);
+                        diffList.removeAll(dbList);
+                        for (String removedCategoryName: diffList
+                                ) {
+                            categoryAutoCompleteAdapter.remove(removedCategoryName);
+                        }
+                        category_name_list = new ArrayList<>(dbList);
+                    } else {
+                        ArrayList<String> diffList = new ArrayList<>(dbList);
+                        diffList.removeAll(category_name_list);
+                        for (String insertedCategoryName: diffList
+                                ) {
+                            categoryAutoCompleteAdapter.add(insertedCategoryName);
+                        }
+                        category_name_list = new ArrayList<>(dbList);
+                    }
+
+
+//                    categoryTextView.invalidate();
+//                    category_name_list.clear();
+//                    category_name_list.addAll(_dbHandler.getNames(_dbHandler.COL_CATEGORY));
+//                    categoryAutoCompleteAdapter.notifyDataSetChanged();
+//                    categoryTextView.setAdapter(categoryAutoCompleteAdapter);
+                }
+
+            }
+        };
+
+
 //        testButton = (Button) getView().findViewById(R.id.testButton);
 //        testButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -183,9 +252,10 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
     }
 
     private void setupHabitNameAutoComplete() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this.getActivity(),android.R.layout.simple_list_item_1,_dbHandler.getNames(_dbHandler.COL_NAME));
-        habitNameTextView.setAdapter(adapter);
+        habit_name_list = _dbHandler.getNames(_dbHandler.COL_NAME);
+        habitAutoCompleteAdapter = new ArrayAdapter<String>
+                (this.getActivity(),android.R.layout.simple_list_item_1,habit_name_list);
+        habitNameTextView.setAdapter(habitAutoCompleteAdapter);
         habitNameTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -197,9 +267,10 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
     }
 
     private void setupCategoryAutoComplete() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this.getActivity(),android.R.layout.simple_list_item_1,_dbHandler.getNames(_dbHandler.COL_CATEGORY));
-        categoryTextView.setAdapter(adapter);
+        category_name_list = _dbHandler.getNames(_dbHandler.COL_CATEGORY);
+        categoryAutoCompleteAdapter = new ArrayAdapter<String>
+                (this.getActivity(),android.R.layout.simple_list_item_1, category_name_list);
+        categoryTextView.setAdapter(categoryAutoCompleteAdapter);
     }
 
 
@@ -284,17 +355,18 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         Calendar reminderTime = habit.getNextReminderTime();
         if(reminderTime != null) {
             Log.d("Next Reminder Time:", Utility.dateToString(reminderTime.getTime(), Utility.dateFormat + " " + Utility.timeFormat));
-            setAlarm(reminderTime.getTimeInMillis());
-
+            setAlarm(reminderTime.getTimeInMillis(), habit.getRepeatingPeriodInMillis());
+            // TODO: cancel the alarm when deleting from database.
         }
     }
 
 
-    public void setAlarm(Long time) {
+    public void setAlarm(Long time, Long repeatingInterval) {
         Intent alertIntent = new Intent(getActivity(), NotificationPublisher.class);
         AlarmManager alarmManager = (AlarmManager)
                 getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(getActivity(), 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(getActivity(), 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, repeatingInterval, PendingIntent.getBroadcast(getActivity(), 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     private void saveToCloud() {
