@@ -10,6 +10,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 import android.util.Log;
 import android.view.View;
@@ -45,6 +46,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static java.lang.Math.abs;
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -76,8 +78,8 @@ public class TabbedActivityTest {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mDevice.openNotification();
         mDevice.wait(Until.hasObject(By.pkg("com.android.systemui")), 10000);
-
-
+        UiObject2 title = mDevice.findObject(By.text("Hey"));
+        assertEquals("Hey", title.getText() );
     }
 
     static final String alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -115,6 +117,29 @@ public class TabbedActivityTest {
 
     }
 
+    public String enterHabitDetailsThatHasJustBeenPerformed(
+            String habitName,
+            String category,
+            String repetitionFreq,
+            String repetitionPeriod
+    ) {
+        onView(withId(R.id.habitInputName)).perform(typeText(habitName));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.categoryInput)).perform(typeText(category));
+        Espresso.closeSoftKeyboard();
+
+        onView(withText("Just did it!")).perform(click());
+        onView(withId(R.id.repetitionFrequencyInput)).perform(typeText(repetitionFreq));
+        Espresso.closeSoftKeyboard();
+
+
+
+        onView(withId(R.id.repetitionPeriodSpinner)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(repetitionPeriod))).perform(click());
+
+        return habitName;
+
+    }
 
     public String enterHabitDetails(
             String habitName,
@@ -348,6 +373,18 @@ public class TabbedActivityTest {
     // TODO: search filter testing
 
 
+    @Test
+    public void addHabitAndTestNotificationAlarm () {
+        String habitName = enterHabitDetailsThatHasJustBeenPerformed("TestNotification", "", "1", spinnerOptions[0]);
+        clickRecordButton();
+        waitInSeconds(75);
+        testNotification();
+        switchToDataListView();
+        deleteHabitFromList(habitName);
+//        waitInSeconds(75);
+
+
+    }
 
     @Test
     public void addHabitWithoutCategory () {

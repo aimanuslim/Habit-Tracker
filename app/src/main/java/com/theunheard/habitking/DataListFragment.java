@@ -552,6 +552,9 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                         habitList.remove(position);
                         _dbHandler.deleteHabitByID(Integer.parseInt(habit.getId()));
                         _dbHandler.deletePersonByHabitID(Integer.parseInt(habit.getId()));
+                        if(_dbHandler.requestIdExists(habit.getAlarmId())){
+                            _dbHandler.cancelAlarm(habit.getAlarmId());
+                        }
                         getActivity().runOnUiThread(updateListAndAdapters);
                         dialog.dismiss();
                     }

@@ -20,7 +20,15 @@ public class Habit {
     private Integer frequencyPerformed;
     private Calendar nextReminderTime; // date when the user will be reminded of the habit, will be calculated using the reminder properties
     private Integer reminderPerPeriodLengthMode; // ex: weeks, months
+    private int alarmId;
 
+    public int getAlarmId() {
+        return alarmId;
+    }
+
+    public void setAlarmId(int alarmId) {
+        this.alarmId = alarmId;
+    }
 
     public void setReminderPeriodMultiplier(Integer reminderPeriodMultiplier) {
         this.reminderPeriodMultiplier = reminderPeriodMultiplier;

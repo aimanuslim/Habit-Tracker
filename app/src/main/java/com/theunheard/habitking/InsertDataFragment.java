@@ -355,18 +355,23 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         Calendar reminderTime = habit.getNextReminderTime();
         if(reminderTime != null) {
             Log.d("Next Reminder Time:", Utility.dateToString(reminderTime.getTime(), Utility.dateFormat + " " + Utility.timeFormat));
-            setAlarm(reminderTime.getTimeInMillis(), habit.getRepeatingPeriodInMillis());
-            // TODO: cancel the alarm when deleting from database.
+            habit.setAlarmId(setAlarm(reminderTime.getTimeInMillis(), habit.getRepeatingPeriodInMillis()));
         }
     }
 
 
-    public void setAlarm(Long time, Long repeatingInterval) {
+    public int setAlarm(Long time, Long repeatingInterval) {
         Intent alertIntent = new Intent(getActivity(), NotificationPublisher.class);
+
+        int requestID = _dbHandler.getNextAvailableRequestID();
+        _dbHandler.addRequestId(requestID);
+
         AlarmManager alarmManager = (AlarmManager)
                 getActivity().getSystemService(Context.ALARM_SERVICE);
 //        alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(getActivity(), 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, repeatingInterval, PendingIntent.getBroadcast(getActivity(), 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, repeatingInterval, PendingIntent.getBroadcast(getActivity(), requestID, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        Log.d("Alarm", "Alarm set -> ID: " + requestID);
+        return requestID;
     }
 
     private void saveToCloud() {
@@ -382,19 +387,22 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
 
         }
 
+        setupReminderNotification(habit);
+
+
         // if this habit is already in database, increase the number of times it has been performed.
+        // It is only considered the same habit if both the name and the category matches whats already in the database.
         if(_dbHandler.habitExist(habitName, habit.getCategory())) {
             _dbHandler.increaseHabitFreq(habitName, habit.getCategory());
+            _dbHandler.updateTimeLastPerformed(habit);
         } else {
             _dbHandler.addHabit(habit);
         }
 
-        // laterTODO: interacted person feature
         if(personInteractedListView.getAdapter().getCount() != 0) {
             _dbHandler.addPersonInteracted(person_list, habit.getId());
         }
 
-        setupReminderNotification(habit);
 
         Log.d(TAG, "Done adding");
         Log.d(TAG, "DB " + _dbHandler.databasetostring());

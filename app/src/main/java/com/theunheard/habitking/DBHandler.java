@@ -1,7 +1,10 @@
 package com.theunheard.habitking;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -31,11 +34,14 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COL_FREQUENCY = "frequency";
     public static final String COL_PERIOD = "period";
     public static final String COL_MULTIPLIER = "multiplier";
+    public static final String COL_ALARMID = "alarmID";
 
 
     public static final String COL_PITID = "_pitid";
     public static final String COL_PITNAME = "personInteracted";
     public static final String COL_HABITID= "habit";
+
+    private ArrayList<Integer> requestIDList;
 
 //    public static synchronized DBHandler getInstance(Context context) {
 //
@@ -51,6 +57,19 @@ public class DBHandler extends SQLiteOpenHelper {
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         myContext = context;
+        requestIDList = new ArrayList<Integer>();
+    }
+
+    public void addRequestId(int rID){
+        requestIDList.add((Integer) new Integer(rID));
+    }
+
+    public boolean requestIdExists(int rID) {
+        return requestIDList.contains((Integer) new Integer(rID));
+    }
+
+    public void removeRequestId(int rID) {
+        requestIDList.remove((Integer) new Integer(rID));
     }
 
     @Override
@@ -65,6 +84,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 COL_FREQUENCY + " INTEGER, " +
                 COL_PERIOD + " INTEGER, " +
                 COL_MULTIPLIER + " INTEGER " +
+                COL_ALARMID + " INTEGER " +
 
 
                 ");";
@@ -104,6 +124,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 COL_FREQUENCY + " INTEGER " +
                 COL_PERIOD + " TEXT " +
                 COL_MULTIPLIER + " INTEGER " +
+                COL_ALARMID + " INTEGER " +
 
 
                 ");";
@@ -191,6 +212,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+
     public ArrayList<String> getAllHabitNames() {
         ArrayList<String> habitNameList = new ArrayList<String>();
 
@@ -216,6 +238,16 @@ public class DBHandler extends SQLiteOpenHelper {
         "' AND " + COL_CATEGORY + " = '" + category + "';");
         db.close();
 
+    }
+
+    public void updateTimeLastPerformed(Habit habit){
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = getWritableDatabase();
+        String filter = COL_ID +" = " +habit.getId();
+
+        values.put(COL_DATELP, habit.getDateLastPerformed().getTime());
+        db.update(TABLE_HABITS, values, filter, null);
+        db.close();
     }
 
     public Habit getHabitByName(String name ) {
@@ -498,6 +530,7 @@ public class DBHandler extends SQLiteOpenHelper {
             {
 
                 dbString+= c.getString(c.getColumnIndex(COL_NAME));
+                dbString+= " Date: " + c.getString(c.getColumnIndex(COL_DATELP));
 
                 dbString+="\n";
 
@@ -520,4 +553,27 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public int getNextAvailableRequestID() {
+        int i = 0;
+        boolean found = false;
+        if(requestIDList == null) {
+            return i;
+        }
+        while(!found) {
+            if(requestIDList.contains(new Integer(i))){
+                i++;
+            } else {
+                found = true;
+            }
+        }
+        return i;
+    }
+
+    public void cancelAlarm(int alarmId) {
+        AlarmManager am = (AlarmManager)
+                myContext.getSystemService(Context.ALARM_SERVICE);
+        Intent alertIntent = new Intent(myContext, NotificationPublisher.class);
+        am.cancel(PendingIntent.getBroadcast(myContext, alarmId, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        Log.d("Alarm", "Alarm cancel -> ID: " + alarmId);
+    }
 }
