@@ -41,7 +41,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COL_PITNAME = "personInteracted";
     public static final String COL_HABITID= "habit";
 
-    private ArrayList<Integer> requestIDList;
+    private static ArrayList<Integer> requestIDList;
 
 //    public static synchronized DBHandler getInstance(Context context) {
 //
@@ -83,7 +83,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 COL_CATEGORY + " TEXT, " +
                 COL_FREQUENCY + " INTEGER, " +
                 COL_PERIOD + " INTEGER, " +
-                COL_MULTIPLIER + " INTEGER " +
+                COL_MULTIPLIER + " INTEGER, " +
                 COL_ALARMID + " INTEGER " +
 
 
@@ -191,9 +191,14 @@ public class DBHandler extends SQLiteOpenHelper {
                 habit.setDateLastPerformed(new Date(c.getLong(c.getColumnIndex(COL_DATELP))));
                 habit.setReminderPeriodProperties(c.getInt(c.getColumnIndex(COL_PERIOD)), c.getInt(c.getColumnIndex(COL_MULTIPLIER)));
                 habit.setFrequencyPerformed(c.getInt(c.getColumnIndex(COL_FREQUENCY)));
-
             } catch (Exception e) {
                 Log.d("Habit King", "Date doesn't exist for this row?");
+            }
+
+            try{
+                habit.setAlarmId(c.getInt(c.getColumnIndex(COL_ALARMID)));
+            } catch (Exception e) {
+                Log.d("Database", "column value doesnt exist for this data");
             }
             habitList.add(habit);
 
@@ -384,6 +389,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(COL_DATELP, habit.getDateLastPerformed().getTime());
         values.put(COL_PERIOD, habit.getReminderPerPeriodLengthMode());
         values.put(COL_MULTIPLIER, habit.getReminderPeriodMultiplier());
+        values.put(COL_ALARMID, habit.getAlarmId());
 
 //        db.execSQL("ALTER TABLE " + TABLE_HABITS + " ADD COLUMN " + COL_HASH + " TEXT" );
 //        db.execSQL("ALTER TABLE " + TABLE_HABITS + " ADD COLUMN " + COL_PERIOD + " INTEGER" );
@@ -574,6 +580,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 myContext.getSystemService(Context.ALARM_SERVICE);
         Intent alertIntent = new Intent(myContext, NotificationPublisher.class);
         am.cancel(PendingIntent.getBroadcast(myContext, alarmId, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        removeRequestId(alarmId);
         Log.d("Alarm", "Alarm cancel -> ID: " + alarmId);
     }
 }

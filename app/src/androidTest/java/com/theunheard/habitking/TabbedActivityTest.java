@@ -74,12 +74,9 @@ public class TabbedActivityTest {
     }
 
     @Test
-    public void testNotification() {
+    public void pullDownNotification() {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mDevice.openNotification();
-        mDevice.wait(Until.hasObject(By.pkg("com.android.systemui")), 10000);
-        UiObject2 title = mDevice.findObject(By.text("Hey"));
-        assertEquals("Hey", title.getText() );
     }
 
     static final String alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -378,10 +375,18 @@ public class TabbedActivityTest {
         String habitName = enterHabitDetailsThatHasJustBeenPerformed("TestNotification", "", "1", spinnerOptions[0]);
         clickRecordButton();
         waitInSeconds(75);
-        testNotification();
+        pullDownNotification();
+
+        UiObject2 title = mDevice.findObject(By.text("Hey"));
+        assertEquals("Hey", title.getText() );
+        title.click();
+
         switchToDataListView();
         deleteHabitFromList(habitName);
-//        waitInSeconds(75);
+
+        waitInSeconds(75);
+        pullDownNotification();
+
 
 
     }
