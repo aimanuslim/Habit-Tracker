@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
+        android:layout_margin="5dp"
         >
 
         <TextView
@@ -31,7 +32,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:layout_margin="5dp"
         >
 
         <TextView
@@ -53,7 +54,9 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        >
 
         <TextView
             android:text="Reminder"
@@ -80,28 +83,64 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         >
+
+        <Button
+            android:id="@+id/justDidItFragmentButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/custom_button"
+            android:ems="5"
+            android:fontFamily="monospace"
+            android:text="Just Did It!"
+
+            android:textColor="#FFFFFFFF"
+            android:textSize="10dp" />
 
         <Button
             android:text="Update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/updateButton"
-            android:layout_weight="1" />
+            android:textSize="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_button"
+            android:ems="5"
+
+            android:fontFamily="monospace"
+            android:textColor="#FFFFFFFF"
+            />
 
         <Button
-            android:text="Delete"
+            android:id="@+id/deleteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/deleteButton"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textSize="10dp"
+            android:text="Delete"
+            android:background="@drawable/custom_button"
+            android:ems="5"
+
+            android:fontFamily="monospace"
+            android:textColor="#FFFFFFFF"
+
+            />
 
         <Button
             android:text="Cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/cancelButton"
-            android:layout_weight="1" />
+            android:textSize="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_button"
+            android:ems="5"
+
+            android:fontFamily="monospace"
+            android:textColor="#FFFFFFFF"
+            />
     </LinearLayout>
 
 </LinearLayout>

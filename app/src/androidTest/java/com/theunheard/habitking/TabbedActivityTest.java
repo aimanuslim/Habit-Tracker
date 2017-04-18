@@ -364,10 +364,6 @@ public class TabbedActivityTest {
 
 
 
-    // TODO: test data views
-    // TODO: check spinner, change data
-    // TODO: check data, betul tak
-    // TODO: search filter testing
 
 
     @Test
@@ -454,8 +450,6 @@ public class TabbedActivityTest {
         dbHandler.deleteAllPersons();
     }
 
-    // TODO: tests the habit list
-    // TODO: transition between activities
 
     @Test
     public void deleteHabitAndMakeSurePersonInteractedGotDeleted() {

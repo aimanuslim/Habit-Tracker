@@ -16,10 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -45,6 +47,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
     private ArrayAdapter<String> habitSortAdapter;
     private ArrayAdapter<String> personSortAdapter;
     private ArrayList<String> sortModeList;
+
 
 
 
@@ -495,6 +498,8 @@ public class DataListFragment extends Fragment implements FragmentInterface {
 //                android.app.FragmentManager fm = getFragmentManager();
 //                EditHabitFragmentDialog myDialog = new EditHabitFragmentDialog().newInstance("Edit habit");
 
+                final TextView lastPerformedTextView = (TextView) view.findViewById(R.id.habitLastPerformedDate);
+                final TextView reminderFrequencyTextView = (TextView) view.findViewById(R.id.habitReminderPeriod);
                 final Dialog dialog = new Dialog(DataListFragment.this.getActivity());
                 dialog.setContentView(R.layout.fragment_edit_habit_fragment_dialog);
                 dialog.setTitle("Edit Habit");
@@ -507,6 +512,8 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                 Button updateButton = (Button) dialog.findViewById(R.id.updateButton);
                 Button deleteButton = (Button) dialog.findViewById(R.id.deleteButton);
                 Button cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
+                Button justNowButton = (Button) dialog.findViewById(R.id.justDidItFragmentButton);
+
 
 
 
@@ -531,11 +538,24 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                         habit.setName(name.getText().toString());
                         habit.setCategory(category.getText().toString());
                         habit.setReminderPeriodProperties(periodSpinner.getSelectedItemPosition(), Integer.parseInt(mult.getText().toString()));
+                        _dbHandler.updateAlarm(habit.getAlarmId(), habit.getDateLastPerformed().getTime(), habit.getRepeatingPeriodInMillis());
                         habitListAdapter.notifyDataSetChanged();
                         _dbHandler.modifyHabit(habit);
+//                        reminderFrequencyTextView.setText(habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
                         dialog.dismiss();
                     }
                 });
+
+                justNowButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        habit.setDateLastPerformed(new Date());
+                        habit.increaseFrequencyPerformed();
+                        _dbHandler.modifyHabit(habit);
+                        habitListAdapter.notifyDataSetChanged();
+                    }
+                });
+
 
                 cancelButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -559,6 +579,9 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                         dialog.dismiss();
                     }
                 });
+                // TODOS: alarm request, how to get already existing intents?
+                // TODOS: alarm request, test when application is closed.
+
 
 
 //                myDialog.show(fm, "Edit Habit");

@@ -22,6 +22,8 @@ public class Habit {
     private Integer reminderPerPeriodLengthMode; // ex: weeks, months
     private int alarmId;
 
+
+
     public int getAlarmId() {
         return alarmId;
     }
@@ -48,8 +50,14 @@ public class Habit {
     public Habit() {
     }
 
-    public Calendar getNextReminderTime() {
-        return nextReminderTime;
+    public Date getNextReminderTime() {
+        Date lpDate = getDateLastPerformed();
+        Long repeatingPeriod = getRepeatingPeriodInMillis();
+        Long nextReminderTimeInMillis = lpDate.getTime() + repeatingPeriod;
+        while(nextReminderTimeInMillis < System.currentTimeMillis()){
+            nextReminderTimeInMillis += repeatingPeriod;
+        }
+        return new Date(nextReminderTimeInMillis);
     }
 
     public Habit(Date dateLastPerformed, String name, String ownerUid) {
@@ -60,7 +68,9 @@ public class Habit {
         this.frequencyPerformed = 0;
 
         this.personsInteracted = null;
+        // TODO: this down here may not be needed
         this.nextReminderTime = null;
+        this.reminderPerPeriodLengthMode = null;
 
     }
 
@@ -179,6 +189,10 @@ public class Habit {
 
     public void setFrequencyPerformed(Integer frequencyPerformed) {
         this.frequencyPerformed = frequencyPerformed;
+    }
+
+    public void increaseFrequencyPerformed() {
+        this.frequencyPerformed += 1;
     }
 
     public ArrayList<String> getPersonsInteracted() {

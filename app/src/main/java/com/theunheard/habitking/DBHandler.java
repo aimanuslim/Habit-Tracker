@@ -400,6 +400,22 @@ public class DBHandler extends SQLiteOpenHelper {
 //        addPersonInteracted(habit);
     }
 
+    private boolean personExist(String personName) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_PIT;
+        Cursor c = db.rawQuery(query ,null);
+        c.moveToFirst();
+        while(!c.isAfterLast()) {
+            if(c.getString(c.getColumnIndex(COL_PITNAME)).trim().equals(personName)) {
+                db.close();
+                return true;
+            }
+            c.moveToNext();
+        }
+        db.close();
+        return false;
+    }
+
     public void addPersonInteracted(ArrayList<String> personList, String habitId) {
 
         SQLiteDatabase db = getWritableDatabase();
@@ -408,12 +424,16 @@ public class DBHandler extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(COL_PITNAME, pn);
             values.put(COL_HABITID, Long.parseLong(habitId));
-            db.insert(TABLE_PIT, null, values);
+            if(personExist(pn)){
+                // reopen closed database
+                db = getWritableDatabase();
+                db.update(TABLE_PIT, values, COL_PITNAME+" = ?", new String[] {pn});
+            } else {
+                db = getWritableDatabase();
+                db.insert(TABLE_PIT, null, values);
+            }
         }
-
         db.close();
-
-
     }
 
     public void modifyHabit (Habit habit) {
@@ -583,4 +603,24 @@ public class DBHandler extends SQLiteOpenHelper {
         removeRequestId(alarmId);
         Log.d("Alarm", "Alarm cancel -> ID: " + alarmId);
     }
+
+    public void updateAlarm(int alarmId, long startTime, Long repeatingPeriodInMillis) {
+        cancelAlarm(alarmId);
+        setAlarm(startTime, repeatingPeriodInMillis);
+    }
+
+    public int setAlarm(Long startTime, Long repeatingInterval) {
+        Intent alertIntent = new Intent(myContext, NotificationPublisher.class);
+
+        int requestID = getNextAvailableRequestID();
+        addRequestId(requestID);
+
+        AlarmManager alarmManager = (AlarmManager)
+                myContext.getSystemService(Context.ALARM_SERVICE);
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(getActivity(), 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, repeatingInterval, PendingIntent.getBroadcast(myContext, requestID, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        Log.d("Alarm", "Alarm set -> ID: " + requestID);
+        return requestID;
+    }
+
 }

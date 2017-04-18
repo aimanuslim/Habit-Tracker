@@ -31,7 +31,7 @@
             android:name=".TabbedActivity"
             android:label="@string/title_activity_tabbed"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <receiver android:name="com.theunheard.habitking.NotificationPublisher">
+        <receiver android:name="com.theunheard.habitking.NotificationPublisher" android:process=":remote">
             <intent-filter>
                 <action android:name="android.intent.action.NOTIFY"/>
             </intent-filter>

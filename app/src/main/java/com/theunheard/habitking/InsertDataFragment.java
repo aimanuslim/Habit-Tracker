@@ -352,27 +352,16 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
 
 
     private void setupReminderNotification(Habit habit) {
-        Calendar reminderTime = habit.getNextReminderTime();
+        if(habit.getReminderPerPeriodLengthMode() == null) return;
+        Date reminderTime = habit.getNextReminderTime();
         if(reminderTime != null) {
-            Log.d("Next Reminder Time:", Utility.dateToString(reminderTime.getTime(), Utility.dateFormat + " " + Utility.timeFormat));
-            habit.setAlarmId(setAlarm(reminderTime.getTimeInMillis(), habit.getRepeatingPeriodInMillis()));
+            Log.d("Next Reminder Time:", Utility.dateToString(reminderTime, Utility.dateFormat + " " + Utility.timeFormat));
+            habit.setAlarmId(_dbHandler.setAlarm(habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis()));
         }
     }
 
 
-    public int setAlarm(Long time, Long repeatingInterval) {
-        Intent alertIntent = new Intent(getActivity(), NotificationPublisher.class);
 
-        int requestID = _dbHandler.getNextAvailableRequestID();
-        _dbHandler.addRequestId(requestID);
-
-        AlarmManager alarmManager = (AlarmManager)
-                getActivity().getSystemService(Context.ALARM_SERVICE);
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(getActivity(), 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, repeatingInterval, PendingIntent.getBroadcast(getActivity(), requestID, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-        Log.d("Alarm", "Alarm set -> ID: " + requestID);
-        return requestID;
-    }
 
     private void saveToCloud() {
 

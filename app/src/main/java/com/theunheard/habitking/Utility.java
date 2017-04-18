@@ -53,7 +53,7 @@ public class Utility {
         long monthsInMilli = weeksInMilli * 4;
         long yearsInMilli = monthsInMilli * 12;
         long periodCount = 0;
-        String periodString = "";
+        String periodString = "minutes";
 
 
 
@@ -75,6 +75,9 @@ public class Utility {
         } else if ( (differenceInMilliseconds / minutesInMilli) > 0 ) {
             periodCount = differenceInMilliseconds / minutesInMilli;
             periodString = "minute" + (periodCount > 1 ? "s" : "");
+        } else if ( (differenceInMilliseconds / secondsInMilli) > 0 ) {
+            periodCount = differenceInMilliseconds / secondsInMilli;
+            periodString = "second" + (periodCount > 1 ? "s" : "");
         }
 
         if(periodCount == 0) {
