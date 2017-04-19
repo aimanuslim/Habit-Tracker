@@ -538,7 +538,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                         habit.setName(name.getText().toString());
                         habit.setCategory(category.getText().toString());
                         habit.setReminderPeriodProperties(periodSpinner.getSelectedItemPosition(), Integer.parseInt(mult.getText().toString()));
-                        _dbHandler.updateAlarm(habit.getAlarmId(), habit.getDateLastPerformed().getTime(), habit.getRepeatingPeriodInMillis());
+                        _dbHandler.updateAlarm(habit.getAlarmId(), habit.getDateLastPerformed().getTime(), habit.getRepeatingPeriodInMillis(), habit.getName());
                         habitListAdapter.notifyDataSetChanged();
                         _dbHandler.modifyHabit(habit);
 //                        reminderFrequencyTextView.setText(habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());

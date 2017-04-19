@@ -1,95 +1,91 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="200dip"
+    android:layout_width="300dip"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="com.theunheard.habitking.EditHabitFragmentDialog"
-    android:layout_width="300dip">
+    tools:context="com.theunheard.habitking.EditHabitFragmentDialog">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:layout_margin="5dp"
-        >
+        android:orientation="horizontal">
 
         <TextView
-            android:text="Habit Name"
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView3"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="Habit Name" />
 
         <EditText
+            android:id="@+id/habitName_DialogInput"
             android:layout_width="197dp"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/habitName_DialogInput" />
+            android:inputType="textPersonName" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        >
+        android:orientation="horizontal">
 
         <TextView
-            android:text="Category"
+            android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView4"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="Category" />
 
         <EditText
+            android:id="@+id/category_DialogInput"
             android:layout_width="198dp"
-            android:layout_height="wrap_content"
 
-            android:inputType="textPersonName"
+            android:layout_height="wrap_content"
             android:ems="10"
-            android:id="@+id/category_DialogInput" />
+            android:inputType="textPersonName" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        >
+        android:orientation="horizontal">
 
         <TextView
-            android:text="Reminder"
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textView2"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="Reminder" />
 
         <EditText
+            android:id="@+id/multiplier_DialogInput"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:id="@+id/multiplier_DialogInput"
-            android:inputType="number"
-            android:layout_width="40dp" />
+            android:inputType="number" />
 
         <Spinner
+            android:id="@+id/reminderPeriod_DialogSpinner"
             android:layout_width="121dp"
-            android:layout_height="match_parent"
-            android:id="@+id/reminderPeriod_DialogSpinner" />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        >
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/justDidItFragmentButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dip"
             android:layout_weight="1"
             android:background="@drawable/custom_button"
             android:ems="5"
@@ -100,47 +96,45 @@
             android:textSize="10dp" />
 
         <Button
-            android:text="Update"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/updateButton"
-            android:textSize="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="50dip"
             android:layout_weight="1"
             android:background="@drawable/custom_button"
             android:ems="5"
-
             android:fontFamily="monospace"
+            android:text="Update"
+
             android:textColor="#FFFFFFFF"
-            />
+            android:textSize="10dp" />
 
         <Button
             android:id="@+id/deleteButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dip"
             android:layout_weight="1"
-            android:textSize="10dp"
-            android:text="Delete"
             android:background="@drawable/custom_button"
             android:ems="5"
-
             android:fontFamily="monospace"
+            android:text="Delete"
+
             android:textColor="#FFFFFFFF"
+            android:textSize="10dp"
 
             />
 
         <Button
-            android:text="Cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/cancelButton"
-            android:textSize="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="50dip"
             android:layout_weight="1"
             android:background="@drawable/custom_button"
             android:ems="5"
-
             android:fontFamily="monospace"
+            android:text="Cancel"
+
             android:textColor="#FFFFFFFF"
-            />
+            android:textSize="10dp" />
     </LinearLayout>
 
 </LinearLayout>

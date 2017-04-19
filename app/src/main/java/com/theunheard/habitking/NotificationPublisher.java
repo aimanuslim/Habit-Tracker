@@ -15,7 +15,8 @@ import android.support.v4.app.NotificationCompat;
 public class NotificationPublisher extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        createNotification(context, "Hey", "What up", "Alert");
+        String habitName = intent.getStringExtra("Habit Name");
+        createNotification(context, "Habit King Reminder", "I am reminding you of doing this! -> " + habitName, "Alert");
     }
 
     public void createNotification(Context context, String msg, String msgText, String msgAlert){

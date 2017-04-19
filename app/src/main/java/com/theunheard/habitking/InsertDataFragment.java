@@ -61,6 +61,8 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
     private Button addPersonButton;
     private Button recordButton;
     private Button nowButton;
+    private Button clearPersonButton;
+    private Button clearFieldButton;
     private Button testButton;
     private Runnable updateAutoCompleteComponents;
 
@@ -124,7 +126,8 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         addPersonButton = (Button) getView().findViewById(R.id.addPersonInteractedButton);
         recordButton = (Button) getView().findViewById(R.id.recordButton);
         nowButton = (Button) getView().findViewById(R.id.nowButton);
-
+        clearPersonButton = (Button) getView().findViewById(R.id.clearPersonButton);
+        clearFieldButton = (Button) getView().findViewById(R.id.clearFieldButton);
         personInteractedListView = (ListView) getView().findViewById(R.id.personInteractedListView);
 
 
@@ -244,12 +247,37 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         setupRepetitionFrequencyField();
         setupAddInteractedPersonButton(addPersonButton);
         setupNowButton();
+        setupClearPersonButton();
+        setupClearFieldsButton();
         setupRecordButton(recordButton);
 
 
 
 
     }
+
+    private void setupClearFieldsButton(){
+        clearFieldButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                habitNameTextView.setText("");
+                categoryTextView.setText("");
+                dateTextView.setText("");
+                timeTextView.setText("");
+            }
+        });
+    }
+
+    private void setupClearPersonButton() {
+        clearPersonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                person_list.clear();
+                arrayAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 
     private void setupHabitNameAutoComplete() {
         habit_name_list = _dbHandler.getNames(_dbHandler.COL_NAME);
@@ -356,7 +384,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         Date reminderTime = habit.getNextReminderTime();
         if(reminderTime != null) {
             Log.d("Next Reminder Time:", Utility.dateToString(reminderTime, Utility.dateFormat + " " + Utility.timeFormat));
-            habit.setAlarmId(_dbHandler.setAlarm(habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis()));
+            habit.setAlarmId(_dbHandler.setAlarm(habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis(), habit.getName()));
         }
     }
 

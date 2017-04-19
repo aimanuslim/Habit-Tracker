@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorPurpleMedium"
+    android:background="@color/colorGreenMedium"
     android:orientation="vertical"
     tools:context="com.theunheard.habitking.TabbedActivity">
 
@@ -14,7 +14,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPurpleMedium"
+        android:background="@color/colorGreenMedium"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppBarOverlay">
 
@@ -22,8 +22,8 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabTextColor="@color/colorPurpleHigh"
-            app:tabSelectedTextColor="@color/colorPurpleHigh"
+            app:tabTextColor="@color/colorGreenDark"
+            app:tabSelectedTextColor="@color/colorGreenDark"
             />
 
     </android.support.design.widget.AppBarLayout>

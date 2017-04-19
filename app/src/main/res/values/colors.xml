@@ -3,9 +3,9 @@
     <color name="colorPrimary">#5cdf42</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorPurpleSuperLight">#F3E5F5</color>
-    <color name="colorPurpleLight">#E1BEE7</color>
-    <color name="colorPurpleMedium">#CE93D8</color>
-    <color name="colorPurpleHigh">#6a1b9a</color>
-    <color name="colorPurpleDark1">#8E24AA</color>
+    <color name="colorGreenSuperLight">#A7FFEB</color>
+    <color name="colorGreenLight">#64FFDA</color>
+    <color name="colorGreenMedium">#1DE9B6</color>
+    <color name="colorGreenHigh">#00BFA5</color>
+    <color name="colorGreenDark">#00796B</color>
 </resources>

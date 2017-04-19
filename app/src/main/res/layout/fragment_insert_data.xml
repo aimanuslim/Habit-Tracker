@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@color/colorPurpleSuperLight"
+                android:background="@color/colorGreenSuperLight"
                 android:hint="Habit Name"
                 android:padding="5dp"
 
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/colorPurpleSuperLight"
+                    android:background="@color/colorGreenSuperLight"
                     android:ems="8"
                     android:focusable="false"
                     android:hint="Date Executed"
@@ -76,7 +76,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:background="@color/colorPurpleSuperLight"
+                    android:background="@color/colorGreenSuperLight"
                     android:ems="8"
                     android:focusable="false"
                     android:hint="Time Executed"
@@ -104,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@color/colorPurpleSuperLight"
+                android:background="@color/colorGreenSuperLight"
                 android:hint="Category"
                 android:inputType="text|textPersonName"
 
@@ -166,42 +166,97 @@
 
                     android:transcriptMode="alwaysScroll" />
 
-                <Button
-                    android:id="@+id/addPersonInteractedButton"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:layout_weight="0.5"
-                    android:background="@drawable/custom_button"
-                    android:ems="5"
-                    android:fontFamily="monospace"
-                    android:text="Add Interacted Person"
-                    android:textColor="#FFFFFFFF"
+                    android:orientation="vertical"
+                    android:layout_gravity="center_vertical"
+                    >
 
-                    android:textSize="10sp"
-                    android:visibility="visible"
+                    <Button
+                        android:id="@+id/addPersonInteractedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5"
+                        android:layout_margin="10dip"
+                        android:background="@drawable/custom_button"
+                        android:ems="5"
+                        android:fontFamily="monospace"
+                        android:text="Add Interacted Person"
+                        android:textColor="#FFFFFFFF"
 
-                    />
+                        android:textSize="10sp"
+                        android:visibility="visible"
+
+                        />
+
+                    <Button
+                        android:id="@+id/clearPersonButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5"
+                        android:layout_margin="10dip"
+                        android:background="@drawable/custom_button"
+                        android:ems="5"
+                        android:fontFamily="monospace"
+                        android:text="Clear List"
+                        android:textColor="#FFFFFFFF"
+
+                        android:textSize="10sp"
+                        android:visibility="visible"
+
+                        />
+                </LinearLayout>
 
             </LinearLayout>
 
 
-            <Button
-
-                android:id="@+id/recordButton"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/custom_button"
-                android:ems="5"
-                android:fontFamily="monospace"
+                >
 
-                android:text="Record!"
-                android:textColor="#FFFFFFFF"
-                android:textSize="10sp"
+                <Button
 
-                />
+                    android:id="@+id/recordButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dip"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_button"
+                    android:ems="5"
+
+                    android:fontFamily="monospace"
+                    android:text="Record!"
+                    android:textColor="#FFFFFFFF"
+
+                    android:textSize="10sp" />
+
+                <Button
+
+                    android:id="@+id/clearFieldButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dip"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_button"
+                    android:ems="5"
+
+                    android:fontFamily="monospace"
+                    android:text="Clear Fields"
+                    android:textColor="#FFFFFFFF"
+
+                    android:textSize="10sp" />
+            </LinearLayout>
 
 
         </LinearLayout>

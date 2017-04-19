@@ -522,6 +522,13 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public void deleteAllHabitsAndPerson() {
+        // cancel alarms
+        ArrayList<Habit> habits = getAllHabits();
+        for(Habit habit: habits){
+            cancelAlarm(habit.getAlarmId());
+        }
+
+        // delete habit from database.
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_HABITS + " WHERE 1;");
         db.execSQL("DELETE FROM " + TABLE_PIT + " WHERE 1;");
@@ -604,14 +611,14 @@ public class DBHandler extends SQLiteOpenHelper {
         Log.d("Alarm", "Alarm cancel -> ID: " + alarmId);
     }
 
-    public void updateAlarm(int alarmId, long startTime, Long repeatingPeriodInMillis) {
+    public void updateAlarm(int alarmId, long startTime, Long repeatingPeriodInMillis, String habitName) {
         cancelAlarm(alarmId);
-        setAlarm(startTime, repeatingPeriodInMillis);
+        setAlarm(startTime, repeatingPeriodInMillis, habitName);
     }
 
-    public int setAlarm(Long startTime, Long repeatingInterval) {
+    public int setAlarm(Long startTime, Long repeatingInterval, String habitName) {
         Intent alertIntent = new Intent(myContext, NotificationPublisher.class);
-
+        alertIntent.putExtra("Habit Name", habitName);
         int requestID = getNextAvailableRequestID();
         addRequestId(requestID);
 
