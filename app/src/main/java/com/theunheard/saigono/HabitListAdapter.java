@@ -1,4 +1,4 @@
-package com.theunheard.habitking;
+package com.theunheard.saigono;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -181,8 +181,8 @@ public class HabitListAdapter extends ArrayAdapter<Habit> implements Filterable{
             holder.nameLabel.setText(habit.getName());
             holder.categoryLabel.setText(habit.getCategory());
             holder.periodSinceLastPerformedLabel.setText("Last performed: " + Utility.outputApproximateTimePeriodDifferenceAsString(habit.getDateLastPerformed(), new Date()));
-            holder.frequencyPerformedLabel.setText(habit.getFrequencyPerformed().toString() + " time" + (habit.getFrequencyPerformed() > 1 ? "s" : ""));
-            holder.reminderPeriodLabel.setText(habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
+            holder.frequencyPerformedLabel.setText("Performed " + habit.getFrequencyPerformed().toString() + " time" + (habit.getFrequencyPerformed() > 1 ? "s" : ""));
+            holder.reminderPeriodLabel.setText("Remind in " + habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
         }
 
         return v;

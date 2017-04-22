@@ -1,4 +1,4 @@
-package com.theunheard.habitking;
+package com.theunheard.saigono;
 
 import android.util.Log;
 
@@ -6,7 +6,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by ian21 on 2/4/2017.

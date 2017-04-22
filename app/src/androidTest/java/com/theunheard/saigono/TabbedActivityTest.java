@@ -1,4 +1,4 @@
-package com.theunheard.habitking;
+package com.theunheard.saigono;
 
 import android.os.Build;
 import android.os.SystemClock;
@@ -11,7 +11,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
-import android.support.test.uiautomator.Until;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,6 +113,10 @@ public class TabbedActivityTest {
 
     }
 
+    public void clearAllPersons() {
+        onView(withId(R.id.clearPersonButton)).perform(click());
+    }
+
     public String enterHabitDetailsThatHasJustBeenPerformed(
             String habitName,
             String category,
@@ -197,7 +200,7 @@ public class TabbedActivityTest {
     }
 
     public void clickRecordButton() {
-        waitInSeconds(2);
+//        waitInSeconds(2);
         onView(withId(R.id.recordButton)).perform(click());
     }
 
@@ -236,6 +239,7 @@ public class TabbedActivityTest {
         checkIfPersonItemExist(habitname, personName1, personName2);
         switchToInsertHabitView();
         clearAllInputs();
+        clearAllPersons();
     }
 
     @Test

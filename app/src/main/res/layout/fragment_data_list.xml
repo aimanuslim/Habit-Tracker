@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.theunheard.habitking.DataListFragment"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    tools:context="com.theunheard.saigono.DataListFragment"
 
     >
 
@@ -11,7 +12,6 @@
         android:id="@+id/dataListSpinnerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/habitron_habit_list_toolbar"
         android:orientation="horizontal">
 
         <Spinner
@@ -48,23 +48,47 @@
     <ListView
         android:id="@+id/dataListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/dataListSpinnerContainer"
-        android:layout_above="@+id/clearDataListButton"
-        android:layout_margin="5dip" />
-
-    <Button
-        android:id="@+id/clearDataListButton"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/custom_button"
-        android:ems="5"
+        android:layout_below="@+id/dataListSpinnerContainer"
+        android:layout_above="@+id/bottomElements"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="5dip" />
 
-        android:fontFamily="monospace"
-        android:text="Clear Data"
-        android:textColor="#FFFFFFFF"
-        android:textSize="10sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottomElements"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+
+        >
+
+        <Button
+            android:id="@+id/clearDataListButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dataListView"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dip"
+
+            android:background="@drawable/custom_button"
+            android:ems="5"
+
+            android:fontFamily="monospace"
+            android:text="Clear Data"
+            android:textColor="#FFFFFFFF"
+            android:textSize="10sp" />
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adViewDataList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/clearDataListButton"
+            android:layout_weight="1"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="@string/banner_ad_footer" />
+    </LinearLayout>
+
+
 </RelativeLayout>

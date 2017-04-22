@@ -1,4 +1,4 @@
-package com.theunheard.habitking;
+package com.theunheard.saigono;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -611,14 +611,15 @@ public class DBHandler extends SQLiteOpenHelper {
         Log.d("Alarm", "Alarm cancel -> ID: " + alarmId);
     }
 
-    public void updateAlarm(int alarmId, long startTime, Long repeatingPeriodInMillis, String habitName) {
+    public void updateAlarm(int alarmId, long startTime, Long repeatingPeriodInMillis, Habit habit) {
         cancelAlarm(alarmId);
-        setAlarm(startTime, repeatingPeriodInMillis, habitName);
+        setAlarm(startTime, repeatingPeriodInMillis, habit);
     }
 
-    public int setAlarm(Long startTime, Long repeatingInterval, String habitName) {
+    public int setAlarm(Long startTime, Long repeatingInterval, Habit habit) {
         Intent alertIntent = new Intent(myContext, NotificationPublisher.class);
-        alertIntent.putExtra("Habit Name", habitName);
+        alertIntent.putExtra("Habit Name", habit.getName());
+        alertIntent.putExtra("Last Performed", habit.getDateTimeLastPerformedAsString());
         int requestID = getNextAvailableRequestID();
         addRequestId(requestID);
 

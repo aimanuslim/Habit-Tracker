@@ -1,4 +1,4 @@
-package com.theunheard.habitking;
+package com.theunheard.saigono;
 
 
 import android.app.NotificationManager;
@@ -16,7 +16,8 @@ public class NotificationPublisher extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String habitName = intent.getStringExtra("Habit Name");
-        createNotification(context, "Habit King Reminder", "I am reminding you of doing this! -> " + habitName, "Alert");
+        String lastPerformed = intent.getStringExtra("Last Performed");
+        createNotification(context, "Saigo No Reminder: " + habitName, "You last performed this activity on " + lastPerformed, "Alert");
     }
 
     public void createNotification(Context context, String msg, String msgText, String msgAlert){

@@ -1,6 +1,7 @@
-package com.theunheard.habitking;
+package com.theunheard.saigono;
 
 import android.app.Dialog;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,12 +18,17 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+
 
 
 public class DataListFragment extends Fragment implements FragmentInterface {
@@ -47,6 +53,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
     private ArrayAdapter<String> habitSortAdapter;
     private ArrayAdapter<String> personSortAdapter;
     private ArrayList<String> sortModeList;
+    private AdView adView;
 
 
 
@@ -85,6 +92,11 @@ public class DataListFragment extends Fragment implements FragmentInterface {
     }
 
     public void setupAll () {
+        adView = (AdView) getView().findViewById(R.id.adViewDataList);
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+        adView.loadAd(adRequest);
+
         dataListView = (ListView) getView().findViewById(R.id.dataListView);
         dataModeSpinner = (Spinner) getView().findViewById(R.id.dataModeSpinner);
         _dbHandler = new DBHandler(this.getActivity());
@@ -149,37 +161,43 @@ public class DataListFragment extends Fragment implements FragmentInterface {
         sortTypeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String sortModeTextSelected = (String) sortTypeListView.getItemAtPosition(position);
-                if(sortTypeListView.getAdapter() == habitSortAdapter) {
-                    if(sortModeTextSelected.equals(getResources().getString(R.string.name_habit_sort_ascending_mode_text))) {
-                        Collections.sort(habitList, new HabitNameComparator());
-                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
-                    } else if(sortModeTextSelected.equals(getResources().getString(R.string.name_habit_sort_descending_mode_text))) {
-                        Collections.sort(habitList, Collections.<Habit>reverseOrder(new HabitNameComparator()));
-                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
-                    } else if(sortModeTextSelected.equals(getResources().getString(R.string.last_performed_habit_sort_ascending_mode_text))) {
-                        Collections.sort(habitList, new  HabitLastPerformedComparator());
-                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
-                    } else if (sortModeTextSelected.equals(getResources().getString(R.string.last_performed_habit_sort_descending_mode_text))) {
-                        Collections.sort(habitList, Collections.<Habit>reverseOrder(new  HabitLastPerformedComparator()));
-                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+
+
+                try {
+                    String sortModeTextSelected = (String) sortTypeListView.getItemAtPosition(position);
+                    if(sortTypeListView.getAdapter() == habitSortAdapter) {
+                        if(sortModeTextSelected.equals(getResources().getString(R.string.name_habit_sort_ascending_mode_text))) {
+                            Collections.sort(habitList, new HabitNameComparator());
+                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                        } else if(sortModeTextSelected.equals(getResources().getString(R.string.name_habit_sort_descending_mode_text))) {
+                            Collections.sort(habitList, Collections.<Habit>reverseOrder(new HabitNameComparator()));
+                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                        } else if(sortModeTextSelected.equals(getResources().getString(R.string.last_performed_habit_sort_ascending_mode_text))) {
+                            Collections.sort(habitList, new  HabitLastPerformedComparator());
+                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                        } else if (sortModeTextSelected.equals(getResources().getString(R.string.last_performed_habit_sort_descending_mode_text))) {
+                            Collections.sort(habitList, Collections.<Habit>reverseOrder(new  HabitLastPerformedComparator()));
+                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                        }
+                    } else {
+                        if(sortModeTextSelected.equals(getResources().getString(R.string.last_performed_person_sort_ascending_mode_text))){
+                            Collections.sort(personList, new  PersonLastPerformedComparator());
+                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                        } else if (sortModeTextSelected.equals(getResources().getString(R.string.last_performed_person_sort_descending_mode_text))){
+                            Collections.sort(personList, Collections.<Person>reverseOrder(new  PersonLastPerformedComparator()));
+                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                        } else if (sortModeTextSelected.equals(getResources().getString(R.string.name_person_sort_ascending_mode_text))) {
+                            Collections.sort(personList, new PersonNameComparator());
+                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                        } else if (sortModeTextSelected.equals(getResources().getString(R.string.name_person_sort_descending_mode_text))) {
+                            Collections.sort(personList, Collections.<Person>reverseOrder(new PersonNameComparator()));
+                            getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
+                        }
                     }
-                } else {
-                    if(sortModeTextSelected.equals(getResources().getString(R.string.last_performed_person_sort_ascending_mode_text))){
-                        Collections.sort(personList, new  PersonLastPerformedComparator());
-                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
-                    } else if (sortModeTextSelected.equals(getResources().getString(R.string.last_performed_person_sort_descending_mode_text))){
-                        Collections.sort(personList, Collections.<Person>reverseOrder(new  PersonLastPerformedComparator()));
-                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
-                    } else if (sortModeTextSelected.equals(getResources().getString(R.string.name_person_sort_ascending_mode_text))) {
-                        Collections.sort(personList, new PersonNameComparator());
-                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
-                    } else if (sortModeTextSelected.equals(getResources().getString(R.string.name_person_sort_descending_mode_text))) {
-                        Collections.sort(personList, Collections.<Person>reverseOrder(new PersonNameComparator()));
-                        getActivity().runOnUiThread(notifyDataSetChangedFromMainThread);
-                    }
+                    dialog.dismiss();
+                } catch (Resources.NotFoundException e) {
+                    Toast.makeText(DataListFragment.this.getActivity(), "Something wrong with sort feature", android.widget.Toast.LENGTH_LONG).show();
                 }
-                dialog.dismiss();
 
             }
         });
@@ -187,55 +205,52 @@ public class DataListFragment extends Fragment implements FragmentInterface {
 
     public void setupSearchView () {
 
-        // TODO: need to work on making it expand fully
-        searchView.setMaxWidth( Integer.MAX_VALUE );
-        searchView.setMinimumWidth(getView().findViewById(R.id.dataListSpinnerContainer).getWidth());
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+        try {
+            searchView.setMaxWidth( Integer.MAX_VALUE );
+            searchView.setMinimumWidth(getView().findViewById(R.id.dataListSpinnerContainer).getWidth());
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String searchText) {
-                filterData(searchText);
-                return true;
-            }
+                @Override
+                public boolean onQueryTextChange(String searchText) {
+                    filterData(searchText);
+                    return true;
+                }
 
-        });
+            });
 
-        searchView.setMaxWidth(getView().findViewById(R.id.dataListSpinnerContainer).getWidth());
+            searchView.setMaxWidth(getView().findViewById(R.id.dataListSpinnerContainer).getWidth());
 
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                getActivity().runOnUiThread(updateListAndAdapters);
-                searchView.onActionViewCollapsed();
-                dataModeSpinner.setVisibility(View.VISIBLE);
-                sortButton.setVisibility(View.VISIBLE);
-                return true;
-            }
-        });
+            searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+                @Override
+                public boolean onClose() {
+                    getActivity().runOnUiThread(updateListAndAdapters);
+                    searchView.onActionViewCollapsed();
+                    dataModeSpinner.setVisibility(View.VISIBLE);
+                    sortButton.setVisibility(View.VISIBLE);
+                    return true;
+                }
+            });
 
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dataModeSpinner.setVisibility(View.GONE);
-                sortButton.setVisibility(View.GONE);
-//                view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, width));
-            }
-        });
 
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dataModeSpinner.setVisibility(View.GONE);
-                sortButton.setVisibility(View.GONE);
-//                searchView.setMinimumWidth(getView().findViewById(R.id.dataListSpinnerContainer).getWidth());
-//                searchView.onActionViewExpanded();
+            searchView.setOnSearchClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dataModeSpinner.setVisibility(View.GONE);
+                    sortButton.setVisibility(View.GONE);
+                    Log.d("Search View", "onSearchClickListener");
+                    searchView.setMaxWidth(getView().findViewById(R.id.dataListSpinnerContainer).getWidth());
+    //                searchView.setMinimumWidth(getView().findViewById(R.id.dataListSpinnerContainer).getWidth());
+    //                searchView.onActionViewExpanded();
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(DataListFragment.this.getActivity(), "Something wrong with search view", android.widget.Toast.LENGTH_LONG).show();
+        }
     }
 
     // http://stackoverflow.com/questions/26919099/implement-search-in-listview-inside-fragment
@@ -280,29 +295,38 @@ public class DataListFragment extends Fragment implements FragmentInterface {
         clearDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch(dataModeSpinner.getSelectedItemPosition()) {
-                    case 0: _dbHandler.deleteAllHabitsAndPerson();
-                            break;
-                    case 1: _dbHandler.deleteAllPersons();
-                            break;
+
+                try {
+                    switch(dataModeSpinner.getSelectedItemPosition()) {
+                        case 0: _dbHandler.deleteAllHabitsAndPerson();
+                                break;
+                        case 1: _dbHandler.deleteAllPersons();
+                                break;
+                    }
+                    getActivity().runOnUiThread(updateListAndAdapters);
+                } catch (Exception e) {
+                    Toast.makeText(DataListFragment.this.getActivity(), "Something wrong clearing data", android.widget.Toast.LENGTH_LONG).show();
                 }
-                getActivity().runOnUiThread(updateListAndAdapters);
             }
 
         });
     }
 
     private void setupAdapters() {
-        habitList = _dbHandler.getAllHabits();
-        habitListAdapter = new HabitListAdapter(this.getActivity(), R.layout.habit_item, habitList);
-        personList = _dbHandler.getAllPerson();
-        personListAdapter = new PersonListAdapter(this.getActivity(), R.layout.person_item, personList);
-
+        try {
+            habitList = _dbHandler.getAllHabits();
+            habitListAdapter = new HabitListAdapter(this.getActivity(), R.layout.habit_item, habitList);
+            personList = _dbHandler.getAllPerson();
+            personListAdapter = new PersonListAdapter(this.getActivity(), R.layout.person_item, personList);
+        } catch (Exception e) {
+            Toast.makeText(DataListFragment.this.getActivity(), "Something wrong with fetching data", android.widget.Toast.LENGTH_LONG).show();
+        }
 
 
     }
 
     private void setupSortButton() {
+
         sortModeList = new ArrayList<String>();
         // Create an ArrayAdapter using the string array and a default spinner layout
         habitSortAdapter = new ArrayAdapter<String>(this.getActivity(),
@@ -315,14 +339,17 @@ public class DataListFragment extends Fragment implements FragmentInterface {
             public void onClick(View view) {
 
 
-                final Dialog dialog = new Dialog(DataListFragment.this.getActivity());
-                dialog.setContentView(R.layout.fragment_sort_mode_list);
-                dialog.setTitle("Select Sorting Mode");
+                try {
+                    final Dialog dialog = new Dialog(DataListFragment.this.getActivity());
+                    dialog.setContentView(R.layout.fragment_sort_mode_list);
+                    dialog.setTitle("Select Sorting Mode");
 
-                setupSortModeListView(dialog);
+                    setupSortModeListView(dialog);
 
-                dialog.show();
-
+                    dialog.show();
+                } catch (Exception e) {
+                    Toast.makeText(DataListFragment.this.getActivity(), "Something wrong with sort feature", android.widget.Toast.LENGTH_LONG).show();
+                }
 
 
             }
@@ -393,20 +420,26 @@ public class DataListFragment extends Fragment implements FragmentInterface {
         dataModeSpinner.setAdapter(adapter);
 
         dataModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                Log.d("position", "Position: " + Integer.toString(position));
-                switch (position) {
-                    // TODO: fix ordering of sorting modes.
-                    case 0:
-                        setupHabitAdapter();
-//                        sortTypeListView.setAdapter(habitSortAdapter);
-                        break;
-                    case 1:
-                        setupPersonInteractedAdapter();
-//                        sortTypeListView.setAdapter(personSortAdapter);
-                        break;
-                    default: setupHabitAdapter();
+
+//                Log.d("position", "Position: " + Integer.toString(position));
+                try {
+                    switch (position) {
+                        // TODO: fix ordering of sorting modes.
+                        case 0:
+                            setupHabitAdapter();
+    //                        sortTypeListView.setAdapter(habitSortAdapter);
+                            break;
+                        case 1:
+                            setupPersonInteractedAdapter();
+    //                        sortTypeListView.setAdapter(personSortAdapter);
+                            break;
+                        default: setupHabitAdapter();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(DataListFragment.this.getActivity(), "Something wrong with mode selection", android.widget.Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -498,96 +531,95 @@ public class DataListFragment extends Fragment implements FragmentInterface {
 //                android.app.FragmentManager fm = getFragmentManager();
 //                EditHabitFragmentDialog myDialog = new EditHabitFragmentDialog().newInstance("Edit habit");
 
-                final TextView lastPerformedTextView = (TextView) view.findViewById(R.id.habitLastPerformedDate);
-                final TextView reminderFrequencyTextView = (TextView) view.findViewById(R.id.habitReminderPeriod);
-                final Dialog dialog = new Dialog(DataListFragment.this.getActivity());
-                dialog.setContentView(R.layout.fragment_edit_habit_fragment_dialog);
-                dialog.setTitle("Edit Habit");
+                try {
+                    final TextView lastPerformedTextView = (TextView) view.findViewById(R.id.habitLastPerformedDate);
+                    final TextView reminderFrequencyTextView = (TextView) view.findViewById(R.id.habitReminderPeriod);
+                    final Dialog dialog = new Dialog(DataListFragment.this.getActivity());
+                    dialog.setContentView(R.layout.fragment_edit_habit_fragment_dialog);
+                    dialog.setTitle("Edit Habit");
 //                View dialogView = view.inflate(getApplicationContext(), R.layout.fragment_edit_habit_fragment_dialog, null);
 
-                final EditText name = (EditText) dialog.findViewById(R.id.habitName_DialogInput);
-                final EditText category = (EditText) dialog.findViewById(R.id.category_DialogInput);
-                final EditText mult = (EditText) dialog.findViewById(R.id.multiplier_DialogInput);
-                final Spinner periodSpinner = (Spinner) dialog.findViewById(R.id.reminderPeriod_DialogSpinner);
-                Button updateButton = (Button) dialog.findViewById(R.id.updateButton);
-                Button deleteButton = (Button) dialog.findViewById(R.id.deleteButton);
-                Button cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
-                Button justNowButton = (Button) dialog.findViewById(R.id.justDidItFragmentButton);
+                    final EditText name = (EditText) dialog.findViewById(R.id.habitName_DialogInput);
+                    final EditText category = (EditText) dialog.findViewById(R.id.category_DialogInput);
+                    final EditText mult = (EditText) dialog.findViewById(R.id.multiplier_DialogInput);
+                    final Spinner periodSpinner = (Spinner) dialog.findViewById(R.id.reminderPeriod_DialogSpinner);
+                    Button updateButton = (Button) dialog.findViewById(R.id.updateButton);
+                    Button deleteButton = (Button) dialog.findViewById(R.id.deleteButton);
+                    Button cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
+                    Button justNowButton = (Button) dialog.findViewById(R.id.justDidItFragmentButton);
 
 
+                    final Habit habit = (Habit) dataListView.getItemAtPosition(pos);
+
+                    name.setText(habit.getName());
+                    category.setText(habit.getCategory());
+                    mult.setText(habit.getReminderPeriodMultiplier().toString());
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(DataListFragment.this.getActivity(),
+                            R.array.repetition_period_array, android.R.layout.simple_spinner_item);
+                    // Specify the layout to use when the list of choices appears
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    // Apply the adapter to the spinner
+                    periodSpinner.setAdapter(adapter);
+                    periodSpinner.setSelection(habit.getReminderPerPeriodLengthMode());
 
 
-                final Habit habit = (Habit) dataListView.getItemAtPosition(pos);
-
-                name.setText(habit.getName());
-                category.setText(habit.getCategory());
-                mult.setText(habit.getReminderPeriodMultiplier().toString());
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(DataListFragment.this.getActivity(),
-                        R.array.repetition_period_array, android.R.layout.simple_spinner_item);
-                // Specify the layout to use when the list of choices appears
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                // Apply the adapter to the spinner
-                periodSpinner.setAdapter(adapter);
-                periodSpinner.setSelection(habit.getReminderPerPeriodLengthMode());
-
-
-
-                updateButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        habit.setName(name.getText().toString());
-                        habit.setCategory(category.getText().toString());
-                        habit.setReminderPeriodProperties(periodSpinner.getSelectedItemPosition(), Integer.parseInt(mult.getText().toString()));
-                        _dbHandler.updateAlarm(habit.getAlarmId(), habit.getDateLastPerformed().getTime(), habit.getRepeatingPeriodInMillis(), habit.getName());
-                        habitListAdapter.notifyDataSetChanged();
-                        _dbHandler.modifyHabit(habit);
-//                        reminderFrequencyTextView.setText(habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
-                        dialog.dismiss();
-                    }
-                });
-
-                justNowButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        habit.setDateLastPerformed(new Date());
-                        habit.increaseFrequencyPerformed();
-                        _dbHandler.modifyHabit(habit);
-                        habitListAdapter.notifyDataSetChanged();
-                    }
-                });
-
-
-                cancelButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-
-                deleteButton.setTag(pos);
-                deleteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int position = (int) view.getTag();
-                        habitList.remove(position);
-                        _dbHandler.deleteHabitByID(Integer.parseInt(habit.getId()));
-                        _dbHandler.deletePersonByHabitID(Integer.parseInt(habit.getId()));
-                        if(_dbHandler.requestIdExists(habit.getAlarmId())){
-                            _dbHandler.cancelAlarm(habit.getAlarmId());
+                    updateButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            habit.setName(name.getText().toString());
+                            habit.setCategory(category.getText().toString());
+                            habit.setReminderPeriodProperties(periodSpinner.getSelectedItemPosition(), Integer.parseInt(mult.getText().toString()));
+                            _dbHandler.updateAlarm(habit.getAlarmId(), habit.getDateLastPerformed().getTime(), habit.getRepeatingPeriodInMillis(), habit);
+                            habitListAdapter.notifyDataSetChanged();
+                            _dbHandler.modifyHabit(habit);
+    //                        reminderFrequencyTextView.setText(habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
+                            dialog.dismiss();
                         }
-                        getActivity().runOnUiThread(updateListAndAdapters);
-                        dialog.dismiss();
-                    }
-                });
-                // TODOS: alarm request, how to get already existing intents?
-                // TODOS: alarm request, test when application is closed.
+                    });
 
+                    justNowButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            habit.setDateLastPerformed(new Date());
+                            habit.increaseFrequencyPerformed();
+                            _dbHandler.modifyHabit(habit);
+                            habitListAdapter.notifyDataSetChanged();
+                        }
+                    });
+
+
+                    cancelButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    deleteButton.setTag(pos);
+                    deleteButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            int position = (int) view.getTag();
+                            habitList.remove(position);
+                            _dbHandler.deleteHabitByID(Integer.parseInt(habit.getId()));
+                            _dbHandler.deletePersonByHabitID(Integer.parseInt(habit.getId()));
+                            if(_dbHandler.requestIdExists(habit.getAlarmId())){
+                                _dbHandler.cancelAlarm(habit.getAlarmId());
+                            }
+                            getActivity().runOnUiThread(updateListAndAdapters);
+                            dialog.dismiss();
+                        }
+                    });
+                    // TODOS: alarm request, how to get already existing intents?
+                    // TODOS: alarm request, test when application is closed.
 
 
 //                myDialog.show(fm, "Edit Habit");
 
-                dialog.show();
-
+                    dialog.show();
+                } catch (Exception e) {
+                    Toast.makeText(DataListFragment.this.getActivity(), "Something wrong with data list", android.widget.Toast.LENGTH_LONG).show();
+                }
             }
         });
 

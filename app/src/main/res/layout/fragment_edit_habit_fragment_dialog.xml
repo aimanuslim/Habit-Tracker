@@ -1,15 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dip"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="com.theunheard.habitking.EditHabitFragmentDialog">
+    tools:context="com.theunheard.saigono.EditHabitFragmentDialog">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_margin="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:orientation="horizontal">
 
         <TextView
@@ -30,7 +31,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:orientation="horizontal">
 
         <TextView
@@ -52,7 +54,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:orientation="horizontal">
 
         <TextView
@@ -67,7 +70,8 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="number" />
+            android:inputType="number"
+            android:textAlignment="center" />
 
         <Spinner
             android:id="@+id/reminderPeriod_DialogSpinner"
@@ -79,19 +83,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+
+        android:layout_margin="15dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/justDidItFragmentButton"
             android:layout_width="wrap_content"
             android:layout_height="50dip"
+            android:layout_gravity="top"
             android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/custom_button"
+            android:elevation="0dp"
             android:ems="5"
             android:fontFamily="monospace"
-            android:text="Just Did It!"
 
+            android:text="Just Did It!"
+            android:textAlignment="center"
             android:textColor="#FFFFFFFF"
             android:textSize="10dp" />
 
@@ -100,6 +110,8 @@
             android:layout_width="wrap_content"
             android:layout_height="50dip"
             android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/custom_button"
             android:ems="5"
             android:fontFamily="monospace"
@@ -113,6 +125,8 @@
             android:layout_width="wrap_content"
             android:layout_height="50dip"
             android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/custom_button"
             android:ems="5"
             android:fontFamily="monospace"
@@ -128,6 +142,8 @@
             android:layout_width="wrap_content"
             android:layout_height="50dip"
             android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/custom_button"
             android:ems="5"
             android:fontFamily="monospace"

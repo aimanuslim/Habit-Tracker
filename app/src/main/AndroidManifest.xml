@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.theunheard.habitking">
+    package="com.theunheard.saigono">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 
@@ -18,8 +19,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:windowSoftInputMode="adjustResize|stateVisible|stateAlwaysHidden">
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
-            android:name=".LoginActivity"
+            android:name="com.theunheard.saigono.LoginActivity"
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,10 +34,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TabbedActivity"
+            android:name="com.theunheard.saigono.TabbedActivity"
             android:label="@string/title_activity_tabbed"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <receiver android:name="com.theunheard.habitking.NotificationPublisher" android:process=":remote">
+
+        <!--Include the AdActivity configChanges and theme. -->
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+
+        <receiver android:name="com.theunheard.saigono.NotificationPublisher" android:process=":remote">
             <intent-filter>
                 <action android:name="android.intent.action.NOTIFY"/>
             </intent-filter>

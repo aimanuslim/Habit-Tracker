@@ -1,4 +1,4 @@
-package com.theunheard.habitking;
+package com.theunheard.saigono;
 
 import android.content.Context;
 import android.support.design.widget.TabLayout;
@@ -30,6 +30,7 @@ public class TabbedActivity extends AppCompatActivity {
 //        toolbar.setTitle("Coreo");
 //        setSupportActionBar(toolbar);
 
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.insert_data_tab_text));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.data_list_tab_text));
@@ -46,6 +47,7 @@ public class TabbedActivity extends AppCompatActivity {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+
                 viewPager.setCurrentItem(tab.getPosition());
 
                 FragmentInterface fragment = (FragmentInterface) adapter.instantiateItem(viewPager, tab.getPosition());
@@ -54,7 +56,6 @@ public class TabbedActivity extends AppCompatActivity {
 
                 }
 
-                //TODO: remove keyboard when changing tabs
                 View focus = getCurrentFocus();
                 if (focus != null) {
                     hiddenKeyboard(focus);
@@ -81,7 +82,6 @@ public class TabbedActivity extends AppCompatActivity {
                     fragment.fragmentBecameVisible();
 
                 }
-
                 View focus = getCurrentFocus();
                 if (focus != null) {
                     hiddenKeyboard(focus);
@@ -104,11 +104,10 @@ public class TabbedActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
 }

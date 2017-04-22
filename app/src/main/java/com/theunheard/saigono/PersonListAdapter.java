@@ -1,4 +1,4 @@
-package com.theunheard.habitking;
+package com.theunheard.saigono;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -44,7 +44,7 @@ public class PersonListAdapter extends ArrayAdapter<Person> {
 
             nameLabel.setText(person.getName());
             habitLabel.setText(person.getHabitName());
-            dateLastInteractedWithLabel.setText("Last Interacted: " + Utility.outputApproximateTimePeriodDifferenceAsString(person.getLastDateInteractedWith(), new Date()));
+            dateLastInteractedWithLabel.setText("Last Interacted with: " + Utility.outputApproximateTimePeriodDifferenceAsString(person.getLastDateInteractedWith(), new Date()));
 
         }
 

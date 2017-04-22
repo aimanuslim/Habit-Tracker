@@ -1,21 +1,12 @@
-package com.theunheard.habitking;
+package com.theunheard.saigono;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -31,6 +22,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -40,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import static android.content.Context.ALARM_SERVICE;
 import static android.text.InputType.TYPE_CLASS_DATETIME;
 import static android.text.InputType.TYPE_DATETIME_VARIATION_DATE;
 
@@ -74,7 +66,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
     private DatabaseReference _databaseRef;
     private FirebaseDatabase _firebaseInstance;
 
-    private final static String TAG = "HabitKing";
+    private final static String TAG = "saigono";
 
     // for list view
     private ArrayList<String>  person_list;
@@ -84,6 +76,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
     private ArrayAdapter<String> habitAutoCompleteAdapter;
     private ArrayList<String>  category_name_list;
     private ArrayAdapter<String> categoryAutoCompleteAdapter;
+    private AdView adView;
 
     public InsertDataFragment() {
         // Required empty public constructor
@@ -116,6 +109,11 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
 
         this.periodArray = new String[] {"Minute (s)", "Hour (s)", "Day (s)", "Week (s)", "Month (s)", "Year (s)"};
 
+
+        adView = (AdView) getView().findViewById(R.id.adViewInsertData);
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+        adView.loadAd(adRequest);
 
         habitNameTextView = (AutoCompleteTextView) getView().findViewById(R.id.habitInputName);
         dateTextView = (EditText) getView().findViewById(R.id.dateLastPerformedInput);
@@ -257,25 +255,33 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
     }
 
     private void setupClearFieldsButton(){
-        clearFieldButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                habitNameTextView.setText("");
-                categoryTextView.setText("");
-                dateTextView.setText("");
-                timeTextView.setText("");
-            }
-        });
+        try {
+            clearFieldButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    habitNameTextView.setText("");
+                    categoryTextView.setText("");
+                    dateTextView.setText("");
+                    timeTextView.setText("");
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(InsertDataFragment.this.getActivity(), "Error clearing form inputs", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setupClearPersonButton() {
-        clearPersonButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                person_list.clear();
-                arrayAdapter.notifyDataSetChanged();
-            }
-        });
+        try {
+            clearPersonButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    person_list.clear();
+                    arrayAdapter.notifyDataSetChanged();
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(InsertDataFragment.this.getActivity(), "Something wrong with clearing person list", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -331,7 +337,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
             public void onClick(View v) {
 //                if(isNetworkAvailable()) {
                 if(areEntriesValid()) {
-                    saveToCloud();
+                    saveData();
                     Toast.makeText(InsertDataFragment.this.getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(InsertDataFragment.this.getActivity(), R.string.missing_info, Toast.LENGTH_SHORT).show();
@@ -384,14 +390,14 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         Date reminderTime = habit.getNextReminderTime();
         if(reminderTime != null) {
             Log.d("Next Reminder Time:", Utility.dateToString(reminderTime, Utility.dateFormat + " " + Utility.timeFormat));
-            habit.setAlarmId(_dbHandler.setAlarm(habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis(), habit.getName()));
+            habit.setAlarmId(_dbHandler.setAlarm(habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis(), habit));
         }
     }
 
 
 
 
-    private void saveToCloud() {
+    private void saveData() {
 
         String habitName = habitNameTextView.getText().toString();
         Habit habit = new Habit(prepareDatePerformed(), habitName, "0");
@@ -421,8 +427,8 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         }
 
 
-        Log.d(TAG, "Done adding");
-        Log.d(TAG, "DB " + _dbHandler.databasetostring());
+//        Log.d(TAG, "Done adding");
+//        Log.d(TAG, "DB " + _dbHandler.databasetostring());
 
 
 
@@ -467,43 +473,47 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(InsertDataFragment.this.getActivity());
-                alert.setTitle("Add person");
-                alert.setMessage("Enter the name of the person you performed this activity with");
+                try {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(InsertDataFragment.this.getActivity());
+                    alert.setTitle("Add person");
+                    alert.setMessage("Enter the name of the person you performed this activity with");
 
 //                final EditText input = new EditText(InsertDataFragment.this.getActivity());
-                final AutoCompleteTextView input = new AutoCompleteTextView(InsertDataFragment.this.getActivity());
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                        (getActivity(),android.R.layout.simple_list_item_1,_dbHandler.getAllPersonNames());
-                input.setAdapter(adapter);
-                input.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        input.showDropDown();
-                    }
-                });
-                input.setId(R.id.person_name_edit);
+                    final AutoCompleteTextView input = new AutoCompleteTextView(InsertDataFragment.this.getActivity());
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                            (getActivity(),android.R.layout.simple_list_item_1,_dbHandler.getAllPersonNames());
+                    input.setAdapter(adapter);
+                    input.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            input.showDropDown();
+                        }
+                    });
+                    input.setId(R.id.person_name_edit);
 
-                alert.setView(input);
+                    alert.setView(input);
 
-                alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String personName = input.getEditableText().toString();
-                        person_list.add(personName);
-                        arrayAdapter.notifyDataSetChanged();
-                    }
-                });
+                    alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String personName = input.getEditableText().toString();
+                            person_list.add(personName);
+                            arrayAdapter.notifyDataSetChanged();
+                        }
+                    });
 
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
 
-                AlertDialog alertDialog = alert.create();
-                alertDialog.show();
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
+                } catch (Exception e) {
+                    Toast.makeText(InsertDataFragment.this.getActivity(), "Error: cannot add interacted person", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
