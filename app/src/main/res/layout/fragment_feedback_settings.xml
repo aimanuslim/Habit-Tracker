@@ -1,0 +1,68 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.theunheard.saigono.FeedbackSettingsFragment">
+
+    <TextView
+        android:id="@+id/feedbackLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Anything, really!"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/feedbackEditText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="@color/colorGreenSuperLight"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/sendFeedbackButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/feedbackEditText"
+        android:layout_margin="10dp"
+        android:background="@drawable/custom_button"
+
+        android:ems="5"
+        android:fontFamily="monospace"
+
+        android:text="Send"
+        android:textColor="#FFFFFFFF"
+        android:textSize="10sp" />
+
+    <Button
+        android:id="@+id/rateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sendFeedbackButton"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/custom_button"
+
+        android:ems="5"
+        android:fontFamily="monospace"
+
+        android:text="Rate The App!"
+        android:textColor="#FFFFFFFF"
+        android:textSize="10sp" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adViewFeedbackSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ads:adSize="LARGE_BANNER"
+        ads:adUnitId="@string/banner_ad_footer"
+        />
+
+</LinearLayout>

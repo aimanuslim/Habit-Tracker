@@ -241,7 +241,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                 public void onClick(View view) {
                     dataModeSpinner.setVisibility(View.GONE);
                     sortButton.setVisibility(View.GONE);
-                    Log.d("Search View", "onSearchClickListener");
+//                    Log.d("Search View", "onSearchClickListener");
                     searchView.setMaxWidth(getView().findViewById(R.id.dataListSpinnerContainer).getWidth());
     //                searchView.setMinimumWidth(getView().findViewById(R.id.dataListSpinnerContainer).getWidth());
     //                searchView.onActionViewExpanded();
@@ -549,7 +549,11 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                     Button justNowButton = (Button) dialog.findViewById(R.id.justDidItFragmentButton);
 
 
-                    final Habit habit = (Habit) dataListView.getItemAtPosition(pos);
+                    Habit tempHabit = (Habit) dataListView.getItemAtPosition(pos);
+                    tempHabit = _dbHandler.getHabitByName(tempHabit.getName());
+                    final Habit habit = tempHabit;
+
+
 
                     name.setText(habit.getName());
                     category.setText(habit.getCategory());
@@ -574,6 +578,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                             _dbHandler.modifyHabit(habit);
     //                        reminderFrequencyTextView.setText(habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
                             dialog.dismiss();
+                            Toast.makeText(DataListFragment.this.getContext(), "Activity information updated!", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -584,6 +589,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                             habit.increaseFrequencyPerformed();
                             _dbHandler.modifyHabit(habit);
                             habitListAdapter.notifyDataSetChanged();
+                            Toast.makeText(DataListFragment.this.getContext(), "Activity information updated!", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -601,13 +607,14 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                         public void onClick(View view) {
                             int position = (int) view.getTag();
                             habitList.remove(position);
-                            _dbHandler.deleteHabitByID(Integer.parseInt(habit.getId()));
-                            _dbHandler.deletePersonByHabitID(Integer.parseInt(habit.getId()));
                             if(_dbHandler.requestIdExists(habit.getAlarmId())){
                                 _dbHandler.cancelAlarm(habit.getAlarmId());
                             }
+                            _dbHandler.deleteHabitByID(Integer.parseInt(habit.getId()));
+                            _dbHandler.deletePersonByHabitID(Integer.parseInt(habit.getId()));
                             getActivity().runOnUiThread(updateListAndAdapters);
                             dialog.dismiss();
+                            Toast.makeText(DataListFragment.this.getContext(), "Activity deleted!", Toast.LENGTH_SHORT).show();
                         }
                     });
                     // TODOS: alarm request, how to get already existing intents?

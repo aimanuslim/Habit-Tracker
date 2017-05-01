@@ -121,9 +121,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 COL_NAME + " TEXT, " +
                 COL_DATELP + " INTEGER, " + // date has to be stored as an integer
                 COL_CATEGORY + " TEXT, " +
-                COL_FREQUENCY + " INTEGER " +
-                COL_PERIOD + " TEXT " +
-                COL_MULTIPLIER + " INTEGER " +
+                COL_FREQUENCY + " INTEGER, " +
+                COL_PERIOD + " TEXT, " +
+                COL_MULTIPLIER + " INTEGER, " +
                 COL_ALARMID + " INTEGER " +
 
 
@@ -192,13 +192,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 habit.setReminderPeriodProperties(c.getInt(c.getColumnIndex(COL_PERIOD)), c.getInt(c.getColumnIndex(COL_MULTIPLIER)));
                 habit.setFrequencyPerformed(c.getInt(c.getColumnIndex(COL_FREQUENCY)));
             } catch (Exception e) {
-                Log.d("Habit King", "Date doesn't exist for this row?");
+//                Log.d("Habit King", "Date doesn't exist for this row?");
             }
 
             try{
                 habit.setAlarmId(c.getInt(c.getColumnIndex(COL_ALARMID)));
             } catch (Exception e) {
-                Log.d("Database", "column value doesnt exist for this data");
+//                Log.d("Database", "column value doesnt exist for this data");
             }
             habitList.add(habit);
 
@@ -275,9 +275,10 @@ public class DBHandler extends SQLiteOpenHelper {
                     habit.setDateLastPerformed(new Date(c.getLong(c.getColumnIndex(COL_DATELP))));
                     habit.setReminderPeriodProperties(c.getInt(c.getColumnIndex(COL_PERIOD)), c.getInt(c.getColumnIndex(COL_MULTIPLIER)));
                     habit.setFrequencyPerformed(c.getInt(c.getColumnIndex(COL_FREQUENCY)));
+                    habit.setAlarmId(c.getInt(c.getColumnIndex(COL_ALARMID)));
 
                 } catch (Exception e) {
-                    Log.d("Habit King", "Date doesn't exist for this row?");
+//                    Log.d("Habit King", "Date doesn't exist for this row?");
                 }
 
                 db.close();
@@ -608,7 +609,7 @@ public class DBHandler extends SQLiteOpenHelper {
         Intent alertIntent = new Intent(myContext, NotificationPublisher.class);
         am.cancel(PendingIntent.getBroadcast(myContext, alarmId, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         removeRequestId(alarmId);
-        Log.d("Alarm", "Alarm cancel -> ID: " + alarmId);
+//        Log.d("Alarm", "Alarm cancel -> ID: " + alarmId);
     }
 
     public void updateAlarm(int alarmId, long startTime, Long repeatingPeriodInMillis, Habit habit) {
@@ -627,7 +628,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 myContext.getSystemService(Context.ALARM_SERVICE);
 //        alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(getActivity(), 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, repeatingInterval, PendingIntent.getBroadcast(myContext, requestID, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-        Log.d("Alarm", "Alarm set -> ID: " + requestID);
+//        Log.d("Alarm", "Alarm set -> ID: " + requestID);
         return requestID;
     }
 

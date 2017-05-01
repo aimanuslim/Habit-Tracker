@@ -389,7 +389,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         if(habit.getReminderPerPeriodLengthMode() == null) return;
         Date reminderTime = habit.getNextReminderTime();
         if(reminderTime != null) {
-            Log.d("Next Reminder Time:", Utility.dateToString(reminderTime, Utility.dateFormat + " " + Utility.timeFormat));
+//            Log.d("Next Reminder Time:", Utility.dateToString(reminderTime, Utility.dateFormat + " " + Utility.timeFormat));
             habit.setAlarmId(_dbHandler.setAlarm(habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis(), habit));
         }
     }

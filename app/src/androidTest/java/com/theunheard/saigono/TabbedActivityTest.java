@@ -256,7 +256,7 @@ public class TabbedActivityTest {
 //
 ////                            inAdapterView(withId(R.id.dataListView))
 //                    .check(matches(isDisplayed()));
-            Log.d("Check person", "Succeed " + personName);
+//            Log.d("Check person", "Succeed " + personName);
 
         }
 

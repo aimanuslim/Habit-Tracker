@@ -182,7 +182,7 @@ public class HabitListAdapter extends ArrayAdapter<Habit> implements Filterable{
             holder.categoryLabel.setText(habit.getCategory());
             holder.periodSinceLastPerformedLabel.setText("Last performed: " + Utility.outputApproximateTimePeriodDifferenceAsString(habit.getDateLastPerformed(), new Date()));
             holder.frequencyPerformedLabel.setText("Performed " + habit.getFrequencyPerformed().toString() + " time" + (habit.getFrequencyPerformed() > 1 ? "s" : ""));
-            holder.reminderPeriodLabel.setText("Remind in " + habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
+            holder.reminderPeriodLabel.setText("Remind every " + habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
         }
 
         return v;

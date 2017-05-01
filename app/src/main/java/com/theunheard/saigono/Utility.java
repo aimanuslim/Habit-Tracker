@@ -80,7 +80,7 @@ public class Utility {
         }
 
         if(periodCount == 0) {
-            Log.d("Utility", Long.toString(differenceInMilliseconds));
+//            Log.d("Utility", Long.toString(differenceInMilliseconds));
         }
 
         return Long.toString(periodCount) + " " + periodString;

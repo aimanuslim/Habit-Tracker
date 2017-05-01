@@ -164,130 +164,130 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+//    private void attemptLogin() {
+//
+//
+//        // Reset errors.
+//        mEmailView.setError(null);
+//        mPasswordView.setError(null);
+//
+//        // Store values at the time of the login attempt.
+//        String email = mEmailView.getText().toString();
+//        String password = mPasswordView.getText().toString();
+//
+//        boolean cancel = false;
+//        View focusView = null;
+//
+//        // Check for a valid password, if the user entered one.
+//        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+//            mPasswordView.setError(getString(R.string.error_invalid_password));
+//            focusView = mPasswordView;
+//            cancel = true;
+//        }
+//
+//        // Check for a valid email address.
+//        if (TextUtils.isEmpty(email)) {
+//            mEmailView.setError(getString(R.string.error_field_required));
+//            focusView = mEmailView;
+//            cancel = true;
+//        } else if (!isEmailValid(email)) {
+//            mEmailView.setError(getString(R.string.error_invalid_email));
+//            focusView = mEmailView;
+//            cancel = true;
+//        }
+//
+//        if (cancel) {
+//            // There was an error; don't attempt login and focus the first
+//            // form field with an error.
+//            focusView.requestFocus();
+//        } else {
+//            // Show a progress spinner, and kick off a background task to
+//            // perform the user login attempt.
+//            showProgress(true);
+//            Authenticate(email,password);
+////            mAuthTask = new UserLoginTask(email, password);
+////            mAuthTask.execute((Void) null);
+//        }
+//    }
 
-
-        // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            Authenticate(email,password);
-//            mAuthTask = new UserLoginTask(email, password);
-//            mAuthTask.execute((Void) null);
-        }
-    }
-
-    private void Authenticate(String email, String password){
-         final String mEmail = email;
-         final String mPassword = password;
-
-
-
-
-
-
-        AutoCompleteTextView inputEmail = (AutoCompleteTextView) findViewById(R.id.email);
-        EditText inputPassword = (EditText) findViewById(R.id.password);
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.login_progress);
-
-
-        auth = FirebaseAuth.getInstance();
-
-        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = auth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        });
-
-
-        auth.createUserWithEmailAndPassword(mEmail, mPassword)
-                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(!task.isSuccessful()){
-                            try {
-                                throw task.getException();
-                            } catch(FirebaseAuthInvalidCredentialsException e) {
-                                showProgress(false);
-                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            } catch(FirebaseAuthUserCollisionException e) {
-                                auth.signInWithEmailAndPassword(mEmail, mPassword)
-                                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                                if(task.isSuccessful()){
-//                                                    Intent intent = new Intent(getApplicationContext(), InsertDataActivity.class);
-//                                                    startActivity(intent);
-                                                } else {
-                                                    showProgress(false);
-                                                    Toast.makeText(LoginActivity.this, getString(R.string.error_incorrect_password), Toast.LENGTH_LONG).show();
-                                                }
-                                            }
-                                        });
-                            } catch(Exception e) {
-                                Log.d(TAG, e.getMessage());
-                            }
-
-
-
-                        } else {
-                            showProgress(false);
-                            Toast.makeText(LoginActivity.this, "Creating account", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-    }
-
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() > 4;
-    }
+//    private void Authenticate(String email, String password){
+//         final String mEmail = email;
+//         final String mPassword = password;
+//
+//
+//
+//
+//
+//
+//        AutoCompleteTextView inputEmail = (AutoCompleteTextView) findViewById(R.id.email);
+//        EditText inputPassword = (EditText) findViewById(R.id.password);
+//        ProgressBar progressBar = (ProgressBar) findViewById(R.id.login_progress);
+//
+//
+//        auth = FirebaseAuth.getInstance();
+//
+//        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                FirebaseUser user = auth.getCurrentUser();
+//                if (user != null) {
+//                    // User is signed in
+//                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+//                } else {
+//                    // User is signed out
+//                    Log.d(TAG, "onAuthStateChanged:signed_out");
+//                }
+//                // ...
+//            }
+//        });
+//
+//
+//        auth.createUserWithEmailAndPassword(mEmail, mPassword)
+//                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if(!task.isSuccessful()){
+//                            try {
+//                                throw task.getException();
+//                            } catch(FirebaseAuthInvalidCredentialsException e) {
+//                                showProgress(false);
+//                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+//                            } catch(FirebaseAuthUserCollisionException e) {
+//                                auth.signInWithEmailAndPassword(mEmail, mPassword)
+//                                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+//                                            @Override
+//                                            public void onComplete(@NonNull Task<AuthResult> task) {
+//                                                if(task.isSuccessful()){
+////                                                    Intent intent = new Intent(getApplicationContext(), InsertDataActivity.class);
+////                                                    startActivity(intent);
+//                                                } else {
+//                                                    showProgress(false);
+//                                                    Toast.makeText(LoginActivity.this, getString(R.string.error_incorrect_password), Toast.LENGTH_LONG).show();
+//                                                }
+//                                            }
+//                                        });
+//                            } catch(Exception e) {
+//                                Log.d(TAG, e.getMessage());
+//                            }
+//
+//
+//
+//                        } else {
+//                            showProgress(false);
+//                            Toast.makeText(LoginActivity.this, "Creating account", Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//                });
+//
+//    }
+//
+//    private boolean isEmailValid(String email) {
+//        return email.contains("@");
+//    }
+//
+//    private boolean isPasswordValid(String password) {
+//        return password.length() > 4;
+//    }
 
     /**
      * Shows the progress UI and hides the login form.

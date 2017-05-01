@@ -29,6 +29,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 DataListFragment dataListFragment = new DataListFragment();
                 return dataListFragment;
+            case 2:
+                FeedbackSettingsFragment feedbackSettingsFragment = new FeedbackSettingsFragment();
+                return feedbackSettingsFragment;
             default:
                 return null;
         }
