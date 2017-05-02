@@ -377,7 +377,8 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         finalCal.set(Calendar.DAY_OF_MONTH, d.get(Calendar.DAY_OF_MONTH));
         finalCal.set(Calendar.MONTH, d.get(Calendar.MONTH));
         finalCal.set(Calendar.YEAR, d.get(Calendar.YEAR));
-        finalCal.set(Calendar.HOUR, t.get(Calendar.HOUR));
+        // fam this cannot be Calendar.HOUR for some reason
+        finalCal.set(Calendar.HOUR_OF_DAY, t.get(Calendar.HOUR_OF_DAY));
         finalCal.set(Calendar.MINUTE, t.get(Calendar.MINUTE));
 
         return finalCal.getTime();
