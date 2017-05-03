@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SaigoNo</string>
+    <string name="app_name">Habit Tracker</string>
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
@@ -53,5 +53,36 @@
     <string name="person_data_mode_text">Person List</string>
 
     <string name="banner_ad_footer">ca-app-pub-6696048212000730/7608980807</string>
+
+    <string name="about_text">
+        <![CDATA[
+        <h2><strong>Welcome!</strong>
+</h2>
+<h3><strong>How To Use This App</strong>
+</h3>
+<p>This app aims to aid you to track your periodic habits. If you have ever asked yourself these questions, then this is app is for you.&nbsp;
+</p>
+&#8226; When was the last time I washed my car?<br/>
+&#8226; When was the last time I had a romantic dinner with my SO?<br/>
+&#8226; When was the last time I bought my mum a gift?<br/>
+&#8226; When was the last time I took my kids out to a fun fair?<br/>
+<br/>
+<p>Easy, enter the activity or habits that you wished to be tracked in the Insert Habit tab, with these required details.
+</p>
+&#8226; Name of habit. (Required)<br/>
+&#8226; The time it was last performed (Required)<br/>
+&#8226; The habit&#39;s category.<br/>
+&#8226; The frequency of reminder for this habit.<br/>
+&#8226; The persons you interacted with while doing with this habit (to keep your relationships alive!)<br/>
+<p>The video of the rest of the features is available here:
+</p>
+<p>I welcome any feedbacks for the app. Email theunheardbiz@gmail.com if you have any! Also don&#39;t forget to rate us in the store!
+</p>
+<p>
+<br />
+Thank you!
+</p>
+        ]]>
+     </string>
 
 </resources>

@@ -94,9 +94,11 @@
                     android:ems="5"
                     android:fontFamily="monospace"
 
+                    android:padding="@dimen/button_padding"
+                    android:textSize="@dimen/button_text"
                     android:text="Just did it!"
                     android:textColor="#FFFFFFFF"
-                    android:textSize="10sp" />
+                     />
 
             </LinearLayout>
 
@@ -130,6 +132,7 @@
 
                     android:gravity="center_vertical"
                     android:text="Remind me every"
+                    android:textSize="@dimen/general_text"
                     android:textAlignment="center" />
 
                 <EditText
@@ -188,7 +191,8 @@
                         android:text="Add Interacted Person"
                         android:textColor="#FFFFFFFF"
 
-                        android:textSize="10sp"
+                        android:padding="@dimen/button_padding"
+                        android:textSize="@dimen/button_text"
                         android:visibility="visible"
 
                         />
@@ -206,7 +210,8 @@
                         android:text="Clear List"
                         android:textColor="#FFFFFFFF"
 
-                        android:textSize="10sp"
+                        android:padding="@dimen/button_padding"
+                        android:textSize="@dimen/button_text"
                         android:visibility="visible"
 
                         />
@@ -238,7 +243,8 @@
                     android:text="Record!"
                     android:textColor="#FFFFFFFF"
 
-                    android:textSize="10sp" />
+                    android:padding="@dimen/button_padding"
+                    android:textSize="@dimen/button_text" />
 
                 <Button
 
@@ -256,7 +262,8 @@
                     android:text="Clear Fields"
                     android:textColor="#FFFFFFFF"
 
-                    android:textSize="10sp" />
+                    android:padding="@dimen/button_padding"
+                    android:textSize="@dimen/button_text" />
             </LinearLayout>
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adViewInsertData"

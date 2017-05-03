@@ -43,6 +43,7 @@ public class Habit {
     public final static int PERIOD_WEEK = 3;
     public final static int PERIOD_MONTH = 4;
     public final static int PERIOD_YEAR = 5;
+    public final static int NO_INT_VALUE = -1;
 
 
     public Habit() {
@@ -64,11 +65,12 @@ public class Habit {
         this.ownerUid = ownerUid;
         this.category = null;
         this.frequencyPerformed = 0;
-
+        this.reminderPeriodMultiplier = null;
         this.personsInteracted = null;
         // TODO: this down here may not be needed
         this.nextReminderTime = null;
         this.reminderPerPeriodLengthMode = null;
+        this.alarmId = NO_INT_VALUE;
 
     }
 

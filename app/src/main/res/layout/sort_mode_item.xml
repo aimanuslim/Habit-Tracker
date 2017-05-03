@@ -7,4 +7,4 @@
     android:fontFamily="monospace"
     android:text="TextView"
     android:textAlignment="center"
-    android:textSize="14sp" />
+    android:textSize="@dimen/general_text" />

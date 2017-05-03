@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:foregroundGravity="center"
     android:orientation="vertical"
     tools:context="com.theunheard.saigono.EditHabitFragmentDialog">
 
@@ -85,6 +86,7 @@
         android:layout_height="wrap_content"
 
         android:layout_margin="15dp"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <Button
@@ -103,7 +105,8 @@
             android:text="Just Did It!"
             android:textAlignment="center"
             android:textColor="#FFFFFFFF"
-            android:textSize="10dp" />
+            android:padding="@dimen/button_padding"
+            android:textSize="@dimen/button_text" />
 
         <Button
             android:id="@+id/updateButton"
@@ -118,7 +121,8 @@
             android:text="Update"
 
             android:textColor="#FFFFFFFF"
-            android:textSize="10dp" />
+            android:padding="@dimen/button_padding"
+            android:textSize="@dimen/button_text" />
 
         <Button
             android:id="@+id/deleteButton"
@@ -133,7 +137,8 @@
             android:text="Delete"
 
             android:textColor="#FFFFFFFF"
-            android:textSize="10dp"
+            android:padding="@dimen/button_padding"
+            android:textSize="@dimen/button_text"
 
             />
 
@@ -150,7 +155,8 @@
             android:text="Cancel"
 
             android:textColor="#FFFFFFFF"
-            android:textSize="10dp" />
+            android:padding="@dimen/button_padding"
+            android:textSize="@dimen/button_text" />
     </LinearLayout>
 
 </LinearLayout>

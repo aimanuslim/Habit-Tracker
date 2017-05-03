@@ -30,7 +30,8 @@
             android:fontFamily="monospace"
             android:text="sort"
             android:textColor="#FFFFFFFF"
-            android:textSize="10sp"
+            android:padding="@dimen/button_padding"
+            android:textSize="@dimen/button_text"
 
             />
 
@@ -78,7 +79,9 @@
             android:fontFamily="monospace"
             android:text="Clear Data"
             android:textColor="#FFFFFFFF"
-            android:textSize="10sp" />
+            android:padding="@dimen/button_padding"
+            android:textSize="@dimen/button_text"
+            />
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/adViewDataList"

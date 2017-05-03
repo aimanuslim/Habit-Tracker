@@ -24,14 +24,14 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
+                AboutFragment aboutFragment = new AboutFragment();
+                return aboutFragment;
+            case 1:
                 InsertDataFragment insertDataFragment = new InsertDataFragment();
                 return insertDataFragment;
-            case 1:
+            case 2:
                 DataListFragment dataListFragment = new DataListFragment();
                 return dataListFragment;
-            case 2:
-                FeedbackSettingsFragment feedbackSettingsFragment = new FeedbackSettingsFragment();
-                return feedbackSettingsFragment;
             default:
                 return null;
         }

@@ -4,21 +4,38 @@
     android:layout_height="match_parent"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.theunheard.saigono.FeedbackSettingsFragment">
+    tools:context="com.theunheard.saigono.AboutFragment"
+    android:focusable="true" android:focusableInTouchMode="true"
+    >
+
+    <TextView
+        android:id="@+id/aboutTextView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="15dp"
+        android:layout_weight="0.8"
+        android:scrollbars="vertical"
+        android:textSize="@dimen/general_text"
+
+        android:textAlignment="textStart"
+     />
 
     <TextView
         android:id="@+id/feedbackLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Anything, really!"
+        android:text="Enter your feedback here!"
         android:textSize="18sp" />
 
     <EditText
         android:id="@+id/feedbackEditText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.3"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:background="@color/colorGreenSuperLight"
@@ -61,7 +78,7 @@
         android:id="@+id/adViewFeedbackSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        ads:adSize="LARGE_BANNER"
+        ads:adSize="SMART_BANNER"
         ads:adUnitId="@string/banner_ad_footer"
         />
 

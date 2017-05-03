@@ -445,6 +445,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(COL_DATELP, habit.getDateLastPerformed().getTime());
         cv.put(COL_PERIOD, habit.getReminderPerPeriodLengthMode());
         cv.put(COL_MULTIPLIER, habit.getReminderPeriodMultiplier());
+        cv.put(COL_ALARMID, habit.getAlarmId());
 
 
 

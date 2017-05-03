@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -557,7 +556,9 @@ public class DataListFragment extends Fragment implements FragmentInterface {
 
                     name.setText(habit.getName());
                     category.setText(habit.getCategory());
-                    mult.setText(habit.getReminderPeriodMultiplier().toString());
+                    if(habit.getReminderPeriodMultiplier() != null) {
+                        mult.setText(habit.getReminderPeriodMultiplier().toString());
+                    }
                     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(DataListFragment.this.getActivity(),
                             R.array.repetition_period_array, android.R.layout.simple_spinner_item);
                     // Specify the layout to use when the list of choices appears
@@ -572,11 +573,18 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                         public void onClick(View view) {
                             habit.setName(name.getText().toString());
                             habit.setCategory(category.getText().toString());
-                            habit.setReminderPeriodProperties(periodSpinner.getSelectedItemPosition(), Integer.parseInt(mult.getText().toString()));
-                            _dbHandler.updateAlarm(habit.getAlarmId(), habit.getDateLastPerformed().getTime(), habit.getRepeatingPeriodInMillis(), habit);
-                            habitListAdapter.notifyDataSetChanged();
+                            if(!mult.toString().trim().equals("")){
+                                habit.setReminderPeriodProperties(periodSpinner.getSelectedItemPosition(), Integer.parseInt(mult.getText().toString()));
+                                if(habit.getAlarmId() != habit.NO_INT_VALUE) {
+                                    _dbHandler.updateAlarm(habit.getAlarmId(), habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis(), habit);
+                                }  else {
+                                    habit.setAlarmId(_dbHandler.setAlarm(habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis(), habit));
+                                }
+                            }
+
                             _dbHandler.modifyHabit(habit);
     //                        reminderFrequencyTextView.setText(habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
+                            getActivity().runOnUiThread(updateListAndAdapters);
                             dialog.dismiss();
                             Toast.makeText(DataListFragment.this.getContext(), "Activity information updated!", Toast.LENGTH_SHORT).show();
                         }
@@ -587,8 +595,16 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                         public void onClick(View view) {
                             habit.setDateLastPerformed(new Date());
                             habit.increaseFrequencyPerformed();
+                            if(!mult.toString().trim().equals("")){
+                                if(habit.getAlarmId() != habit.NO_INT_VALUE) {
+                                    habit.setReminderPeriodProperties(periodSpinner.getSelectedItemPosition(), Integer.parseInt(mult.getText().toString()));
+                                    _dbHandler.updateAlarm(habit.getAlarmId(), habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis(), habit);
+                                }  else {
+                                    habit.setAlarmId(_dbHandler.setAlarm(habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis(), habit));
+                                }
+                            }
                             _dbHandler.modifyHabit(habit);
-                            habitListAdapter.notifyDataSetChanged();
+                            getActivity().runOnUiThread(updateListAndAdapters);
                             Toast.makeText(DataListFragment.this.getContext(), "Activity information updated!", Toast.LENGTH_SHORT).show();
                         }
                     });
