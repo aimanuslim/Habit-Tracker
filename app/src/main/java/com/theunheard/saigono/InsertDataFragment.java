@@ -237,6 +237,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
 //        timeTextView.setWidth(width/2);
 
         setupHabitNameAutoComplete();
+        setupCategoryAutoComplete();
         setupRepetitionPeriodSpinner();
 
         setupField(dateTextView);
@@ -425,6 +426,12 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
 
         if(personInteractedListView.getAdapter().getCount() != 0) {
             _dbHandler.addPersonInteracted(person_list, habit.getId());
+        }
+
+
+        // update autocomplete components
+        if(_dbHandler != null) {
+            getActivity().runOnUiThread(updateAutoCompleteComponents);
         }
 
 

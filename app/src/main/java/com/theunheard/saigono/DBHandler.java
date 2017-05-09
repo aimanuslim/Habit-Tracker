@@ -424,17 +424,66 @@ public class DBHandler extends SQLiteOpenHelper {
         for(String pn: personList ) {
             ContentValues values = new ContentValues();
             values.put(COL_PITNAME, pn);
-            values.put(COL_HABITID, Long.parseLong(habitId));
             if(personExist(pn)){
+                String ID = getHabitIdFromPersonInteracted(pn);
+                if(habitIsNewer(habitId, ID)){0
+                    values.put(COL_HABITID, Long.parseLong(habitId));
+                }
                 // reopen closed database
                 db = getWritableDatabase();
                 db.update(TABLE_PIT, values, COL_PITNAME+" = ?", new String[] {pn});
             } else {
+                values.put(COL_HABITID, Long.parseLong(habitId));
                 db = getWritableDatabase();
                 db.insert(TABLE_PIT, null, values);
             }
         }
         db.close();
+    }
+
+    private String getHabitIdFromPersonInteracted(String pn) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_PIT;
+        Cursor c = db.rawQuery(query ,null);
+        c.moveToFirst();
+        while(!c.isAfterLast()) {
+            if(c.getString(c.getColumnIndex(COL_PITNAME)).trim().equals(pn)) {
+                db.close();
+                return String.valueOf(c.getLong(c.getColumnIndex(COL_HABITID)));
+            }
+            c.moveToNext();
+        }
+        db.close();
+        return null;
+    }
+
+    private boolean habitIsNewer(String inputHabitId, String checkHabitId) {
+        SQLiteDatabase db = getReadableDatabase();
+        Integer inputHabitIntegerDate = null;
+        Integer checkHabitIntegerDate = null;
+        String query = "SELECT * FROM " + TABLE_HABITS;
+        Cursor c = db.rawQuery(query ,null);
+        c.moveToFirst();
+        while(!c.isAfterLast()) {
+
+
+            if(c.getInt(c.getColumnIndex(COL_ID)) == Integer.parseInt(inputHabitId)) {
+                inputHabitIntegerDate = c.getInt(c.getColumnIndex(COL_DATELP));
+            }
+
+            if(c.getInt(c.getColumnIndex(COL_ID)) == Integer.parseInt(checkHabitId)) {
+                checkHabitIntegerDate = c.getInt(c.getColumnIndex(COL_DATELP));
+            }
+
+            c.moveToNext();
+
+        }
+        db.close();
+
+        if(inputHabitIntegerDate != null && checkHabitIntegerDate != null){
+            return inputHabitIntegerDate > checkHabitIntegerDate;
+        }
+        return false;
     }
 
     public void modifyHabit (Habit habit) {
