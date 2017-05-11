@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
-    private final static String TAG = "saigono";
+    private final static String TAG = String.valueOf(R.string.app_name);
 
     FirebaseAuth auth;
     FirebaseAuth.AuthStateListener mAuthListener;

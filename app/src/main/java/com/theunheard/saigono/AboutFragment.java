@@ -77,7 +77,7 @@ public class AboutFragment extends Fragment implements FragmentInterface {
     }
 
     private void setupAboutTextView() {
-        aboutTextView.setText(Html.fromHtml(getString(R.string.about_text, Html.FROM_HTML_MODE_COMPACT)));
+        aboutTextView.setText(Html.fromHtml(getString(R.string.about_app_description, Html.FROM_HTML_MODE_COMPACT)));
         aboutTextView.setMovementMethod(new ScrollingMovementMethod());
     }
 

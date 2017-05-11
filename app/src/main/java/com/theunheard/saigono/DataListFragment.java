@@ -341,7 +341,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                 try {
                     final Dialog dialog = new Dialog(DataListFragment.this.getActivity());
                     dialog.setContentView(R.layout.fragment_sort_mode_list);
-                    dialog.setTitle("Select Sorting Mode");
+                    dialog.setTitle(R.string.sorting_mode_title);
 
                     setupSortModeListView(dialog);
 
@@ -459,7 +459,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 final Dialog dialog = new Dialog(DataListFragment.this.getActivity());
                 dialog.setContentView(R.layout.fragment_edit_person_info_fragment_dialog);
-                dialog.setTitle("Edit Person");
+                dialog.setTitle(R.string.edit_person_dialog_title);
 
                 // TODO: this should probably be autocompletetextview
                 final AutoCompleteTextView personName = (AutoCompleteTextView) dialog.findViewById(R.id.personEdit_personNameEditText);
@@ -535,7 +535,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                     final TextView reminderFrequencyTextView = (TextView) view.findViewById(R.id.habitReminderPeriod);
                     final Dialog dialog = new Dialog(DataListFragment.this.getActivity());
                     dialog.setContentView(R.layout.fragment_edit_habit_fragment_dialog);
-                    dialog.setTitle("Edit Habit");
+                    dialog.setTitle(R.string.edit_habit_dialog_title);
 //                View dialogView = view.inflate(getApplicationContext(), R.layout.fragment_edit_habit_fragment_dialog, null);
 
                     final EditText name = (EditText) dialog.findViewById(R.id.habitName_DialogInput);
@@ -586,7 +586,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
     //                        reminderFrequencyTextView.setText(habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
                             getActivity().runOnUiThread(updateListAndAdapters);
                             dialog.dismiss();
-                            Toast.makeText(DataListFragment.this.getContext(), "Activity information updated!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DataListFragment.this.getContext(), R.string.update_information_toast_notice, Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -605,7 +605,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                             }
                             _dbHandler.modifyHabit(habit);
                             getActivity().runOnUiThread(updateListAndAdapters);
-                            Toast.makeText(DataListFragment.this.getContext(), "Activity information updated!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DataListFragment.this.getContext(), R.string.update_information_toast_notice, Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -630,7 +630,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                             _dbHandler.deletePersonByHabitID(Integer.parseInt(habit.getId()));
                             getActivity().runOnUiThread(updateListAndAdapters);
                             dialog.dismiss();
-                            Toast.makeText(DataListFragment.this.getContext(), "Activity deleted!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DataListFragment.this.getContext(), R.string.delete_information_toast_notice, Toast.LENGTH_SHORT).show();
                         }
                     });
                     // TODOS: alarm request, how to get already existing intents?

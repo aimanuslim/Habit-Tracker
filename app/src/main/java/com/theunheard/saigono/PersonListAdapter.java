@@ -44,7 +44,8 @@ public class PersonListAdapter extends ArrayAdapter<Person> {
 
             nameLabel.setText(person.getName());
             habitLabel.setText(person.getHabitName());
-            dateLastInteractedWithLabel.setText("Last Interacted with: " + Utility.outputApproximateTimePeriodDifferenceAsString(person.getLastDateInteractedWith(), new Date()));
+//            dateLastInteractedWithLabel.setText("Last Interacted with: " + Utility.outputApproximateTimePeriodDifferenceAsString(person.getLastDateInteractedWith(), new Date()));
+            dateLastInteractedWithLabel.setText(this.getContext().getString(R.string.listviewitem_last_interacted_with_label, Utility.outputApproximateTimePeriodDifferenceAsString(person.getLastDateInteractedWith(), new Date())));
 
         }
 

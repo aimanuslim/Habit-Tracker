@@ -180,9 +180,11 @@ public class HabitListAdapter extends ArrayAdapter<Habit> implements Filterable{
         if (habit != null) {
             holder.nameLabel.setText(habit.getName());
             holder.categoryLabel.setText(habit.getCategory());
-            holder.periodSinceLastPerformedLabel.setText("Last performed: " + Utility.outputApproximateTimePeriodDifferenceAsString(habit.getDateLastPerformed(), new Date()));
-            holder.frequencyPerformedLabel.setText("Performed " + habit.getFrequencyPerformed().toString() + " time" + (habit.getFrequencyPerformed() > 1 ? "s" : ""));
-            holder.reminderPeriodLabel.setText("Remind every " + habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
+            holder.periodSinceLastPerformedLabel.setText(this.getContext().getString(R.string.listviewitem_last_performed_label, Utility.outputApproximateTimePeriodDifferenceAsString(habit.getDateLastPerformed(), new Date())));
+//            holder.frequencyPerformedLabel.setText(this.getContext().getString(R.string.listviewitem_frequency_performed_label) + habit.getFrequencyPerformed().toString() + " time" + (habit.getFrequencyPerformed() > 1 ? "s" : ""));
+            holder.frequencyPerformedLabel.setText(this.getContext().getString(R.string.listviewitem_frequency_performed_label, habit.getFrequencyPerformed(), (habit.getFrequencyPerformed() > 1 ? "s" : "")));
+//            holder.reminderPeriodLabel.setText("Remind every " + habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
+            holder.reminderPeriodLabel.setText(this.getContext().getString(R.string.listviewitem_reminder_label, habit.getReminderPeriodMultiplier(), habit.getReminderPerPeriodLengthModeAsString()));
         }
 
         return v;

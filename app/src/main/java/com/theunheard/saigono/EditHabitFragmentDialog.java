@@ -25,7 +25,7 @@ public class EditHabitFragmentDialog extends DialogFragment {
     public static EditHabitFragmentDialog newInstance(String title) {
         EditHabitFragmentDialog frag = new EditHabitFragmentDialog();
         Bundle args = new Bundle();
-        args.putString("Edit Habit", title);
+        args.putString(String.valueOf(R.string.edit_habit_dialog_title), title);
         frag.setArguments(args);
         return frag;
     }

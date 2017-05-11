@@ -66,7 +66,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
     private DatabaseReference _databaseRef;
     private FirebaseDatabase _firebaseInstance;
 
-    private final static String TAG = "saigono";
+    private final static String TAG = String.valueOf(R.string.app_name);
 
     // for list view
     private ArrayList<String>  person_list;
@@ -483,8 +483,8 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
             public void onClick(View v) {
                 try {
                     AlertDialog.Builder alert = new AlertDialog.Builder(InsertDataFragment.this.getActivity());
-                    alert.setTitle("Add person");
-                    alert.setMessage("Enter the name of the person you performed this activity with");
+                    alert.setTitle(R.string.addinteractedperson_title);
+                    alert.setMessage(R.string.addinteractedperson_message);
 
 //                final EditText input = new EditText(InsertDataFragment.this.getActivity());
                     final AutoCompleteTextView input = new AutoCompleteTextView(InsertDataFragment.this.getActivity());
@@ -501,7 +501,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
 
                     alert.setView(input);
 
-                    alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton(R.string.button_add_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String personName = input.getEditableText().toString();
@@ -510,7 +510,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
                         }
                     });
 
-                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    alert.setNegativeButton(R.string.button_cancel_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();

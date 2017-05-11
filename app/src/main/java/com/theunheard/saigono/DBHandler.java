@@ -426,7 +426,7 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(COL_PITNAME, pn);
             if(personExist(pn)){
                 String ID = getHabitIdFromPersonInteracted(pn);
-                if(habitIsNewer(habitId, ID)){0
+                if(habitIsNewer(habitId, ID)){
                     values.put(COL_HABITID, Long.parseLong(habitId));
                 }
                 // reopen closed database
@@ -517,7 +517,7 @@ public class DBHandler extends SQLiteOpenHelper {
         while(!c.isAfterLast()) {
 
 
-            if(c.getString(c.getColumnIndex(COL_NAME)) == habitName) {
+            if(c.getString(c.getColumnIndex(COL_NAME)).trim().equals(habitName)) {
                 return c.getInt(c.getColumnIndex(COL_ID));
             }
 
@@ -669,8 +669,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public int setAlarm(Long startTime, Long repeatingInterval, Habit habit) {
         Intent alertIntent = new Intent(myContext, NotificationPublisher.class);
-        alertIntent.putExtra("Habit Name", habit.getName());
-        alertIntent.putExtra("Last Performed", habit.getDateTimeLastPerformedAsString());
+        alertIntent.putExtra(myContext.getString(R.string.alarm_notification_habitname_label), habit.getName());
+        alertIntent.putExtra(myContext.getString(R.string.alarm_notification_last_performed_label), habit.getDateTimeLastPerformedAsString());
         int requestID = getNextAvailableRequestID();
         addRequestId(requestID);
 

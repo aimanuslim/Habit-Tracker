@@ -38,6 +38,7 @@
 
     <string name="data_list_tab_text">Data List</string>
     <string name="insert_data_tab_text">Insert Habit</string>
+    <string name="about_app_tab_text">About The App</string>
 
     <string name="last_performed_habit_sort_ascending_mode_text">Last Performed (Ascending)</string>
     <string name="name_habit_sort_ascending_mode_text">Habit Name (Ascending)</string>
@@ -54,7 +55,7 @@
 
     <string name="banner_ad_footer">ca-app-pub-6696048212000730/7608980807</string>
 
-    <string name="about_text">
+    <string name="about_app_description">
         <![CDATA[
         <h2><strong>Welcome!</strong>
 </h2>
@@ -84,5 +85,22 @@ Thank you!
 </p>
         ]]>
      </string>
+    <string name="sorting_mode_title">Select Sorting Mode</string>
+    <string name="edit_person_dialog_title">Edit Person</string>
+    <string name="edit_habit_dialog_title">Edit Habit</string>
+    <string name="update_information_toast_notice">Activity information updated!</string>
+    <string name="delete_information_toast_notice">Activity deleted!</string>
+    <string name="alarm_notification_habitname_label">Habit Name</string>
+    <string name="alarm_notification_last_performed_label">Last Performed</string>
+    <string name="listviewitem_last_performed_label">Last performed: %1$s</string>
+    <string name="listviewitem_frequency_performed_label">Performed %1$d time%2$s</string>
+    <string name="listviewitem_reminder_label">Remind every %1$d %2$s</string>
+    <string name="listviewitem_last_interacted_with_label">Last interacted with: %1$s</string>
+    <string name="addinteractedperson_title">Add person</string>
+    <string name="addinteractedperson_message">Enter the name of the person you performed this activity with</string>
+    <string name="button_add_label">Add</string>
+    <string name="button_cancel_label">Cancel</string>
+    <string name="date_format">dd-MM-yyyy</string>
+    <string name="time_format">h:mm a</string>
 
 </resources>
