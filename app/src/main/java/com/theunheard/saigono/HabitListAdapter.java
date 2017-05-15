@@ -184,7 +184,11 @@ public class HabitListAdapter extends ArrayAdapter<Habit> implements Filterable{
 //            holder.frequencyPerformedLabel.setText(this.getContext().getString(R.string.listviewitem_frequency_performed_label) + habit.getFrequencyPerformed().toString() + " time" + (habit.getFrequencyPerformed() > 1 ? "s" : ""));
             holder.frequencyPerformedLabel.setText(this.getContext().getString(R.string.listviewitem_frequency_performed_label, habit.getFrequencyPerformed(), (habit.getFrequencyPerformed() > 1 ? "s" : "")));
 //            holder.reminderPeriodLabel.setText("Remind every " + habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
-            holder.reminderPeriodLabel.setText(this.getContext().getString(R.string.listviewitem_reminder_label, habit.getReminderPeriodMultiplier(), habit.getReminderPerPeriodLengthModeAsString()));
+            if(habit.getReminderPeriodMultiplier() == null) {
+                holder.reminderPeriodLabel.setText("No reminder set");
+            } else {
+                holder.reminderPeriodLabel.setText(this.getContext().getString(R.string.listviewitem_reminder_label, habit.getReminderPeriodMultiplier(), habit.getReminderPerPeriodLengthModeAsString()));
+            }
         }
 
         return v;

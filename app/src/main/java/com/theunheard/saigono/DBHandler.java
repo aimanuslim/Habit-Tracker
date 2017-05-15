@@ -189,7 +189,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
             try {
                 habit.setDateLastPerformed(new Date(c.getLong(c.getColumnIndex(COL_DATELP))));
-                habit.setReminderPeriodProperties(c.getInt(c.getColumnIndex(COL_PERIOD)), c.getInt(c.getColumnIndex(COL_MULTIPLIER)));
+                if(c.getInt(c.getColumnIndex(COL_MULTIPLIER)) != 0) {
+                    habit.setReminderPeriodProperties(c.getInt(c.getColumnIndex(COL_PERIOD)), c.getInt(c.getColumnIndex(COL_MULTIPLIER)));
+                }
                 habit.setFrequencyPerformed(c.getInt(c.getColumnIndex(COL_FREQUENCY)));
             } catch (Exception e) {
 //                Log.d("Habit King", "Date doesn't exist for this row?");
@@ -273,7 +275,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
                 try {
                     habit.setDateLastPerformed(new Date(c.getLong(c.getColumnIndex(COL_DATELP))));
-                    habit.setReminderPeriodProperties(c.getInt(c.getColumnIndex(COL_PERIOD)), c.getInt(c.getColumnIndex(COL_MULTIPLIER)));
+                    if(c.getInt(c.getColumnIndex(COL_MULTIPLIER)) != 0) {
+                        habit.setReminderPeriodProperties(c.getInt(c.getColumnIndex(COL_PERIOD)), c.getInt(c.getColumnIndex(COL_MULTIPLIER)));
+                    }
                     habit.setFrequencyPerformed(c.getInt(c.getColumnIndex(COL_FREQUENCY)));
                     habit.setAlarmId(c.getInt(c.getColumnIndex(COL_ALARMID)));
 

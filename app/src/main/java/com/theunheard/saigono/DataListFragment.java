@@ -556,16 +556,19 @@ public class DataListFragment extends Fragment implements FragmentInterface {
 
                     name.setText(habit.getName());
                     category.setText(habit.getCategory());
-                    if(habit.getReminderPeriodMultiplier() != null) {
-                        mult.setText(habit.getReminderPeriodMultiplier().toString());
-                    }
+
                     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(DataListFragment.this.getActivity(),
                             R.array.repetition_period_array, android.R.layout.simple_spinner_item);
                     // Specify the layout to use when the list of choices appears
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     // Apply the adapter to the spinner
                     periodSpinner.setAdapter(adapter);
-                    periodSpinner.setSelection(habit.getReminderPerPeriodLengthMode());
+
+                    if(habit.getReminderPeriodMultiplier() != null) {
+                        mult.setText(habit.getReminderPeriodMultiplier().toString());
+                        periodSpinner.setSelection(habit.getReminderPerPeriodLengthMode());
+                    }
+
 
 
                     updateButton.setOnClickListener(new View.OnClickListener() {
@@ -573,13 +576,19 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                         public void onClick(View view) {
                             habit.setName(name.getText().toString());
                             habit.setCategory(category.getText().toString());
-                            if(!mult.toString().trim().equals("")){
+                            if(!mult.getText().toString().trim().equals("")){
                                 habit.setReminderPeriodProperties(periodSpinner.getSelectedItemPosition(), Integer.parseInt(mult.getText().toString()));
                                 if(habit.getAlarmId() != habit.NO_INT_VALUE) {
                                     _dbHandler.updateAlarm(habit.getAlarmId(), habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis(), habit);
                                 }  else {
                                     habit.setAlarmId(_dbHandler.setAlarm(habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis(), habit));
                                 }
+                            } else {
+                                if(habit.getAlarmId() != Habit.NO_INT_VALUE) {
+                                    _dbHandler.cancelAlarm(habit.getAlarmId());
+                                    habit.setReminderPeriodProperties(0, null);
+                                }
+
                             }
 
                             _dbHandler.modifyHabit(habit);
@@ -595,7 +604,7 @@ public class DataListFragment extends Fragment implements FragmentInterface {
                         public void onClick(View view) {
                             habit.setDateLastPerformed(new Date());
                             habit.increaseFrequencyPerformed();
-                            if(!mult.toString().trim().equals("")){
+                            if(!mult.getText().toString().trim().equals("")){
                                 if(habit.getAlarmId() != habit.NO_INT_VALUE) {
                                     habit.setReminderPeriodProperties(periodSpinner.getSelectedItemPosition(), Integer.parseInt(mult.getText().toString()));
                                     _dbHandler.updateAlarm(habit.getAlarmId(), habit.getNextReminderTime().getTime(), habit.getRepeatingPeriodInMillis(), habit);
