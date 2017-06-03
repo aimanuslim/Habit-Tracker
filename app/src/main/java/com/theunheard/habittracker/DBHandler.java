@@ -1,4 +1,4 @@
-package com.theunheard.saigono;
+package com.theunheard.habittracker;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -673,8 +672,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public int setAlarm(Long startTime, Long repeatingInterval, Habit habit) {
         Intent alertIntent = new Intent(myContext, NotificationPublisher.class);
-        alertIntent.putExtra(myContext.getString(R.string.alarm_notification_habitname_label), habit.getName());
-        alertIntent.putExtra(myContext.getString(R.string.alarm_notification_last_performed_label), habit.getDateTimeLastPerformedAsString());
+        alertIntent.putExtra(myContext.getString(com.theunheard.habittracker.R.string.alarm_notification_habitname_label), habit.getName());
+        alertIntent.putExtra(myContext.getString(com.theunheard.habittracker.R.string.alarm_notification_last_performed_label), habit.getDateTimeLastPerformedAsString());
         int requestID = getNextAvailableRequestID();
         addRequestId(requestID);
 

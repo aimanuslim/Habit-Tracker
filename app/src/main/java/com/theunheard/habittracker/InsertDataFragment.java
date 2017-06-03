@@ -1,4 +1,4 @@
-package com.theunheard.saigono;
+package com.theunheard.habittracker;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,7 +65,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
     private DatabaseReference _databaseRef;
     private FirebaseDatabase _firebaseInstance;
 
-    private final static String TAG = String.valueOf(R.string.app_name);
+    private final static String TAG = String.valueOf(com.theunheard.habittracker.R.string.app_name);
 
     // for list view
     private ArrayList<String>  person_list;
@@ -93,7 +92,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_insert_data, container, false);
+        View view = inflater.inflate(com.theunheard.habittracker.R.layout.fragment_insert_data, container, false);
 
         // Inflate the layout for this fragment
         return view;
@@ -110,27 +109,27 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         this.periodArray = new String[] {"Minute (s)", "Hour (s)", "Day (s)", "Week (s)", "Month (s)", "Year (s)"};
 
 
-        adView = (AdView) getView().findViewById(R.id.adViewInsertData);
+        adView = (AdView) getView().findViewById(com.theunheard.habittracker.R.id.adViewInsertData);
         AdRequest adRequest = new AdRequest.Builder()
                 .build();
         adView.loadAd(adRequest);
 
-        habitNameTextView = (AutoCompleteTextView) getView().findViewById(R.id.habitInputName);
-        dateTextView = (EditText) getView().findViewById(R.id.dateLastPerformedInput);
-        timeTextView = (EditText) getView().findViewById(R.id.timeLastPerformedInput);
+        habitNameTextView = (AutoCompleteTextView) getView().findViewById(com.theunheard.habittracker.R.id.habitInputName);
+        dateTextView = (EditText) getView().findViewById(com.theunheard.habittracker.R.id.dateLastPerformedInput);
+        timeTextView = (EditText) getView().findViewById(com.theunheard.habittracker.R.id.timeLastPerformedInput);
 
-        categoryTextView = (AutoCompleteTextView) getView().findViewById(R.id.categoryInput);
-        repetitionFrequencyTextView = (EditText) getView().findViewById(R.id.repetitionFrequencyInput);
-        addPersonButton = (Button) getView().findViewById(R.id.addPersonInteractedButton);
-        recordButton = (Button) getView().findViewById(R.id.recordButton);
-        nowButton = (Button) getView().findViewById(R.id.nowButton);
-        clearPersonButton = (Button) getView().findViewById(R.id.clearPersonButton);
-        clearFieldButton = (Button) getView().findViewById(R.id.clearFieldButton);
-        personInteractedListView = (ListView) getView().findViewById(R.id.personInteractedListView);
+        categoryTextView = (AutoCompleteTextView) getView().findViewById(com.theunheard.habittracker.R.id.categoryInput);
+        repetitionFrequencyTextView = (EditText) getView().findViewById(com.theunheard.habittracker.R.id.repetitionFrequencyInput);
+        addPersonButton = (Button) getView().findViewById(com.theunheard.habittracker.R.id.addPersonInteractedButton);
+        recordButton = (Button) getView().findViewById(com.theunheard.habittracker.R.id.recordButton);
+        nowButton = (Button) getView().findViewById(com.theunheard.habittracker.R.id.nowButton);
+        clearPersonButton = (Button) getView().findViewById(com.theunheard.habittracker.R.id.clearPersonButton);
+        clearFieldButton = (Button) getView().findViewById(com.theunheard.habittracker.R.id.clearFieldButton);
+        personInteractedListView = (ListView) getView().findViewById(com.theunheard.habittracker.R.id.personInteractedListView);
 
 
         person_list = new ArrayList<String>();
-        arrayAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.person_name_item, person_list);
+        arrayAdapter = new ArrayAdapter<String>(this.getActivity(), com.theunheard.habittracker.R.layout.person_name_item, person_list);
         personInteractedListView.setAdapter(arrayAdapter);
 
         updateAutoCompleteComponents = new Runnable() {
@@ -311,13 +310,13 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
 
 
     private void setupRepetitionPeriodSpinner() {
-        repetitionPeriodSpinner = (Spinner) getView().findViewById(R.id.repetitionPeriodSpinner);
+        repetitionPeriodSpinner = (Spinner) getView().findViewById(com.theunheard.habittracker.R.id.repetitionPeriodSpinner);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),
-                R.layout.hk_spinner_unclicked_textview, periodArray);
+                com.theunheard.habittracker.R.layout.hk_spinner_unclicked_textview, periodArray);
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(R.layout.hk_spinner_item);
+        adapter.setDropDownViewResource(com.theunheard.habittracker.R.layout.hk_spinner_item);
         // Apply the adapter to the spinner
         repetitionPeriodSpinner.setAdapter(adapter);
 
@@ -339,9 +338,9 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
 //                if(isNetworkAvailable()) {
                 if(areEntriesValid()) {
                     saveData();
-                    Toast.makeText(InsertDataFragment.this.getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InsertDataFragment.this.getActivity(), com.theunheard.habittracker.R.string.save_success, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(InsertDataFragment.this.getActivity(), R.string.missing_info, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InsertDataFragment.this.getActivity(), com.theunheard.habittracker.R.string.missing_info, Toast.LENGTH_SHORT).show();
                 }
 //                } else {
 
@@ -406,7 +405,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
         habit.setCategory(categoryTextView.getText().toString());
 
 
-        if(!repetitionFrequencyTextView.getText().toString().trim().equals("")) {
+        if(!repetitionFrequencyTextView.getText().toString().trim().equals("") && !repetitionFrequencyTextView.getText().toString().trim().equals("0")) {
             int deltaTime = Integer.parseInt(repetitionFrequencyTextView.getText().toString());
             habit.setReminderTimeAndProperties(repetitionPeriodSpinner.getSelectedItemPosition(), deltaTime);
 
@@ -483,8 +482,8 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
             public void onClick(View v) {
                 try {
                     AlertDialog.Builder alert = new AlertDialog.Builder(InsertDataFragment.this.getActivity());
-                    alert.setTitle(R.string.addinteractedperson_title);
-                    alert.setMessage(R.string.addinteractedperson_message);
+                    alert.setTitle(com.theunheard.habittracker.R.string.addinteractedperson_title);
+                    alert.setMessage(com.theunheard.habittracker.R.string.addinteractedperson_message);
 
 //                final EditText input = new EditText(InsertDataFragment.this.getActivity());
                     final AutoCompleteTextView input = new AutoCompleteTextView(InsertDataFragment.this.getActivity());
@@ -497,11 +496,11 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
                             input.showDropDown();
                         }
                     });
-                    input.setId(R.id.person_name_edit);
+                    input.setId(com.theunheard.habittracker.R.id.person_name_edit);
 
                     alert.setView(input);
 
-                    alert.setPositiveButton(R.string.button_add_label, new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton(com.theunheard.habittracker.R.string.button_add_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String personName = input.getEditableText().toString();
@@ -510,7 +509,7 @@ public class InsertDataFragment extends Fragment implements FragmentInterface {
                         }
                     });
 
-                    alert.setNegativeButton(R.string.button_cancel_label, new DialogInterface.OnClickListener() {
+                    alert.setNegativeButton(com.theunheard.habittracker.R.string.button_cancel_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();

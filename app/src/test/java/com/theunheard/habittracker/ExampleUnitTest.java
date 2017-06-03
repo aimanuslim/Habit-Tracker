@@ -1,4 +1,4 @@
-package com.theunheard.saigono;
+package com.theunheard.habittracker;
 
 import org.junit.Test;
 

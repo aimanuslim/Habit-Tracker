@@ -1,4 +1,4 @@
-package com.theunheard.saigono;
+package com.theunheard.habittracker;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -162,13 +162,13 @@ public class HabitListAdapter extends ArrayAdapter<Habit> implements Filterable{
         if (v == null) {
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.habit_item, null);
+            v = vi.inflate(com.theunheard.habittracker.R.layout.habit_item, null);
             holder = new ViewHolder();
-            holder.nameLabel = (TextView) v.findViewById(R.id.habitNamelabel);
-            holder.categoryLabel = (TextView) v.findViewById(R.id.habitCategoryLabel);
-            holder.periodSinceLastPerformedLabel = (TextView) v.findViewById(R.id.habitLastPerformedDate);
-            holder.reminderPeriodLabel = (TextView) v.findViewById(R.id.habitReminderPeriod);
-            holder.frequencyPerformedLabel = (TextView) v.findViewById(R.id.frequencyPerformedLabel);
+            holder.nameLabel = (TextView) v.findViewById(com.theunheard.habittracker.R.id.habitNamelabel);
+            holder.categoryLabel = (TextView) v.findViewById(com.theunheard.habittracker.R.id.habitCategoryLabel);
+            holder.periodSinceLastPerformedLabel = (TextView) v.findViewById(com.theunheard.habittracker.R.id.habitLastPerformedDate);
+            holder.reminderPeriodLabel = (TextView) v.findViewById(com.theunheard.habittracker.R.id.habitReminderPeriod);
+            holder.frequencyPerformedLabel = (TextView) v.findViewById(com.theunheard.habittracker.R.id.frequencyPerformedLabel);
             v .setTag(holder);
 
         } else {
@@ -180,14 +180,14 @@ public class HabitListAdapter extends ArrayAdapter<Habit> implements Filterable{
         if (habit != null) {
             holder.nameLabel.setText(habit.getName());
             holder.categoryLabel.setText(habit.getCategory());
-            holder.periodSinceLastPerformedLabel.setText(this.getContext().getString(R.string.listviewitem_last_performed_label, Utility.outputApproximateTimePeriodDifferenceAsString(habit.getDateLastPerformed(), new Date())));
+            holder.periodSinceLastPerformedLabel.setText(this.getContext().getString(com.theunheard.habittracker.R.string.listviewitem_last_performed_label, Utility.outputApproximateTimePeriodDifferenceAsString(habit.getDateLastPerformed(), new Date())));
 //            holder.frequencyPerformedLabel.setText(this.getContext().getString(R.string.listviewitem_frequency_performed_label) + habit.getFrequencyPerformed().toString() + " time" + (habit.getFrequencyPerformed() > 1 ? "s" : ""));
-            holder.frequencyPerformedLabel.setText(this.getContext().getString(R.string.listviewitem_frequency_performed_label, habit.getFrequencyPerformed(), (habit.getFrequencyPerformed() > 1 ? "s" : "")));
+            holder.frequencyPerformedLabel.setText(this.getContext().getString(com.theunheard.habittracker.R.string.listviewitem_frequency_performed_label, habit.getFrequencyPerformed(), (habit.getFrequencyPerformed() > 1 ? "s" : "")));
 //            holder.reminderPeriodLabel.setText("Remind every " + habit.getReminderPeriodMultiplier().toString() + " " + habit.getReminderPerPeriodLengthModeAsString());
             if(habit.getReminderPeriodMultiplier() == null) {
                 holder.reminderPeriodLabel.setText("No reminder set");
             } else {
-                holder.reminderPeriodLabel.setText(this.getContext().getString(R.string.listviewitem_reminder_label, habit.getReminderPeriodMultiplier(), habit.getReminderPerPeriodLengthModeAsString()));
+                holder.reminderPeriodLabel.setText(this.getContext().getString(com.theunheard.habittracker.R.string.listviewitem_reminder_label, habit.getReminderPeriodMultiplier(), habit.getReminderPerPeriodLengthModeAsString()));
             }
         }
 

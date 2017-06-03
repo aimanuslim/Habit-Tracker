@@ -1,4 +1,4 @@
-package com.theunheard.saigono;
+package com.theunheard.habittracker;
 
 import android.os.Build;
 import android.os.SystemClock;
@@ -11,7 +11,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
@@ -105,16 +104,16 @@ public class TabbedActivityTest {
     }
 
     public void clearAllInputs() {
-        onView(withId(R.id.habitInputName)).perform(clearText());
-        onView(withId(R.id.categoryInput)).perform(clearText());
-        onView(withId(R.id.dateLastPerformedInput)).perform(clearText());
-        onView(withId(R.id.timeLastPerformedInput)).perform(clearText());
-        onView(withId(R.id.repetitionFrequencyInput)).perform(clearText());
+        onView(withId(com.theunheard.habittracker.R.id.habitInputName)).perform(clearText());
+        onView(withId(com.theunheard.habittracker.R.id.categoryInput)).perform(clearText());
+        onView(withId(com.theunheard.habittracker.R.id.dateLastPerformedInput)).perform(clearText());
+        onView(withId(com.theunheard.habittracker.R.id.timeLastPerformedInput)).perform(clearText());
+        onView(withId(com.theunheard.habittracker.R.id.repetitionFrequencyInput)).perform(clearText());
 
     }
 
     public void clearAllPersons() {
-        onView(withId(R.id.clearPersonButton)).perform(click());
+        onView(withId(com.theunheard.habittracker.R.id.clearPersonButton)).perform(click());
     }
 
     public String enterHabitDetailsThatHasJustBeenPerformed(
@@ -123,18 +122,18 @@ public class TabbedActivityTest {
             String repetitionFreq,
             String repetitionPeriod
     ) {
-        onView(withId(R.id.habitInputName)).perform(typeText(habitName));
+        onView(withId(com.theunheard.habittracker.R.id.habitInputName)).perform(typeText(habitName));
         Espresso.closeSoftKeyboard();
-        onView(withId(R.id.categoryInput)).perform(typeText(category));
+        onView(withId(com.theunheard.habittracker.R.id.categoryInput)).perform(typeText(category));
         Espresso.closeSoftKeyboard();
 
         onView(withText("Just did it!")).perform(click());
-        onView(withId(R.id.repetitionFrequencyInput)).perform(typeText(repetitionFreq));
+        onView(withId(com.theunheard.habittracker.R.id.repetitionFrequencyInput)).perform(typeText(repetitionFreq));
         Espresso.closeSoftKeyboard();
 
 
 
-        onView(withId(R.id.repetitionPeriodSpinner)).perform(click());
+        onView(withId(com.theunheard.habittracker.R.id.repetitionPeriodSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(repetitionPeriod))).perform(click());
 
         return habitName;
@@ -152,13 +151,13 @@ public class TabbedActivityTest {
             String repetitionFreq,
             String repetitionPeriod
     ) {
-        onView(withId(R.id.habitInputName)).perform(typeText(habitName));
+        onView(withId(com.theunheard.habittracker.R.id.habitInputName)).perform(typeText(habitName));
         Espresso.closeSoftKeyboard();
-        onView(withId(R.id.categoryInput)).perform(typeText(category));
+        onView(withId(com.theunheard.habittracker.R.id.categoryInput)).perform(typeText(category));
         Espresso.closeSoftKeyboard();
 
         if(year != 0) {
-            onView(withId(R.id.dateLastPerformedInput)).perform(click());
+            onView(withId(com.theunheard.habittracker.R.id.dateLastPerformedInput)).perform(click());
             onView(withClassName(equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(year, month, day));
             if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
                 onView(withText("OK")).perform(click());
@@ -168,7 +167,7 @@ public class TabbedActivityTest {
         }
 
         if(hour != 0) {
-            onView(withId(R.id.timeLastPerformedInput)).perform(click());
+            onView(withId(com.theunheard.habittracker.R.id.timeLastPerformedInput)).perform(click());
             onView(withClassName(equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(hour, minutes));
             if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
                 onView(withText("OK")).perform(click());
@@ -179,12 +178,12 @@ public class TabbedActivityTest {
 
 
 
-        onView(withId(R.id.repetitionFrequencyInput)).perform(typeText(repetitionFreq));
+        onView(withId(com.theunheard.habittracker.R.id.repetitionFrequencyInput)).perform(typeText(repetitionFreq));
         Espresso.closeSoftKeyboard();
 
 
 
-        onView(withId(R.id.repetitionPeriodSpinner)).perform(click());
+        onView(withId(com.theunheard.habittracker.R.id.repetitionPeriodSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(repetitionPeriod))).perform(click());
 
         return habitName;
@@ -201,38 +200,37 @@ public class TabbedActivityTest {
 
     public void clickRecordButton() {
 //        waitInSeconds(2);
-        onView(withId(R.id.recordButton)).perform(click());
+        onView(withId(com.theunheard.habittracker.R.id.recordButton)).perform(click());
     }
 
     @Test
     public void addHabitWithoutName () {
         enterHabitDetails("", randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         clickRecordButton();
-        onView(withText(R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        onView(withText(com.theunheard.habittracker.R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
     }
 
     public void switchToDataListView() {
 //        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
-        onView(withText(R.string.data_list_tab_text)).perform(click());
+        onView(withText(com.theunheard.habittracker.R.string.data_list_tab_text)).perform(click());
     }
 
 
     public void switchToInsertHabitView() {
 //        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
-        onView(withText(R.string.insert_data_tab_text)).perform(click());
+        onView(withText(com.theunheard.habittracker.R.string.insert_data_tab_text)).perform(click());
     }
 
 
     @Test
     public void addHabitsWithPersonInteracted() {
+        switchToInsertHabitView();
         String habitname = randomString();
         enterHabitDetails(habitname, randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         String personName1 = enterPersonInteracted();
         String personName2 = enterPersonInteracted();
         clickRecordButton();
-
-
 
         switchToDataListView();
         switchDataListToPersonList();
@@ -345,21 +343,21 @@ public class TabbedActivityTest {
     }
 
     public void switchDataListToPersonList () {
-        onView(withId(R.id.dataModeSpinner)).perform(click());
+        onView(withId(com.theunheard.habittracker.R.id.dataModeSpinner)).perform(click());
         onView(withText("Person List")).perform(click());
 
 
     }
 
     public void switchDataListToHabitList () {
-        onView(withId(R.id.dataModeSpinner)).perform(click());
+        onView(withId(com.theunheard.habittracker.R.id.dataModeSpinner)).perform(click());
         onView(withText("Habit List")).perform(click());
     }
 
     public String enterPersonInteracted() {
-        onView(withId(R.id.addPersonInteractedButton)).perform(click());
+        onView(withId(com.theunheard.habittracker.R.id.addPersonInteractedButton)).perform(click());
         String personName = randomString();
-        onView(withId(R.id.person_name_edit)).perform(typeText(personName), closeSoftKeyboard());
+        onView(withId(com.theunheard.habittracker.R.id.person_name_edit)).perform(typeText(personName), closeSoftKeyboard());
         waitInSeconds(1);
         onView(withText("Add")).perform(click());
         return personName;
@@ -395,7 +393,7 @@ public class TabbedActivityTest {
     public void addHabitWithoutCategory () {
         enterHabitDetails(randomString(), "", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         clickRecordButton();
-        onView(withText(R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        onView(withText(com.theunheard.habittracker.R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
     }
 
@@ -403,7 +401,7 @@ public class TabbedActivityTest {
     public void addHabitWithoutDate () {
         enterHabitDetails(randomString(), randomString(), 0, randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         clickRecordButton();
-        onView(withText(R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        onView(withText(com.theunheard.habittracker.R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
     }
 
@@ -411,7 +409,7 @@ public class TabbedActivityTest {
     public void addHabitWithoutTime () {
         enterHabitDetails(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), 0, randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         clickRecordButton();
-        onView(withText(R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        onView(withText(com.theunheard.habittracker.R.string.missing_info)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
     }
 
@@ -419,14 +417,14 @@ public class TabbedActivityTest {
     public void addHabitWithoutRepetitionFreq () {
         enterHabitDetails(randomString(), randomString(), randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), "", spinnerOptions[randomInt(spinnerOptions.length)]);
         clickRecordButton();
-        onView(withText(R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        onView(withText(com.theunheard.habittracker.R.string.save_success)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         deleteData();
     }
     @Test
     public void nowButtonCheck() {
-        onView(withId(R.id.nowButton)).perform(click());
-        onView(withId(R.id.dateLastPerformedInput)).check(matches(withText(Utility.dateToString(new Date(), Utility.dateFormat))));
-        onView(withId(R.id.timeLastPerformedInput)).check(matches(withText(Utility.dateToString(new Date(), Utility.timeFormat))));
+        onView(withId(com.theunheard.habittracker.R.id.nowButton)).perform(click());
+        onView(withId(com.theunheard.habittracker.R.id.dateLastPerformedInput)).check(matches(withText(Utility.dateToString(new Date(), Utility.dateFormat))));
+        onView(withId(com.theunheard.habittracker.R.id.timeLastPerformedInput)).check(matches(withText(Utility.dateToString(new Date(), Utility.timeFormat))));
 
     }
 
@@ -440,7 +438,7 @@ public class TabbedActivityTest {
         enterHabitDetails("Test", "Test_category", randomInt(2017), randomInt(12), randomInt(29), randomInt(24), randomInt(60), Integer.toString(randomInt(10)), spinnerOptions[randomInt(spinnerOptions.length)]);
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
         onView(withText("View My Habits")).perform(click());
-        onData(anything()).inAdapterView(withId(R.id.dataListView)).atPosition(0).onChildView(withId(R.id.frequencyPerformedLabel)).check(matches(withText("2 times")));
+        onData(anything()).inAdapterView(withId(com.theunheard.habittracker.R.id.dataListView)).atPosition(0).onChildView(withId(com.theunheard.habittracker.R.id.frequencyPerformedLabel)).check(matches(withText("2 times")));
         deleteData();
 
 
@@ -464,7 +462,7 @@ public class TabbedActivityTest {
         deleteHabitFromList(habitName);
         switchDataListToPersonList();
         // negative testing.
-        onView(withId(R.id.dataListView)).check(matches(not(withAdaptedData(withYourPersonName(Matchers.containsString(personName))))));
+        onView(withId(com.theunheard.habittracker.R.id.dataListView)).check(matches(not(withAdaptedData(withYourPersonName(Matchers.containsString(personName))))));
 
     }
 
@@ -475,7 +473,7 @@ public class TabbedActivityTest {
 
     public void deleteHabitFromList(String habitName) {
         onData(withYourHabitName(Matchers.containsString(habitName)))
-                .inAdapterView(withId(R.id.dataListView))
+                .inAdapterView(withId(com.theunheard.habittracker.R.id.dataListView))
                 .perform(click());
         onView(withText("Delete")).perform(click());
     }

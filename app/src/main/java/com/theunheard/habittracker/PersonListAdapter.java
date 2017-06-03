@@ -1,4 +1,4 @@
-package com.theunheard.saigono;
+package com.theunheard.habittracker;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -32,20 +32,20 @@ public class PersonListAdapter extends ArrayAdapter<Person> {
         if (v == null) {
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.person_item, null);
+            v = vi.inflate(com.theunheard.habittracker.R.layout.person_item, null);
         }
 
         Person person = getItem(position);
 
         if (person != null) {
-            TextView nameLabel = (TextView) v.findViewById(R.id.personNameTextView);
-            TextView habitLabel = (TextView) v.findViewById(R.id.associatedHabitTextView);
-            TextView dateLastInteractedWithLabel = (TextView) v.findViewById(R.id.lastInteractedWithTextView);
+            TextView nameLabel = (TextView) v.findViewById(com.theunheard.habittracker.R.id.personNameTextView);
+            TextView habitLabel = (TextView) v.findViewById(com.theunheard.habittracker.R.id.associatedHabitTextView);
+            TextView dateLastInteractedWithLabel = (TextView) v.findViewById(com.theunheard.habittracker.R.id.lastInteractedWithTextView);
 
             nameLabel.setText(person.getName());
             habitLabel.setText(person.getHabitName());
 //            dateLastInteractedWithLabel.setText("Last Interacted with: " + Utility.outputApproximateTimePeriodDifferenceAsString(person.getLastDateInteractedWith(), new Date()));
-            dateLastInteractedWithLabel.setText(this.getContext().getString(R.string.listviewitem_last_interacted_with_label, Utility.outputApproximateTimePeriodDifferenceAsString(person.getLastDateInteractedWith(), new Date())));
+            dateLastInteractedWithLabel.setText(this.getContext().getString(com.theunheard.habittracker.R.string.listviewitem_last_interacted_with_label, Utility.outputApproximateTimePeriodDifferenceAsString(person.getLastDateInteractedWith(), new Date())));
 
         }
 

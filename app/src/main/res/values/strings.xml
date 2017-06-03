@@ -57,28 +57,48 @@
 
     <string name="about_app_description">
         <![CDATA[
-        <h2><strong>Welcome!</strong>
+<h2><strong>Welcome!</strong>
 </h2>
 <h3><strong>How To Use This App</strong>
 </h3>
 <p>This app aims to aid you to track your periodic habits. If you have ever asked yourself these questions, then this is app is for you.&nbsp;
 </p>
 &#8226; When was the last time I washed my car?<br/>
-&#8226; When was the last time I had a romantic dinner with my SO?<br/>
+&#8226; When was the last time I serviced its battery?<br/>
+&#8226; When was the last time I had a romantic dinner with my significant other?<br/>
 &#8226; When was the last time I bought my mum a gift?<br/>
 &#8226; When was the last time I took my kids out to a fun fair?<br/>
+&#8226; When was the last time I hung out with my local judo club folks?<br/>
+
 <br/>
-<p>Easy, enter the activity or habits that you wished to be tracked in the Insert Habit tab, with these required details.
+<p>Rest easy. Just enter the activity or habit that you wished to be tracked in the Insert Habit tab, with these details.
 </p>
-&#8226; Name of habit. (Required)<br/>
+&#8226; Name of habit or activity. (Required)<br/>
 &#8226; The time it was last performed (Required)<br/>
 &#8226; The habit&#39;s category.<br/>
 &#8226; The frequency of reminder for this habit.<br/>
-&#8226; The persons you interacted with while doing with this habit (to keep your relationships alive!)<br/>
-<p>The video of the rest of the features is available here:
+&#8226; The persons you interacted with while doing this habit (to keep your relationships alive!)<br/>
+
+
+<p>The app currently support these features:
 </p>
+&#8226; Saving of habit information (as described above) and display them as a list.<br/>
+&#8226; Setting of reminder for habits that user\'s require reminding of.<br/>
+&#8226; Saving of persons users interacted with while performing a habit and displays them as a list.<br/>
+&#8226; Sorting of habits and persons data according to \'last performed with\' information and alphabetically.<br/>
+&#8226; Updating of habits and persons information from the list.<br/>
+&#8226; Updating the frequency of a habit being performed by clicking the \'Just Did It!\' button.<br/>
+&#8226; Searching of habit and person data either by name or category.<br/>
+
+
+
+
 <p>I welcome any feedbacks for the app. Email theunheardbiz@gmail.com if you have any! Also don&#39;t forget to rate us in the store!
 </p>
+
+<p>This app is still in beta. Please let me know if you find any bugs!
+</p>
+
 <p>
 <br />
 Thank you!

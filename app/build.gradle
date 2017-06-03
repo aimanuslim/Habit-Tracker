@@ -5,7 +5,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25"
     defaultConfig {
-        applicationId "com.theunheard.saigono"
+        applicationId "com.theunheard.habittracker"
         minSdkVersion 18
         targetSdkVersion 25
         versionCode 1
@@ -72,6 +72,7 @@ dependencies {
 
 
 apply plugin: 'com.google.gms.google-services'
+
 
 
 

@@ -1,4 +1,4 @@
-package com.theunheard.saigono;
+package com.theunheard.habittracker;
 
 
 import android.app.DialogFragment;
@@ -25,7 +25,7 @@ public class EditHabitFragmentDialog extends DialogFragment {
     public static EditHabitFragmentDialog newInstance(String title) {
         EditHabitFragmentDialog frag = new EditHabitFragmentDialog();
         Bundle args = new Bundle();
-        args.putString(String.valueOf(R.string.edit_habit_dialog_title), title);
+        args.putString(String.valueOf(com.theunheard.habittracker.R.string.edit_habit_dialog_title), title);
         frag.setArguments(args);
         return frag;
     }
@@ -41,7 +41,7 @@ public class EditHabitFragmentDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        dialogView = inflater.inflate(R.layout.fragment_edit_habit_fragment_dialog, container, false);
+        dialogView = inflater.inflate(com.theunheard.habittracker.R.layout.fragment_edit_habit_fragment_dialog, container, false);
         return dialogView;
     }
 

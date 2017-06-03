@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     android:background="@color/colorGreenMedium"
     android:orientation="vertical"
-    tools:context="com.theunheard.saigono.TabbedActivity">
+    tools:context="com.theunheard.habittracker.TabbedActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

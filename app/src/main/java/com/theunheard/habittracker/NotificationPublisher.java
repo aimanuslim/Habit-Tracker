@@ -1,4 +1,4 @@
-package com.theunheard.saigono;
+package com.theunheard.habittracker;
 
 
 import android.app.NotificationManager;
@@ -16,8 +16,8 @@ import android.support.v4.app.NotificationCompat;
 public class NotificationPublisher extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        String habitName = intent.getStringExtra(String.valueOf(R.string.alarm_notification_habitname_label));
-        String lastPerformed = intent.getStringExtra(String.valueOf(R.string.alarm_notification_last_performed_label));
+        String habitName = intent.getStringExtra(String.valueOf(com.theunheard.habittracker.R.string.alarm_notification_habitname_label));
+        String lastPerformed = intent.getStringExtra(String.valueOf(com.theunheard.habittracker.R.string.alarm_notification_last_performed_label));
         createNotification(context, "Saigo No Reminder: " + habitName, "You last performed this activity on " + lastPerformed, "Alert");
     }
 
@@ -25,8 +25,8 @@ public class NotificationPublisher extends BroadcastReceiver {
         PendingIntent notificationIntent = PendingIntent.getActivity(context, 0, new Intent(context, TabbedActivity.class), 0);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.statusbaricon)
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.appicon))
+                .setSmallIcon(com.theunheard.habittracker.R.drawable.statusbaricon)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), com.theunheard.habittracker.R.drawable.appicon))
                 .setContentTitle(msg)
                 .setTicker((msgAlert))
                 .setContentText(msgText);

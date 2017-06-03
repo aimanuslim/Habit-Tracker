@@ -1,4 +1,4 @@
-package com.theunheard.saigono;
+package com.theunheard.habittracker;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -49,7 +49,7 @@ public class AboutFragment extends Fragment implements FragmentInterface {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_about_app, container, false);
+        return inflater.inflate(com.theunheard.habittracker.R.layout.fragment_about_app, container, false);
     }
 
     @Override
@@ -57,13 +57,13 @@ public class AboutFragment extends Fragment implements FragmentInterface {
 
         super.onViewCreated(view, savedInstanceState);
 
-        sendFeedbackButton = (Button) getView().findViewById(R.id.sendFeedbackButton);
-        feedbackEditText = (EditText) getView().findViewById(R.id.feedbackEditText);
-        rateButton = (Button) getView().findViewById(R.id.rateButton);
-        aboutTextView = (TextView) getView().findViewById(R.id.aboutTextView);
+        sendFeedbackButton = (Button) getView().findViewById(com.theunheard.habittracker.R.id.sendFeedbackButton);
+        feedbackEditText = (EditText) getView().findViewById(com.theunheard.habittracker.R.id.feedbackEditText);
+        rateButton = (Button) getView().findViewById(com.theunheard.habittracker.R.id.rateButton);
+        aboutTextView = (TextView) getView().findViewById(com.theunheard.habittracker.R.id.aboutTextView);
 
 
-        adView = (AdView) getView().findViewById(R.id.adViewFeedbackSection);
+        adView = (AdView) getView().findViewById(com.theunheard.habittracker.R.id.adViewFeedbackSection);
         AdRequest adRequest = new AdRequest.Builder()
                 .build();
         adView.loadAd(adRequest);
@@ -77,7 +77,7 @@ public class AboutFragment extends Fragment implements FragmentInterface {
     }
 
     private void setupAboutTextView() {
-        aboutTextView.setText(Html.fromHtml(getString(R.string.about_app_description, Html.FROM_HTML_MODE_COMPACT)));
+        aboutTextView.setText(Html.fromHtml(getString(com.theunheard.habittracker.R.string.about_app_description, Html.FROM_HTML_MODE_COMPACT)));
         aboutTextView.setMovementMethod(new ScrollingMovementMethod());
     }
 
@@ -125,7 +125,7 @@ public class AboutFragment extends Fragment implements FragmentInterface {
                 Intent Email = new Intent(Intent.ACTION_SEND);
                 Email.setType("message/rfc822");
                 Email.putExtra(Intent.EXTRA_EMAIL, new String[] { "theunheardbiz@gmail.com" });
-                Email.putExtra(Intent.EXTRA_SUBJECT, "SaigoNo Feedback");
+                Email.putExtra(Intent.EXTRA_SUBJECT, "Habit Tracker Feedback");
                 Email.putExtra(Intent.EXTRA_TEXT, feedbackEditText.getText());
                 startActivity(Intent.createChooser(Email, "Send Feedback:"));
             }

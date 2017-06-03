@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:foregroundGravity="center"
     android:orientation="vertical"
-    tools:context="com.theunheard.saigono.EditHabitFragmentDialog">
+    tools:context="com.theunheard.habittracker.EditHabitFragmentDialog">
 
     <LinearLayout
         android:layout_width="match_parent"

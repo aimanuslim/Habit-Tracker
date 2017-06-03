@@ -1,4 +1,4 @@
-package com.theunheard.saigono;
+package com.theunheard.habittracker;
 
 import android.content.Context;
 import android.support.design.widget.TabLayout;
@@ -24,21 +24,21 @@ public class TabbedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tabbed);
+        setContentView(com.theunheard.habittracker.R.layout.activity_tabbed);
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        toolbar.setTitle("Coreo");
 //        setSupportActionBar(toolbar);
 
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.about_app_tab_text));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.insert_data_tab_text));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.data_list_tab_text));
+        TabLayout tabLayout = (TabLayout) findViewById(com.theunheard.habittracker.R.id.tabs);
+        tabLayout.addTab(tabLayout.newTab().setText(com.theunheard.habittracker.R.string.about_app_tab_text));
+        tabLayout.addTab(tabLayout.newTab().setText(com.theunheard.habittracker.R.string.insert_data_tab_text));
+        tabLayout.addTab(tabLayout.newTab().setText(com.theunheard.habittracker.R.string.data_list_tab_text));
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.container);
+        final ViewPager viewPager = (ViewPager) findViewById(com.theunheard.habittracker.R.id.container);
         final PagerAdapter adapter = new PagerAdapter
                 (getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
@@ -100,7 +100,7 @@ public class TabbedActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_tabbed, menu);
+        getMenuInflater().inflate(com.theunheard.habittracker.R.menu.menu_tabbed, menu);
         return true;
     }
 

@@ -1,6 +1,4 @@
-package com.theunheard.saigono;
-
-import android.util.Log;
+package com.theunheard.habittracker;
 
 import java.text.DateFormat;
 import java.text.ParseException;

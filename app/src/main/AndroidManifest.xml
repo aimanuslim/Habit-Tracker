@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.theunheard.saigono">
+    package="com.theunheard.habittracker">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -22,8 +22,8 @@
             android:value="@integer/google_play_services_version" />
 s
         <activity
-            android:name="com.theunheard.saigono.TabbedActivity"
-            android:label="SaigoNo"
+            android:name="com.theunheard.habittracker.TabbedActivity"
+            android:label="Habit Tracker"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +39,7 @@ s
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
 
-        <receiver android:name="com.theunheard.saigono.NotificationPublisher" android:process=":remote">
+        <receiver android:name="com.theunheard.habittracker.NotificationPublisher" android:process=":remote">
             <intent-filter>
                 <action android:name="android.intent.action.NOTIFY"/>
             </intent-filter>
