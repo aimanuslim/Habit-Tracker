@@ -672,8 +672,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public int setAlarm(Long startTime, Long repeatingInterval, Habit habit) {
         Intent alertIntent = new Intent(myContext, NotificationPublisher.class);
-        alertIntent.putExtra(myContext.getString(com.theunheard.habittracker.R.string.alarm_notification_habitname_label), habit.getName());
-        alertIntent.putExtra(myContext.getString(com.theunheard.habittracker.R.string.alarm_notification_last_performed_label), habit.getDateTimeLastPerformedAsString());
+        alertIntent.putExtra("Habit Name", habit.getName().toString());
+        alertIntent.putExtra("Last Performed", habit.getDateTimeLastPerformedAsString().toString());
         int requestID = getNextAvailableRequestID();
         addRequestId(requestID);
 

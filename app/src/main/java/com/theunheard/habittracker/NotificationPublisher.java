@@ -16,9 +16,9 @@ import android.support.v4.app.NotificationCompat;
 public class NotificationPublisher extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        String habitName = intent.getStringExtra(String.valueOf(com.theunheard.habittracker.R.string.alarm_notification_habitname_label));
-        String lastPerformed = intent.getStringExtra(String.valueOf(com.theunheard.habittracker.R.string.alarm_notification_last_performed_label));
-        createNotification(context, "Saigo No Reminder: " + habitName, "You last performed this activity on " + lastPerformed, "Alert");
+        String habitName = intent.getStringExtra("Habit Name");
+        String lastPerformed = intent.getStringExtra("Last Performed");
+        createNotification(context, "Habit Tracker Reminder: " + habitName, "You last performed this activity on " + lastPerformed, "Alert");
     }
 
     public void createNotification(Context context, String msg, String msgText, String msgAlert){

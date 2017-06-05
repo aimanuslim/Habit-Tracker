@@ -2,11 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.theunheard.habittracker">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <!-- To auto-complete the email text field in the login form with the user's emails -->
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 
     <application
@@ -20,7 +17,7 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-s
+
         <activity
             android:name="com.theunheard.habittracker.TabbedActivity"
             android:label="Habit Tracker"
