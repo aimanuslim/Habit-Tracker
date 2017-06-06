@@ -20,7 +20,6 @@ public class TabbedActivity extends AppCompatActivity {
         return _dbHandler;
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +43,10 @@ public class TabbedActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
 
         _dbHandler = new DBHandler(this);
+
+        if(getIntent().getAction().equals("Open Data List")){
+            viewPager.setCurrentItem(2);
+        }
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

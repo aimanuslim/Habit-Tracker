@@ -22,7 +22,9 @@ public class NotificationPublisher extends BroadcastReceiver {
     }
 
     public void createNotification(Context context, String msg, String msgText, String msgAlert){
-        PendingIntent notificationIntent = PendingIntent.getActivity(context, 0, new Intent(context, TabbedActivity.class), 0);
+        Intent intent = new Intent(context, TabbedActivity.class);
+        intent.setAction("Open Data List");
+        PendingIntent notificationIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(com.theunheard.habittracker.R.drawable.statusbaricon)
